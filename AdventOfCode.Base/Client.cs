@@ -12,6 +12,11 @@ namespace AdventOfCode.Base
 
         public Client(string session)
         {
+            if (session is null)
+            {
+                throw new ArgumentNullException(nameof(session));
+            }
+
             this.webClient.Headers.Add("Cookie", $"session={session}");
         }
 
@@ -22,7 +27,7 @@ namespace AdventOfCode.Base
 
         public string GetInput(int year, int day)
         {
-            return this.webClient.DownloadString($"{BaseUrl}/{year}/day/{day}/input");
+            return this.webClient.DownloadString($"{BaseUrl}/{year}/day/{day}/input").TrimEnd('\n');
         }
 
         protected virtual void Dispose(bool disposing)

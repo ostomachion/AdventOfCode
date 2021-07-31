@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,5 +48,7 @@ namespace AdventOfCode.Helpers
 
         public static int CountOverlap(this string text, string needle) => text.FindOverlap(needle).Count;
         public static int CountOverlap(this string text, char needle) => text.FindOverlap(needle).Count;
+
+        public static string[] Lines(this string text) => text.Split('\n');
     }
 }
