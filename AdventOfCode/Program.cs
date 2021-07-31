@@ -1,12 +1,4 @@
 ﻿using System;
+using AdventOfCode;
 
-namespace AdventOfCode
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
-}
+Runner.Run(2015, 1, 1);
