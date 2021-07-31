@@ -12,7 +12,15 @@ namespace AdventOfCode.Y2015.Days
 
         public override Output Part2()
         {
-            throw new System.NotImplementedException();
+            int l = 0;
+            foreach (var (i, c) in Input.ToDictionary())
+            {
+                l += c == '(' ? 1 : -1;
+                if (l < 0)
+                    return i + 1;
+            }
+            
+            return AnswerNotFound();
         }
     }
 }

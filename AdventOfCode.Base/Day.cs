@@ -8,5 +8,7 @@ namespace AdventOfCode.Base
         
         public abstract Output Part1();
         public abstract Output Part2();
+
+        public static Output AnswerNotFound() => throw new AnswerNotFoundException();
     }
 }

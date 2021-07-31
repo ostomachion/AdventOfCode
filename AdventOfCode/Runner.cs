@@ -24,7 +24,7 @@ namespace AdventOfCode
         {
             Console.WriteLine($"Advent of Code {year} day {day} part {part}...");
             
-            var type = Type.GetType($"AdventOfCode.Y{year}.Days.Day{part:00}, AdventOfCode.Y{year}", true);
+            var type = Type.GetType($"AdventOfCode.Y{year}.Days.Day{day:00}, AdventOfCode.Y{year}", true);
             var instance = (Day)type.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<object>());
             instance.Input = inputManager.Get(year, day);
             Output output = part == 1 ? instance.Part1() : instance.Part2();
