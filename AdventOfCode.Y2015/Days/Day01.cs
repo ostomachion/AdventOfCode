@@ -1,4 +1,5 @@
 using AdventOfCode.Base;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode.Y2015.Days
 {
@@ -6,7 +7,7 @@ namespace AdventOfCode.Y2015.Days
     {
         public override Output Part1()
         {
-            throw new System.NotImplementedException();
+            return Input.Count('(') - Input.Count(')');
         }
 
         public override Output Part2()
