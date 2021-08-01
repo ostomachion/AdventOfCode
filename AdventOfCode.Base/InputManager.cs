@@ -3,28 +3,18 @@ using System.IO;
 
 namespace AdventOfCode.Base
 {
-    public class InputManager : IInputManager
+    public class InputManager
     {
-        public static readonly string OutputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "AdventOfCode", "Input");
+        public readonly Client client;
 
-        private readonly IClient client;
-
-        public InputManager(IClient client)
+        public InputManager(Client client)
         {
             this.client = client;
         }
 
-        public string GetPath(int year, int day)
-        {
-            var dir = Path.Combine(OutputDir, year.ToString());
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-            return Path.Combine(dir, day.ToString() + ".txt");
-        }
-
         public string Get(int year, int day)
         {
-            string path = GetPath(year, day);
+            string path = Paths.GetInputPath(year, day);
             if (!File.Exists(path))
                 File.WriteAllText(path, this.client.GetInput(year, day));
 

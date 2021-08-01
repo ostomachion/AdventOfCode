@@ -12,9 +12,8 @@ namespace AdventOfCode.Y2015.Days
             var input = Input.Lines().Split('x');
             return input.Sum(x =>
             {
-                var box = new SquareGrid(x.ParseInt().ToArray());
-                var faces = box.Faces;
-                var min = faces.Nodes.Min(x => x.Value.Volume);
+                var box = new Box(x.ParseInt().ToArray());
+                var min = box.Faces.Min(x => x.Volume);
                 var area = box.SurfaceArea + min;
                 return area;
             });
@@ -25,9 +24,8 @@ namespace AdventOfCode.Y2015.Days
             var input = Input.Lines().Split('x');
             return input.Sum(x =>
             {
-                var box = new SquareGrid(x.ParseInt().ToArray());
-                var faces = box.Faces;
-                var ribbon = faces.Nodes.Min(y => y.Value.SurfaceArea) + box.Volume;
+                var box = new Box(x.ParseInt().ToArray());
+                var ribbon = box.Faces.Min(y => y.SurfaceArea) + box.Volume;
                 return ribbon;
             });
         }

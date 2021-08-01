@@ -5,31 +5,31 @@ using System.Collections.Generic;
 
 namespace AdventOfCode.Helpers
 {
-    public class SquareGrid
+    public class Box
     {
         public IEnumerable<int> Dimensions { get; }
         public int Rank { get; }
 
-        public int Volume => Dimensions.Aggregate(1, (x, y) => x * y);
+        public long Volume => Dimensions.Product();
 
-        public int SurfaceArea => Faces.Nodes.Sum(x => x.Value.Volume);
+        public long SurfaceArea => Faces.Sum(x => x.Volume);
 
-        public Graph<SquareGrid> Faces
+        public IEnumerable<Box> Faces
         {
             get
             {
-                Graph<SquareGrid> value = new();
+                List<Box> value = new(2 * Rank);
                 for (var i = 0; i < Rank; i++)
                 {
                     var faceDimensions = Dimensions.Take(i).Concat(Dimensions.Skip(i + 1)).ToArray();
-                    value.Add(new SquareGrid(faceDimensions));
-                    value.Add(new SquareGrid(faceDimensions));
+                    value.Add(new Box(faceDimensions));
+                    value.Add(new Box(faceDimensions));
                 }
                 return value;
             }
         }
 
-        public SquareGrid(params int[] dimensions)
+        public Box(params int[] dimensions)
         {
             Dimensions = dimensions;
             Rank = dimensions.Length;

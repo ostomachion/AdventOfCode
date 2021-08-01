@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 namespace AdventOfCode.Base
 {
@@ -24,5 +25,12 @@ namespace AdventOfCode.Base
         public static implicit operator Output(double value) => new(value.ToString());
         public static implicit operator Output(decimal value) => new(value.ToString());
         public static implicit operator Output(bool value) => new(value.ToString());
+
+
+        public override bool Equals(object? obj) => obj is Output output && Value == output.Value;
+
+        public override int GetHashCode() => HashCode.Combine(Value);
+
+        public override string ToString() => Value.ToString();
     }
 }

@@ -1,22 +1,19 @@
 using System.Net;
 using System;
+using System.IO;
 
 namespace AdventOfCode.Base
 {
-    public class Client : IClient, IDisposable
+    public class Client : IDisposable
     {
         public const string BaseUrl = "https://adventofcode.com";
 
         private readonly WebClient webClient = new();
         private bool disposedValue;
 
-        public Client(string session)
+        public Client()
         {
-            if (session is null)
-            {
-                throw new ArgumentNullException(nameof(session));
-            }
-
+            var session = File.ReadAllText(Paths.SessionPath);
             this.webClient.Headers.Add("Cookie", $"session={session}");
         }
 

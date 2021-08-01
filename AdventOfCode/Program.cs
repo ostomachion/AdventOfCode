@@ -1,4 +1,3 @@
-﻿using System;
-using AdventOfCode;
+﻿using AdventOfCode.Base;
 
-Runner.Run(2015, 2, 2);
+new Runner().Print(2015, 2, 2);
