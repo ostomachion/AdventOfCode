@@ -25,7 +25,15 @@ namespace AdventOfCode.Y2015.Days
 
         public override Output Part2()
         {
-            throw new NotImplementedException();
+            var i = 0;
+            while (true)
+            {
+                var bytes = System.Text.Encoding.UTF8.GetBytes(Input + i.ToString());
+                var result = MD5.HashData(bytes).ToHexString();
+                if (result.StartsWith("000000"))
+                    return i;
+                i++;
+            };
         }
     }
 }
