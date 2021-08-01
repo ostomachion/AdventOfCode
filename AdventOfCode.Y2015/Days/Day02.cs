@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using AdventOfCode.Base;
-using AdventOfCode.Helpers;
+using AdventOfCode.Helpers.Cartesian;
+using AdventOfCode.Helpers.Extensions;
 
 namespace AdventOfCode.Y2015.Days
 {

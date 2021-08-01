@@ -1,0 +1,51 @@
+using System;
+using System.Linq;
+using AdventOfCode.Base;
+using AdventOfCode.Helpers;
+using AdventOfCode.Helpers.Cartesian;
+
+namespace AdventOfCode.Y2015.Days
+{
+    public class Day03 : Day
+    {
+        public override Output Part1()
+        {
+            var path = Direction2D.FromString(Input);
+            var grid = new InfiniteGrid<int>();
+            var c = new Coordinate(0, 0);
+            grid[c]++;
+            foreach (var p in path)
+            {
+                c += p;
+                grid[c]++;
+            }
+            return grid.Values.Count;
+        }
+
+        public override Output Part2()
+        {
+            var path = Direction2D.FromString(Input);
+            var grid = new InfiniteGrid<int>();
+            var s = new Coordinate(0, 0);
+            var r = new Coordinate(0, 0);
+            grid[s]++;
+            grid[r]++;
+            bool even = true;
+            foreach (var p in path)
+            {
+                if (even)
+                {
+                    s += p;
+                    grid[s]++;
+                }
+                else
+                {
+                    r += p;
+                    grid[r]++;
+                }
+                even = !even;
+            }
+            return grid.Values.Count;
+        }
+    }
+}

@@ -1,3 +1,3 @@
 ﻿using AdventOfCode.Base;
 
-new Runner().Print(2015, 2, 2);
+new Runner().Print(2015, 3, 2);
