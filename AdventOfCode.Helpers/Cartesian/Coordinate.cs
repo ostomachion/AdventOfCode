@@ -11,6 +11,8 @@ namespace AdventOfCode.Helpers.Cartesian
 
         public int Rank => Value.Length;
 
+        public double Distance => Math.Sqrt(Value.Sum(x => x * x));
+
         public int X => Value[0];
         public int Y => Value[1];
         public int Z => Value[2];
