@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,5 +51,18 @@ namespace AdventOfCode.Helpers.Extensions
         public static int CountOverlap(this string text, char needle) => text.FindOverlap(needle).Count;
 
         public static string[] Lines(this string text) => text.Split('\n');
+
+        public static T? Parse<T>(this string text, params ParseRule<T>[] rules)
+        {
+            foreach (var (pattern, f) in rules)
+            {
+                var match = Regex.Match(text, pattern);
+                if (match.Success)
+                    return f(match);
+            }
+            return default;
+        }
+
+        public static int ParseInt(this string text) => Int32.Parse(text);
     }
 }

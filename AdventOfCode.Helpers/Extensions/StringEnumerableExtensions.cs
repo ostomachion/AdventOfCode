@@ -2,6 +2,7 @@ using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Helpers.Extensions
 {
@@ -32,5 +33,9 @@ namespace AdventOfCode.Helpers.Extensions
         public static IEnumerable<int?> TryParseInt(this IEnumerable<string> text) => text.Select(x => Int32.TryParse(x, out int result) ? result : (int?)null);
         public static IEnumerable<int> ParseInt(this IEnumerable<string> text, NumberStyles style) => text.Select(x => Int32.Parse(x, style));
         public static IEnumerable<int?> TryParseInt(this IEnumerable<string> text, NumberStyles style) => text.Select(x => Int32.TryParse(x, style, null, out int result) ? result : (int?)null);
+
+        public static IEnumerable<T?> Parse<T>(this IEnumerable<string> text, params ParseRule<T>[] rules) => text.Select(x => x.Parse(rules));
     }
+
+    public record ParseRule<T>(string Pattern, Func<Match, T?> F);
 }
