@@ -58,7 +58,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         }
 
         [Fact]
-        public void EdgesReoriented()
+        public void EdgesRotated()
         {
             var plane = new Plane2D(new(1, 2), new(3, 4)) { Orientation = new(Vector2D.TopToBottom, Vector2D.LeftToRight) };
             var edges = plane.Edges.ToList();

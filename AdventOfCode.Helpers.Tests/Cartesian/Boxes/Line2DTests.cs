@@ -31,7 +31,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         }
 
         [Fact]
-        public void VerticesReoriented()
+        public void VerticesRotated()
         {
             var line = new Line2D(new(1, 2), 3) { Orientation = new(Vector2D.BottomToTop, Vector2D.RightToLeft) };
             var vertices = line.Vertices.ToList();

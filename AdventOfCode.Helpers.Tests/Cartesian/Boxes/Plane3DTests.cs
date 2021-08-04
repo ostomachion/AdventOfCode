@@ -70,7 +70,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         }
 
         [Fact]
-        public void EdgesReoriented()
+        public void EdgesRotated()
         {
             var plane = new Plane3D(new(1, 2), new(3, 4), 5) { Orientation = new(Vector3D.NearToFar, Vector3D.TopToBottom, Vector3D.RightToLeft) };
             var edges = plane.Edges.ToList();
