@@ -1,117 +1,87 @@
 using System;
+
 namespace AdventOfCode.Helpers.Cartesian
 {
-    public struct Orientation3D
+    public record Orientation3D
     {
-        public static readonly Orientation3D I = new(1, 0, 0, 0, 1, 0, 0, 0, 1);
-        public static readonly Orientation3D Ryz = new(1, 0, 0, 0, 0, 1, 0, -1, 0);
-        public static readonly Orientation3D Ryz2 = Ryz * Ryz;
-        public static readonly Orientation3D Ryz3 = Ryz * Ryz * Ryz;
-        public static readonly Orientation3D Rxz = new(0, 0, -1, 0, 1, 0, 1, 0, 0);
-        public static readonly Orientation3D Rxz2 = Rxz * Rxz;
-        public static readonly Orientation3D Rxz3 = Rxz * Rxz * Rxz;
-        public static readonly Orientation3D Rxy = new(0, 1, 0, -1, 0, 0, 0, 0, 1);
-        public static readonly Orientation3D Rxy2 = Rxy * Rxy;
-        public static readonly Orientation3D Rxy3 = Rxy * Rxy * Rxy;
+        public static readonly Orientation3D Standard = new(Vector3D.LeftToRight, Vector3D.BottomToTop, Vector3D.FrontToBack);
 
-        public int XX { get; }
-        public int XY { get; }
-        public int XZ { get; }
-        public int YX { get; }
-        public int YY { get; }
-        public int YZ { get; }
-        public int ZX { get; }
-        public int ZY { get; }
-        public int ZZ { get; }
+        private readonly int xx;
+        private readonly int xy;
+        private readonly int xz;
+        private readonly int yx;
+        private readonly int yy;
+        private readonly int yz;
+        private readonly int zx;
+        private readonly int zy;
+        private readonly int zz;
 
-        public Point3D XAxis => new(XX, XY, XZ);
-        public Point3D YAxis => new(YX, YY, YZ);
-        public Point3D ZAxis => new(ZX, ZY, ZZ);
+        public Vector3D XAxis => new(xx, xy, xz);
+        public Vector3D YAxis => new(yx, yy, yz);
+        public Vector3D ZAxis => new(zx, zy, zz);
 
-        public Orientation3D(int xx, int xy, int xz, int yx, int yy, int yz, int zx, int zy, int zz)
+        public int Determinant =>
+            xx * yy * zz +
+            xy * yz * zx +
+            xz * yx * zy -
+            xz * yy * zx -
+            xy * yx * zz -
+            xx * yz * zy;
+
+        private Orientation3D(int xx, int xy, int xz, int yx, int yy, int yz, int zx, int zy, int zz)
         {
-            XX = xx;
-            XY = xy;
-            XZ = xz;
-            YX = yx;
-            YY = yy;
-            YZ = yz;
-            ZX = zx;
-            ZY = zy;
-            ZZ = zz;
+            this.xx = xx;
+            this.xy = xy;
+            this.xz = xz;
+            this.yx = yx;
+            this.yy = yy;
+            this.yz = yz;
+            this.zx = zx;
+            this.zy = zy;
+            this.zz = zz;
         }
 
-        public Orientation3D(Point3D xAxis, Point3D yAxis, Point3D zAxis)
+        public Orientation3D(Vector3D xAxis, Vector3D yAxis, Vector3D zAxis)
+            : this(
+                (int)xAxis.X, (int)xAxis.Y, (int)xAxis.Z,
+                (int)yAxis.X, (int)yAxis.Y, (int)yAxis.Z,
+                (int)zAxis.X, (int)zAxis.Y, (int)zAxis.Z)
         {
-            XX = (int)xAxis.X;
-            XY = (int)xAxis.Y;
-            XZ = (int)xAxis.Z;
-            YX = (int)yAxis.X;
-            YY = (int)yAxis.Y;
-            YZ = (int)yAxis.Z;
-            ZX = (int)zAxis.X;
-            ZY = (int)zAxis.Y;
-            ZZ = (int)zAxis.Z;
+            if (xAxis * yAxis != 0 || yAxis * zAxis != 0 || zAxis * xAxis != 0 || Determinant is not (1 or -1))
+                throw new ArgumentException("Must be an orthonormal basis.");
         }
 
-        public override bool Equals(object? obj)
+        public static Orientation3D operator *(Orientation3D left, Orientation3D right) => new(
+            left.xx * right.xx + left.xy * right.yx + left.xz * right.zx,
+            left.xx * right.xy + left.xy * right.yy + left.xz * right.zy,
+            left.xx * right.xz + left.xy * right.yz + left.xz * right.zz,
+
+            left.yx * right.xx + left.yy * right.yx + left.yz * right.zx,
+            left.yx * right.xy + left.yy * right.yy + left.yz * right.zy,
+            left.yx * right.xz + left.yy * right.yz + left.yz * right.zz,
+
+            left.zx * right.xx + left.zy * right.yx + left.zz * right.zx,
+            left.zx * right.xy + left.zy * right.yy + left.zz * right.zy,
+            left.zx * right.xz + left.zy * right.yz + left.zz * right.zz);
+
+        public Orientation3D Inverse()
         {
-            return obj is Orientation3D d &&
-                   XX == d.XX &&
-                   XY == d.XY &&
-                   XZ == d.XZ &&
-                   YX == d.YX &&
-                   YY == d.YY &&
-                   YZ == d.YZ &&
-                   ZX == d.ZX &&
-                   ZY == d.ZY &&
-                   ZZ == d.ZZ;
+            var value = new Orientation3D(
+                yy * zz - yz * zy, xz * zy - xy * zz, xy * yz - xz * yy,
+                yz * zx - yx * zz, xx * zz - xz * zx, xz * yx - xx * yz,
+                yx * zy - yy * zx, xy * zx - xx * zy, xx * yy - xy * yx
+            );
+            return Determinant == 1 ? value : -value;
         }
 
-        public override int GetHashCode()
-        {
-            HashCode hash = new();
-            hash.Add(XX);
-            hash.Add(XY);
-            hash.Add(XZ);
-            hash.Add(YX);
-            hash.Add(YY);
-            hash.Add(YZ);
-            hash.Add(ZX);
-            hash.Add(ZY);
-            hash.Add(ZZ);
-            return hash.ToHashCode();
-        }
-
-        public static bool operator ==(Orientation3D left, Orientation3D right) => left.Equals(right);
-
-        public static bool operator !=(Orientation3D left, Orientation3D right) => !(left == right);
-
-        public static Orientation3D operator *(Orientation3D left, Orientation3D right)
-        {
-            return new Orientation3D(
-                left.XX * right.XX + left.XY * right.YX + left.XZ * right.ZX,
-                left.XX * right.XY + left.XY * right.YY + left.XZ * right.ZY,
-                left.XX * right.XZ + left.XY * right.YZ + left.XZ * right.ZZ,
-
-                left.YX * right.XX + left.YY * right.YX + left.YZ * right.ZX,
-                left.YX * right.XY + left.YY * right.YY + left.YZ * right.ZY,
-                left.YX * right.XZ + left.YY * right.YZ + left.YZ * right.ZZ,
-
-                left.ZX * right.XX + left.ZY * right.YX + left.ZZ * right.ZX,
-                left.ZX * right.XY + left.ZY * right.YY + left.ZZ * right.ZY,
-                left.ZX * right.XZ + left.ZY * right.YZ + left.ZZ * right.ZZ);
-        }
-
-        public static Point3D operator *(Orientation3D left, Point3D right)
-        {
-            return new(left.XAxis * right, left.YAxis * right, left.ZAxis * right);
-        }
-
+        public static Vector3D operator *(Orientation3D left, Vector3D right) => new(
+            left.XAxis * right,
+            left.YAxis * right,
+            left.ZAxis * right);
 
         public static Orientation3D operator -(Orientation3D value) => new(
-            -value.XX, -value.XY, -value.XZ,
-            -value.YX, -value.YY, -value.YZ,
-            -value.ZX, -value.ZY, -value.ZZ);
+            -value.xx, -value.xy, -value.xz,
+            -value.yx, -value.yy, -value.yz,
+            -value.zx, -value.zy, -value.zz);
     }
 }

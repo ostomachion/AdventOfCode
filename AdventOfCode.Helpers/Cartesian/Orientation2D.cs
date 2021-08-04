@@ -2,69 +2,56 @@ using System;
 
 namespace AdventOfCode.Helpers.Cartesian
 {
-    public struct Orientation2D
+    public record Orientation2D
     {
-        public static readonly Orientation2D I = new(1, 0, 0, 1);
-        public static readonly Orientation2D R = new(0, 1, -1, 0);
-        public static readonly Orientation2D R2 = R * R;
-        public static readonly Orientation2D R3 = R * R * R;
+        public static readonly Orientation2D Standard = new(Vector2D.LeftToRight, Vector2D.BottomToTop);
 
-        public int XX { get; }
-        public int XY { get; }
-        public int YX { get; }
-        public int YY { get; }
+        private readonly int xx;
+        private readonly int xy;
+        private readonly int yx;
+        private readonly int yy;
 
-        public Point2D XAxis => new(XX, XY);
-        public Point2D YAxis => new(YX, YY);
+        public Vector2D XAxis => new(xx, xy);
+        public Vector2D YAxis => new(yx, yy);
 
-        public Orientation2D(int xx, int xy, int yx, int yy)
+        public int Determinant => xx * yy - xy * yx;
+
+        private Orientation2D(int xx, int xy, int yx, int yy)
         {
-            XX = xx;
-            XY = xy;
-            YX = yx;
-            YY = yy;
+            this.xx = xx;
+            this.xy = xy;
+            this.yx = yx;
+            this.yy = yy;
         }
 
-        public Orientation2D(Point2D xAxis, Point2D yAxis)
+        public Orientation2D(Vector2D xAxis, Vector2D yAxis)
+            : this((int)xAxis.X, (int)xAxis.Y, (int)yAxis.X, (int)yAxis.Y)
         {
-            XX = (int)xAxis.X;
-            XY = (int)xAxis.Y;
-            YX = (int)yAxis.X;
-            YY = (int)yAxis.Y;
+            if (xAxis * yAxis != 0 || Determinant is not (1 or -1))
+                throw new ArgumentException("Must be an orthonormal basis.");
         }
 
-        public static Orientation2D operator *(Orientation2D left, Orientation2D right)
+        public Orientation2D Inverse()
         {
-            return new Orientation2D(
-                left.XX * right.XX + left.XY * right.YX,
-                left.XX * right.XY + left.XY * right.YY,
-
-                left.YX * right.XX + left.YY * right.YX,
-                left.YX * right.XY + left.YY * right.YY);
+            var value = new Orientation2D(
+                yy, -xy,
+                -yx, xx);
+            return Determinant == 1 ? value : -value;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is Orientation2D d &&
-                   XX == d.XX &&
-                   XY == d.XY &&
-                   YX == d.YX &&
-                   YY == d.YY;
-        }
+        public static Orientation2D operator *(Orientation2D left, Orientation2D right) => new(
+            left.xx * right.xx + left.xy * right.yx,
+            left.xx * right.xy + left.xy * right.yy,
 
-        public override int GetHashCode() => HashCode.Combine(XX, XY, YX, YY);
+            left.yx * right.xx + left.yy * right.yx,
+            left.yx * right.xy + left.yy * right.yy);
 
-        public static bool operator ==(Orientation2D left, Orientation2D right) => left.Equals(right);
-
-        public static bool operator !=(Orientation2D left, Orientation2D right) => !(left == right);
-
-        public static Point2D operator *(Orientation2D left, Point2D right)
-        {
-            return new(left.XAxis * right, left.YAxis * right);
-        }
+        public static Vector2D operator *(Orientation2D left, Vector2D right) => new(
+            left.XAxis * right,
+            left.YAxis * right);
 
         public static Orientation2D operator -(Orientation2D value) => new(
-            -value.XX, -value.XY,
-            -value.YX, -value.YY);
+            -value.xx, -value.xy,
+            -value.yx, -value.yy);
     }
 }
