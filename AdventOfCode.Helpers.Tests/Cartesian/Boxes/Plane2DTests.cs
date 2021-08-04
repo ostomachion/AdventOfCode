@@ -8,7 +8,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
     public class Plane2DTests
     {
         [Fact]
-        public void Test()
+        public void Edges()
         {
             var plane = new Plane2D(new(1, 2), new(3, 4));
             var edges = plane.Edges.ToList();
@@ -43,7 +43,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
                 item => {
                     Assert.Equal(Vector2D.TopToBottom, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
-                    
+
                     Assert.Equal(1, item.IStart.X);
                     Assert.Equal(4, item.IStart.Y);
                     Assert.Equal(1, item.IEnd.X);
