@@ -6,8 +6,8 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
     {
         public Orientation3D Orientation { get; init; } = Orientation3D.Standard;
 
-        public Point3D IStart => throw new NotImplementedException();
-        public Point3D IEnd => throw new NotImplementedException();
+        public Point3D IStart => new(I.Start, J, K) { Orientation = Orientation };
+        public Point3D IEnd => new(-I.End, -J, -K) { Orientation = -Orientation };
 
         public Point3D[] Vertices => new []
         {

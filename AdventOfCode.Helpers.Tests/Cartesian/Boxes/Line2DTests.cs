@@ -33,7 +33,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         [Fact]
         public void VerticesReoriented()
         {
-            var line = new Line2D(new(1, 2), 3) { Orientation = new Orientation2D(Vector2D.BottomToTop, Vector2D.RightToLeft) };
+            var line = new Line2D(new(1, 2), 3) { Orientation = new(Vector2D.BottomToTop, Vector2D.RightToLeft) };
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
                 item => {
@@ -56,7 +56,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         [Fact]
         public void VerticesFlipped()
         {
-            var line = new Line2D(new(1, 2), 3) { Orientation = new Orientation2D(Vector2D.BottomToTop, Vector2D.LeftToRight) };
+            var line = new Line2D(new(1, 2), 3) { Orientation = new(Vector2D.BottomToTop, Vector2D.LeftToRight) };
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
                 item => {

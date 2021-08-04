@@ -1,5 +1,3 @@
-using AdventOfCode.Helpers.Cartesian.Boxes;
-
 namespace AdventOfCode.Helpers.Cartesian
 {
     public record Vector3D(long X, long Y, long Z)
@@ -13,8 +11,8 @@ namespace AdventOfCode.Helpers.Cartesian
         public static readonly Vector3D RightToLeft = -I;
         public static readonly Vector3D BottomToTop = J;
         public static readonly Vector3D TopToBottom = -J;
-        public static readonly Vector3D FrontToBack = K;
-        public static readonly Vector3D BackToFront = -K;
+        public static readonly Vector3D FarToNear = K;
+        public static readonly Vector3D NearToFar = -K;
 
         public static Vector3D operator +(Vector3D left, Vector3D right) => new(
             left.X + right.X,

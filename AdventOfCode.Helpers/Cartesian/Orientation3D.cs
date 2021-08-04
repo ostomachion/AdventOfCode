@@ -4,7 +4,7 @@ namespace AdventOfCode.Helpers.Cartesian
 {
     public record Orientation3D
     {
-        public static readonly Orientation3D Standard = new(Vector3D.LeftToRight, Vector3D.BottomToTop, Vector3D.FrontToBack);
+        public static readonly Orientation3D Standard = new(Vector3D.LeftToRight, Vector3D.BottomToTop, Vector3D.FarToNear);
 
         private readonly int xx;
         private readonly int xy;

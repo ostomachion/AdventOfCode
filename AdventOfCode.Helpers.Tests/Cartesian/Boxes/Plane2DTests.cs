@@ -60,7 +60,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         [Fact]
         public void EdgesReoriented()
         {
-            var plane = new Plane2D(new(1, 2), new(3, 4)) { Orientation = new Orientation2D(Vector2D.TopToBottom, Vector2D.LeftToRight) };
+            var plane = new Plane2D(new(1, 2), new(3, 4)) { Orientation = new(Vector2D.TopToBottom, Vector2D.LeftToRight) };
             var edges = plane.Edges.ToList();
             Assert.Collection(edges,
                 item =>
@@ -109,7 +109,7 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
         [Fact]
         public void EdgesFlipped()
         {
-            var plane = new Plane2D(new(1, 2), new(3, 4)) { Orientation = new Orientation2D(Vector2D.LeftToRight, Vector2D.TopToBottom) };
+            var plane = new Plane2D(new(1, 2), new(3, 4)) { Orientation = new(Vector2D.LeftToRight, Vector2D.TopToBottom) };
             var edges = plane.Edges.ToList();
             Assert.Collection(edges,
                 item =>

@@ -5,9 +5,9 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
     public record Point3D(long I, long J, long K)
     {
         public Orientation3D Orientation { get; init; } = Orientation3D.Standard;
-        public long X => (Orientation * new Vector3D(I, J, K)).X;
-        public long Y => (Orientation * new Vector3D(I, J, K)).Y;
-        public long Z => (Orientation * new Vector3D(I, J, K)).Z;
+        public long X => (Orientation.Inverse() * new Vector3D(I, J, K)).X;
+        public long Y => (Orientation.Inverse() * new Vector3D(I, J, K)).Y;
+        public long Z => (Orientation.Inverse() * new Vector3D(I, J, K)).Z;
 
         public Vector3D Vector => this;
 

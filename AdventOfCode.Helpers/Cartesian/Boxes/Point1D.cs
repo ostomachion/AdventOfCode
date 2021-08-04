@@ -5,7 +5,7 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
     public record Point1D(long I)
     {
         public Orientation1D Orientation { get; init; } = Orientation1D.Standard;
-        public long X => (Orientation * new Vector1D(I)).X;
+        public long X => (Orientation.Inverse() * new Vector1D(I)).X;
 
         public Vector1D Vector => this;
 
