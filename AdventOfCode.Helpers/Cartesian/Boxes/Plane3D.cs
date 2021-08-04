@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace AdventOfCode.Helpers.Cartesian.Boxes
 {
-    public record Plane3D(Interval I, Interval J, long Z = 0)
+    public record Plane3D(Interval I, Interval J, long K = 0)
     {
         public Orientation3D Orientation { get; init; } = Orientation3D.Standard;
 
-        public Line3D IStart => throw new NotImplementedException();
-        public Line3D IEnd => throw new NotImplementedException();
-        public Line3D JStart => throw new NotImplementedException();
-        public Line3D JEnd => throw new NotImplementedException();
+        public Line3D IStart => new(-J, I.Start, -K) { Orientation =  new Orientation3D(Vector3D.TopToBottom, Vector3D.LeftToRight, Vector3D.NearToFar) * Orientation };
+        public Line3D IEnd => new(J, -I.End, K) { Orientation = new Orientation3D(Vector3D.BottomToTop, Vector3D.RightToLeft, Vector3D.FarToNear) * Orientation };
+        public Line3D JStart => new(I, J.Start, K) { Orientation = Orientation3D.Standard * Orientation };
+        public Line3D JEnd => new(-I, -J.End, -K) { Orientation = new Orientation3D(Vector3D.RightToLeft, Vector3D.TopToBottom, Vector3D.NearToFar) * Orientation };
 
         public Line3D[] Edges => new[]
         {
-            IStart, IEnd,
-            JStart, JEnd
+            JStart, IEnd,
+            JEnd, IStart
         };
 
         public Point3D[] Vertices => new[]
