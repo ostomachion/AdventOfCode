@@ -7,7 +7,7 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
         public Orientation1D Orientation { get; init; } = Orientation1D.Standard;
 
         public Point1D IStart => new(I.Start) { Orientation = Orientation };
-        public Point1D IEnd => new(-I.Start) { Orientation = -Orientation };
+        public Point1D IEnd => new(-I.End) { Orientation = -Orientation };
 
         public Point1D[] Vertices => new[]
         {
