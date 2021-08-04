@@ -12,7 +12,7 @@ namespace AdventOfCode.Y2015.Days
 {
     public class Day06 : Day
     {
-        public record MatchValue(int Toggle, Coordinate Start, Coordinate End);
+        public record MatchValue(int Toggle, Point Start, Point End);
         public override Output Part1()
         {
             var input = Input.Lines().Parse<MatchValue>(

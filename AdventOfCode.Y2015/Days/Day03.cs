@@ -12,7 +12,7 @@ namespace AdventOfCode.Y2015.Days
         {
             var path = Direction2D.FromString(Input);
             var grid = new InfiniteGrid<int>();
-            var c = new Coordinate(0, 0);
+            var c = new Point(0, 0);
             grid[c]++;
             foreach (var p in path)
             {
@@ -26,8 +26,8 @@ namespace AdventOfCode.Y2015.Days
         {
             var path = Direction2D.FromString(Input);
             var grid = new InfiniteGrid<int>();
-            var s = new Coordinate(0, 0);
-            var r = new Coordinate(0, 0);
+            var s = new Point(0, 0);
+            var r = new Point(0, 0);
             grid[s]++;
             grid[r]++;
             bool even = true;
