@@ -9,9 +9,9 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
         public Plane3D IStart => new(J, K, I.Start) { Orientation =  new Orientation3D(Vector3D.BottomToTop, Vector3D.FarToNear, Vector3D.LeftToRight) * Orientation };
         public Plane3D IEnd => new(-J, -K, -I.End) { Orientation =  new Orientation3D(Vector3D.TopToBottom, Vector3D.NearToFar, Vector3D.RightToLeft) * Orientation };
         public Plane3D JStart => new(K, I, J.Start) { Orientation =  new Orientation3D(Vector3D.FarToNear, Vector3D.LeftToRight, Vector3D.BottomToTop) * Orientation };
-        public Plane3D JEnd => new(-K, -I, -J.Start) { Orientation =  new Orientation3D(Vector3D.NearToFar, Vector3D.RightToLeft, Vector3D.TopToBottom) * Orientation };
+        public Plane3D JEnd => new(-K, -I, -J.End) { Orientation =  new Orientation3D(Vector3D.NearToFar, Vector3D.RightToLeft, Vector3D.TopToBottom) * Orientation };
         public Plane3D KStart => new(I, J, K.Start) { Orientation = Orientation3D.Standard * Orientation };
-        public Plane3D KEnd =>  new(-I, -J, -K.Start) { Orientation = -Orientation3D.Standard * Orientation };
+        public Plane3D KEnd =>  new(-I, -J, -K.End) { Orientation = -Orientation3D.Standard * Orientation };
 
         public Plane3D[] Faces => new []
         {
