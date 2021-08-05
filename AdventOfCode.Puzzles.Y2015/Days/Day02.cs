@@ -3,6 +3,7 @@ using System.Linq;
 using AdventOfCode.Puzzles;
 using AdventOfCode.Helpers.Cartesian;
 using AdventOfCode.Helpers.Extensions;
+using AdventOfCode.Helpers.Cartesian.Boxes;
 
 namespace AdventOfCode.Puzzles.Y2015.Days
 {
@@ -10,27 +11,27 @@ namespace AdventOfCode.Puzzles.Y2015.Days
     {
         public override Output Part1()
         {
-            // var input = Input.Lines().Split('x');
-            // return input.Sum(x =>
-            // {
-            //     var box = new Box2D(x.ParseInt().ToArray());
-            //     var min = box.Faces.Min(x => x.Area);
-            //     var area = box.Perimeter + min;
-            //     return area;
-            // });
-            throw new NotImplementedException();
+            var input = Input.Lines().Split('x');
+            return input.Sum(x =>
+            {
+                var dim = x.ParseInt().ToArray();
+                var box = new Space3D(dim[0], dim[1], dim[2]);
+                var min = box.Faces.Min(x => x.Area);
+                var area = box.SurfaceArea + min;
+                return area;
+            });
         }
 
         public override Output Part2()
         {
-            // var input = Input.Lines().Split('x');
-            // return input.Sum(x =>
-            // {
-            //     var box = new Box2D(x.ParseInt().ToArray());
-            //     var ribbon = box.Faces.Min(y => y.Perimeter) + box.Area;
-            //     return ribbon;
-            // });
-            throw new NotImplementedException();
+            var input = Input.Lines().Split('x');
+            return input.Sum(x =>
+            {
+                var dim = x.ParseInt().ToArray();
+                var box = new Space3D(dim[0], dim[1], dim[2]);
+                var ribbon = box.Faces.Min(y => y.Perimeter) + box.Volume;
+                return ribbon;
+            });
         }
     }
 }

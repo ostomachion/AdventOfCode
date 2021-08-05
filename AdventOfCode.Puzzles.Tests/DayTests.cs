@@ -17,7 +17,7 @@ namespace AdventOfCode.Puzzles.Tests
         protected static void Test(string? input, string? output)
         {
             var caller = new StackFrame(1).GetMethod()!;
-            var match = Regex.Match(caller.ReflectedType!.FullName!, $@"^AdventOfCode\.Y(?<year>\d\d\d\d)\.Tests\.Day(?<day>\d\d)$");
+            var match = Regex.Match(caller.ReflectedType!.FullName!, $@"^AdventOfCode\.Puzzles\.Y(?<year>\d\d\d\d)\.Tests\.Day(?<day>\d\d)$");
             
             if (!match.Success)
                 throw new InvalidOperationException();
