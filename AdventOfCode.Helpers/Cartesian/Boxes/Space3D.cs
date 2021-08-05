@@ -15,19 +15,18 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 
         public Plane3D[] Faces => new []
         {
-            IStart, IEnd,
-            JStart, JEnd,
-            KStart, KEnd
+            KStart, JStart, IStart,
+            KEnd, JEnd, IEnd
         };
 
         public Line3D[] Edges => new []
         {
-            IStart.IStart, IStart.IEnd,
-            IEnd.IStart, IEnd.IEnd,
+            KStart.IStart, IStart.IEnd,
             JStart.IStart, JStart.IEnd,
-            JEnd.IStart, JEnd.IEnd,
-            KStart.IStart, KStart.IEnd,
+            IStart.IStart, IStart.IEnd,
             KEnd.IStart, KEnd.IEnd,
+            JEnd.IStart, JEnd.IEnd,
+            IEnd.IStart, IEnd.IEnd
         };
         
         public Point3D[] Vertices => new []
