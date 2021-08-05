@@ -20,8 +20,8 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 
         public Point3D[] Vertices => new[]
         {
-            IStart.IStart, IEnd.IStart,
-            JStart.IStart, JEnd.IStart
+            JStart.IStart, IEnd.IStart,
+            JEnd.IStart, IStart.IStart
         };
 
         public long Perimeter => 2 * (IStart.Length + JStart.Length);
