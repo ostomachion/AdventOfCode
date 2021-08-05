@@ -190,5 +190,152 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
                 }
             );
         }
+
+        [Fact]
+        public void Vertices()
+        {
+            var plane = new Plane3D(new(1, 2), new(3, 4), 5);
+            var vertices = plane.Vertices.ToList();
+            Assert.Collection(vertices,
+                item =>
+                {
+                    Assert.Equal(Vector3D.LeftToRight, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(1, item.X);
+                    Assert.Equal(3, item.Y);
+                    Assert.Equal(5, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.RightToLeft, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(2, item.X);
+                    Assert.Equal(3, item.Y);
+                    Assert.Equal(5, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.RightToLeft, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(2, item.X);
+                    Assert.Equal(4, item.Y);
+                    Assert.Equal(5, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.LeftToRight, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(1, item.X);
+                    Assert.Equal(4, item.Y);
+                    Assert.Equal(5, item.Z);
+                }
+            );
+        }
+
+        [Fact]
+        public void VerticesRotated()
+        {
+            var plane = new Plane3D(new(1, 2), new(3, 4), 5) { Orientation = new(Vector3D.NearToFar, Vector3D.TopToBottom, Vector3D.RightToLeft) };
+            var vertices = plane.Vertices.ToList();
+            Assert.Collection(vertices,
+                item =>
+                {
+                    Assert.Equal(Vector3D.NearToFar, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-3, item.Y);
+                    Assert.Equal(-1, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.FarToNear, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-3, item.Y);
+                    Assert.Equal(-2, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.FarToNear, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-4, item.Y);
+                    Assert.Equal(-2, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.NearToFar, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-4, item.Y);
+                    Assert.Equal(-1, item.Z);
+                }
+            );
+        }
+
+        [Fact]
+        public void VerticesFlipped()
+        {
+            var plane = new Plane3D(new(1, 2), new(3, 4), 5) { Orientation = new(Vector3D.FarToNear, Vector3D.TopToBottom, Vector3D.RightToLeft) };
+            var vertices = plane.Vertices.ToList();
+            Assert.Collection(vertices,
+                item =>
+                {
+                    Assert.Equal(Vector3D.FarToNear, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-3, item.Y);
+                    Assert.Equal(1, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.TopToBottom, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.NearToFar, item.Orientation.YAxis);
+                    Assert.Equal(-1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-3, item.Y);
+                    Assert.Equal(2, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.NearToFar, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-4, item.Y);
+                    Assert.Equal(2, item.Z);
+                },
+                item =>
+                {
+                    Assert.Equal(Vector3D.BottomToTop, item.Orientation.XAxis);
+                    Assert.Equal(Vector3D.FarToNear, item.Orientation.YAxis);
+                    Assert.Equal(1, item.Orientation.Determinant);
+
+                    Assert.Equal(-5, item.X);
+                    Assert.Equal(-4, item.Y);
+                    Assert.Equal(1, item.Z);
+                }
+            );
+        }
     }
 }
