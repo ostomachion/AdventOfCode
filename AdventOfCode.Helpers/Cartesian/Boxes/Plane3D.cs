@@ -10,7 +10,7 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
         public Line3D IStart => new(-J, I.Start, -K) { Orientation =  new Orientation3D(Vector3D.TopToBottom, Vector3D.LeftToRight, Vector3D.NearToFar) * Orientation };
         public Line3D IEnd => new(J, -I.End, K) { Orientation = new Orientation3D(Vector3D.BottomToTop, Vector3D.RightToLeft, Vector3D.FarToNear) * Orientation };
         public Line3D JStart => new(I, J.Start, K) { Orientation = Orientation3D.Standard * Orientation };
-        public Line3D JEnd => new(-I, -J.End, -K) { Orientation = new Orientation3D(Vector3D.RightToLeft, Vector3D.TopToBottom, Vector3D.NearToFar) * Orientation };
+        public Line3D JEnd => new(-I, -J.End, -K) { Orientation = -Orientation3D.Standard * Orientation };
 
         public Line3D[] Edges => new[]
         {
