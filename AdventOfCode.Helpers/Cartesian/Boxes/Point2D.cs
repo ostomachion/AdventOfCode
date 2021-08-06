@@ -10,7 +10,21 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 
         public Vector2D Vector => this;
 
+        public void Deconstruct(out long x, out long y)
+        {
+            x = X;
+            y = Y;
+        }
+
         public override string? ToString() => $"({X},{Y})";
+
+        public static implicit operator Point2D(Coordinate2D value) => new(
+            value.X,
+            value.Y);
+
+        public static implicit operator Coordinate2D(Point2D value) => new(
+            value.X,
+            value.Y);
 
         public static implicit operator Point2D(Vector2D value) => new(
             value.X,

@@ -13,7 +13,7 @@ namespace AdventOfCode.Helpers.DataStructures
 
         public ICollection<TKey> Keys => this.value.Keys;
 
-        public ICollection<TValue?> Values => this.value.Values!;
+        public ICollection<TValue> Values => this.value.Values;
 
         public int Count => this.value.Count;
 

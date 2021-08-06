@@ -11,7 +11,24 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 
         public Vector3D Vector => this;
 
+        public void Deconstruct(out long x, out long y, out long z)
+        {
+            x = X;
+            y = Y;
+            z = Z;
+        }
+
         public override string? ToString() => $"({X},{Y},{Z})";
+
+        public static implicit operator Point3D(Coordinate3D value) => new(
+            value.X,
+            value.Y,
+            value.Z);
+
+        public static implicit operator Coordinate3D(Point3D value) => new(
+            value.X,
+            value.Y,
+            value.Z);
 
         public static implicit operator Point3D(Vector3D value) => new(
             value.X,

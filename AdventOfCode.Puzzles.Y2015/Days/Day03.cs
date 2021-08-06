@@ -3,6 +3,8 @@ using System.Linq;
 using AdventOfCode.Puzzles;
 using AdventOfCode.Helpers;
 using AdventOfCode.Helpers.Cartesian;
+using AdventOfCode.Helpers.Cartesian.Boxes;
+using AdventOfCode.Helpers.Cartesian.Grids;
 
 namespace AdventOfCode.Puzzles.Y2015.Days
 {
@@ -10,44 +12,42 @@ namespace AdventOfCode.Puzzles.Y2015.Days
     {
         public override Output Part1()
         {
-            // var path = Direction2D.FromString(Input);
-            // var grid = new InfiniteGrid<int>();
-            // var c = new Point(0, 0);
-            // grid[c]++;
-            // foreach (var p in path)
-            // {
-            //     c += p;
-            //     grid[c]++;
-            // }
-            // return grid.Values.Count;
-            throw new NotImplementedException();
+            var path = Vector2D.ParseArrows(Input);
+            var grid = SparsePlaneGrid2D<int>.Infinite;
+            var c = Coordinate2D.O;
+            grid[c]++;
+            foreach (var p in path)
+            {
+                c += p;
+                grid[c]++;
+            }
+            return grid.Values.Count();
         }
 
         public override Output Part2()
         {
-            // var path = Direction2D.FromString(Input);
-            // var grid = new InfiniteGrid<int>();
-            // var s = new Point(0, 0);
-            // var r = new Point(0, 0);
-            // grid[s]++;
-            // grid[r]++;
-            // bool even = true;
-            // foreach (var p in path)
-            // {
-            //     if (even)
-            //     {
-            //         s += p;
-            //         grid[s]++;
-            //     }
-            //     else
-            //     {
-            //         r += p;
-            //         grid[r]++;
-            //     }
-            //     even = !even;
-            // }
-            // return grid.Values.Count;
-            throw new NotImplementedException();
+            var path = Vector2D.ParseArrows(Input);
+            var grid = SparsePlaneGrid2D<int>.Infinite;
+            var s = Coordinate2D.O;
+            var r = Coordinate2D.O;
+            grid[s]++;
+            grid[r]++;
+            bool isS = true;
+            foreach (var p in path)
+            {
+                if (isS)
+                {
+                    s += p;
+                    grid[s]++;
+                }
+                else
+                {
+                    r += p;
+                    grid[r]++;
+                }
+                isS = !isS;
+            }
+            return grid.Values.Count();
         }
     }
 }

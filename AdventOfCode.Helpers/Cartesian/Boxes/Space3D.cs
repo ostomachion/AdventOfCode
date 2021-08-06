@@ -4,6 +4,8 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 {
     public record Space3D(Interval I, Interval J, Interval K)
     {
+        public static readonly Space3D Infinite = new(Interval.Infinite, Interval.Infinite, Interval.Infinite);
+
         public Orientation3D Orientation { get; init; } = Orientation3D.Standard;
 
         public Plane3D IStart => new(J, K, I.Start) { Orientation =  new Orientation3D(Vector3D.BottomToTop, Vector3D.FarToNear, Vector3D.LeftToRight) * Orientation };
@@ -35,6 +37,19 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
             IStart.IEnd.IStart, IStart.IEnd.IEnd,
             IEnd.IStart.IStart, IEnd.IStart.IEnd,
             IEnd.IEnd.IStart, IEnd.IEnd.IEnd
+        };
+
+        public bool Contains(Coordinate3D coordinate)
+        {
+            coordinate = Loop(coordinate);
+            return I.Contains(coordinate.X) && J.Contains(coordinate.Y) && K.Contains(coordinate.Z);
+        }
+
+        public Coordinate3D Loop(Coordinate3D coordinate) => coordinate with
+        {
+            X = I.Looping ? I.Loop(coordinate.X) : coordinate.X,
+            Y = J.Looping ? J.Loop(coordinate.Y) : coordinate.Y,
+            Z = K.Looping ? K.Loop(coordinate.Z) : coordinate.Z,
         };
 
         public long SurfaceArea => 2 * (IStart.Area + JStart.Area + KStart.Area);

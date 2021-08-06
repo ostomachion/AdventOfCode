@@ -5,6 +5,8 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 {
     public record Plane3D(Interval I, Interval J, long K = 0)
     {
+        public static readonly Plane3D Infinite = new(Interval.Infinite, Interval.Infinite);
+
         public Orientation3D Orientation { get; init; } = Orientation3D.Standard;
 
         public Line3D IStart => new(-J, I.Start, -K) { Orientation =  new Orientation3D(Vector3D.TopToBottom, Vector3D.LeftToRight, Vector3D.NearToFar) * Orientation };
@@ -26,6 +28,18 @@ namespace AdventOfCode.Helpers.Cartesian.Boxes
 
         public long Perimeter => 2 * (IStart.Length + JStart.Length);
         public long Area => I.Length * J.Length;
+
+        public bool Contains(Coordinate3D coordinate)
+        {
+            coordinate = Loop(coordinate);
+            return I.Contains(coordinate.X) && J.Contains(coordinate.Y) && K == coordinate.Z;
+        }
+
+        public Coordinate3D Loop(Coordinate3D coordinate) => coordinate with
+        {
+            X = I.Looping ? I.Loop(coordinate.X) : coordinate.X,
+            Y = J.Looping ? J.Loop(coordinate.Y) : coordinate.Y,
+        };
 
         public override string ToString() => $"{IStart.IStart}-{IEnd.IEnd}";
     }

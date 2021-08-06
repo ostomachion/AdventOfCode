@@ -5,6 +5,8 @@ namespace AdventOfCode.Helpers.Cartesian
 {
     public record Interval
     {
+        public static readonly Interval Infinite = new();
+
         public long? OptionalStart { get; }
         public long? OptionalEnd { get; }
         public bool Looping { get; }
