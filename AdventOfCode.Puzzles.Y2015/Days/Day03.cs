@@ -13,7 +13,7 @@ namespace AdventOfCode.Puzzles.Y2015.Days
         public override Output Part1()
         {
             var path = Vector2D.ParseArrows(Input);
-            var grid = SparsePlaneGrid2D<int>.Infinite;
+            var grid = Grid.MakeInfiniteSparse2D<int>();
             var c = Coordinate2D.O;
             grid[c]++;
             foreach (var p in path)
@@ -27,7 +27,7 @@ namespace AdventOfCode.Puzzles.Y2015.Days
         public override Output Part2()
         {
             var path = Vector2D.ParseArrows(Input);
-            var grid = SparsePlaneGrid2D<int>.Infinite;
+            var grid = Grid.MakeInfiniteSparse2D<int>();
             var s = Coordinate2D.O;
             var r = Coordinate2D.O;
             grid[s]++;
