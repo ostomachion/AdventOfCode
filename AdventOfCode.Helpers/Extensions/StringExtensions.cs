@@ -52,7 +52,7 @@ namespace AdventOfCode.Helpers.Extensions
 
         public static string[] Lines(this string text) => text.Split('\n');
 
-        public static T? Parse<T>(this string text, params TypeRegex[] rules)
+        public static T? Parse<T>(this string text, params string[] rules)
         {
             throw new NotImplementedException();
         }
