@@ -52,15 +52,9 @@ namespace AdventOfCode.Helpers.Extensions
 
         public static string[] Lines(this string text) => text.Split('\n');
 
-        public static T? Parse<T>(this string text, params ParseRule<T>[] rules)
+        public static T? Parse<T>(this string text, params TypeRegex[] rules)
         {
-            foreach (var (pattern, f) in rules)
-            {
-                var match = Regex.Match(text, pattern);
-                if (match.Success)
-                    return f(match);
-            }
-            return default;
+            throw new NotImplementedException();
         }
 
         public static int ParseInt(this string text) => Int32.Parse(text);
