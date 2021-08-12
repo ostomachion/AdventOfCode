@@ -16,7 +16,10 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
             if (!Expressions.Any())
+            {
                 yield return new ExpressionResult("");
+                yield break;
+            }
 
             var head = Expressions.First();
             var tail = new ConcatExpression(Expressions.Skip(1));
