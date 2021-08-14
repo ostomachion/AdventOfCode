@@ -9,9 +9,10 @@ namespace Kleene
         public string Name { get; }
         public CaptureTreeNode? Parent { get; set; }
         private readonly Stack<CaptureTreeNode> children = new();
-        public ExpressionResult? Value { get; set; }
+        public Stack<ExpressionResult> Values { get; set; } = new();
+        public ExpressionResult Value => Values.Peek();
         public IEnumerable<CaptureTreeNode> Children => this.children;
-        public bool IsOpen => Value is null;
+        public bool IsOpen { get; set; }
 
         public CaptureTreeNode? this[CaptureName? name]
         {

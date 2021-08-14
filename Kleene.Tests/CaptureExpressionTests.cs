@@ -20,10 +20,16 @@ namespace Kleene.Tests
             Assert.Equal("x", result?.Input);
             Assert.Equal("x", result?.Output);
             Assert.Collection(context.CaptureTree.Current.Children,
-                item => {
+                item =>
+                {
                     Assert.Equal("foo", item.Name);
-                    Assert.Equal("x", item.Value?.Input);
-                    Assert.Equal("x", item.Value?.Output);
+                    Assert.Collection(item.Values,
+                    item =>
+                    {
+                        Assert.NotNull(item);
+                        Assert.Equal("x", item.Input);
+                        Assert.Equal("x", item.Output);
+                    });
                 }
             );
         }

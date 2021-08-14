@@ -44,14 +44,16 @@ namespace Kleene
 
         public void Close(ExpressionResult value)
         {
-            this.Current.Value = value;
+            this.Current.IsOpen = false;
+            this.Current.Values.Push(value);
             this.Current = this.Current.Parent ?? throw new InvalidOperationException();
         }
 
         public void Unclose()
         {
             this.Current = this.Current.Children.Last();
-            this.Current.Value = null;
+            this.Current.Values.Pop();
+            this.Current.IsOpen = true;
         }
     }
 }
