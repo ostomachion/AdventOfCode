@@ -29,6 +29,18 @@ namespace Kleene
             this.Current = Root;
         }
 
+        public void Set(CaptureName name, ExpressionResult value)
+        {
+            Open(name);
+            Close(name, value);
+        }
+
+        public void Unset(CaptureName name)
+        {
+            Unclose(name);
+            Unopen(name);
+        }
+
         public void Open(CaptureName name)
         {
             foreach (var part in name.Parts)

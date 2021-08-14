@@ -21,5 +21,7 @@ namespace Kleene
         }
 
         public static implicit operator CaptureName(string value) => new(value);
+
+        public override string ToString() => String.Join('.', Parts);
     }
 }

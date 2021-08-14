@@ -20,11 +20,9 @@ namespace Kleene
             if (value is null)
                 yield break;
 
-            context.CaptureTree.Open(Name);
-            context.CaptureTree.Close(Name, value);
+            context.CaptureTree.Set(Name, value);
             yield return new ExpressionResult("");
-            context.CaptureTree.Unclose(Name);
-            context.CaptureTree.Unopen(Name);
+            context.CaptureTree.Unset(Name);
         }
     }
 }

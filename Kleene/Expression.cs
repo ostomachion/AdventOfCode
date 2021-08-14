@@ -115,7 +115,7 @@ namespace Kleene
                     ':' <type-prop-name>:Name ;
                     (
                         <ws> '{' <ws>
-                        ((<type-prop-name>:Name <ws> '=' <ws> <dotted-capture-name>:Capture):Properties)* % (',' <ws>)
+                        ((<type-prop-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
                         <ws> '}'
                     )? ;
                     (<ws> '=' <ws> <quant>:Scope)? ;
