@@ -11,7 +11,7 @@ namespace Kleene
             var context = new ExpressionContext(input);
             foreach (var result in Run(context))
             {
-                if (context.IsAtEnd)
+                if (context.Local.IsAtEnd)
                     return result.Output;
             }
             return null;

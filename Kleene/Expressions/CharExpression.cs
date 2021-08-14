@@ -13,10 +13,10 @@ namespace Kleene
 
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
-            if (context.Consuming && context.IsAtEnd)
+            if (context.Local.Consuming && context.Local.IsAtEnd)
                 yield break;
 
-            if (!context.Consuming || context.Input[context.Index] == Value)
+            if (!context.Local.Consuming || context.Local.Input[context.Local.Index] == Value)
             {
                 context.Consume(1);
                 context.Produce(Value.ToString());
