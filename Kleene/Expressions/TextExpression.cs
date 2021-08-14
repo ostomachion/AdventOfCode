@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -7,20 +8,21 @@ namespace Kleene
     {
         public string Value { get; }
 
-        private readonly Expression expression;
-
         public TextExpression(string value)
         {
             Value = value;
-            this.expression = new ConcatExpression(value.Select(c => new CharExpression(c)));
         }
 
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
-            // TODO: Make this more efficient.
-            foreach (var result in this.expression.Run(context))
+            var remaining = context.Local.Input.AsSpan()[context.Local.Index..];
+            if (!context.Local.Consuming || remaining.StartsWith(Value))
             {
-                yield return result;
+                context.Consume(Value.Length);
+                context.Produce(Value);
+                yield return new(Value);
+                context.Unproduce();
+                context.Unconsume(Value.Length);
             }
         }
 

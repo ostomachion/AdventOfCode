@@ -10,8 +10,8 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new TransformExpression(
-                new CharExpression('x'),
-                new CharExpression('y'));
+                new TextExpression("x"),
+                new TextExpression("y"));
 
             // When
             var result = expression.Transform("x");
@@ -25,8 +25,8 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new TransformExpression(
-                new CharExpression('x'),
-                new CharExpression('y'));
+                new TextExpression("x"),
+                new TextExpression("y"));
 
             // When
             var result = expression.Transform("y");

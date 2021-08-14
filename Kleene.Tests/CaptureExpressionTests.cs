@@ -10,7 +10,7 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new CaptureExpression("foo", new CharExpression('x'));
+            var expression = new CaptureExpression("foo", new TextExpression("x"));
 
             // When
             var context = new ExpressionContext("x");
@@ -36,8 +36,8 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new CaptureExpression("foo", new CharExpression('x')),
-                new CaptureExpression("foo", new CharExpression('y'))
+                new CaptureExpression("foo", new TextExpression("x")),
+                new CaptureExpression("foo", new TextExpression("y"))
             });
 
             // When
@@ -71,7 +71,7 @@ namespace Kleene.Tests
         public void Nested()
         {
             // Given
-            var expression = new CaptureExpression("foo", new CaptureExpression("bar", new CharExpression('x')));
+            var expression = new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x")));
 
             // When
             var context = new ExpressionContext("x");
@@ -105,7 +105,7 @@ namespace Kleene.Tests
         public void NestedSugar()
         {
             // Given
-            var expression = new CaptureExpression("foo.bar", new CharExpression('x'));
+            var expression = new CaptureExpression("foo.bar", new TextExpression("x"));
 
             // When
             var context = new ExpressionContext("x");

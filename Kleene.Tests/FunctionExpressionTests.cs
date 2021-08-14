@@ -10,7 +10,7 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new FunctionExpression("foo", new CharExpression('x'));
+            var expression = new FunctionExpression("foo", new TextExpression("bar"));
 
             // When
             var context = new ExpressionContext("");
@@ -23,8 +23,8 @@ namespace Kleene.Tests
                 item =>
                 {
                     Assert.Equal("foo", item.Key);
-                    Assert.IsType<CharExpression>(item.Value);
-                    Assert.Equal('x', (item.Value as CharExpression)!.Value)
+                    Assert.IsType<TextExpression>(item.Value);
+                    Assert.Equal("bar", (item.Value as TextExpression)!.Value)
                     ;
                 }
             );

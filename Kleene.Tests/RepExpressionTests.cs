@@ -9,7 +9,7 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new RepExpression(new CharExpression('x'), null, new RepCount(0, -1));
+            var expression = new RepExpression(new TextExpression("x"), null, new RepCount(0, -1));
 
             // When
             var result = expression.Transform("xxxx");
@@ -22,7 +22,7 @@ namespace Kleene.Tests
         public void Separator()
         {
             // Given
-            var expression = new RepExpression(new CharExpression('x'), new CharExpression('y'), new RepCount(0, -1));
+            var expression = new RepExpression(new TextExpression("x"), new TextExpression("y"), new RepCount(0, -1));
 
             // When
             var result = expression.Transform("xyxyxyx");

@@ -47,7 +47,7 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CaptureExpression("foo", new CharExpression('x')),
+                new CaptureExpression("foo", new TextExpression("x")),
                 new AssignmentExpression("foo", new TextExpression("y")),
                 new BackreferenceExpression("foo")
             });

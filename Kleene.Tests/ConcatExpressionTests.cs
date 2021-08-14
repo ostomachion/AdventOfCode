@@ -11,8 +11,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -28,8 +28,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -45,8 +45,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -62,8 +62,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -79,8 +79,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -96,8 +96,8 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new OptExpression(new CharExpression('x')),
-                new CharExpression('x')
+                new OptExpression(new TextExpression("x")),
+                new TextExpression("x")
             });
 
             // When

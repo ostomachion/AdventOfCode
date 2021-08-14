@@ -9,7 +9,7 @@ namespace Kleene.Tests
         public void NonEmpty()
         {
             // Given
-            var expression = new OptExpression(new CharExpression('x'));
+            var expression = new OptExpression(new TextExpression("x"));
 
             // When
             var result = expression.Transform("x");
@@ -22,7 +22,7 @@ namespace Kleene.Tests
         public void Empty()
         {
             // Given
-            var expression = new OptExpression(new CharExpression('x'));
+            var expression = new OptExpression(new TextExpression("x"));
 
             // When
             var result = expression.Transform("");

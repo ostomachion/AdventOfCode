@@ -11,8 +11,8 @@ namespace Kleene.Tests
             // Given
             var expression = new AltExpression(new[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -28,8 +28,8 @@ namespace Kleene.Tests
             // Given
             var expression = new AltExpression(new[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -45,8 +45,8 @@ namespace Kleene.Tests
             // Given
             var expression = new AltExpression(new[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When
@@ -62,8 +62,8 @@ namespace Kleene.Tests
             // Given
             var expression = new AltExpression(new[]
             {
-                new CharExpression('x'),
-                new CharExpression('y')
+                new TextExpression("x"),
+                new TextExpression("y")
             });
 
             // When

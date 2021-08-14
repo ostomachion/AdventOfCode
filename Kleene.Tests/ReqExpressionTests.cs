@@ -11,7 +11,7 @@ namespace Kleene.Tests
             // Given
             var expression = new ReqExpression(new AltExpression(new Expression[]
             {
-                new CharExpression('x'),
+                new TextExpression("x"),
                 new PassExpression()
             }));
 
@@ -28,7 +28,7 @@ namespace Kleene.Tests
             // Given
             var expression = new ReqExpression(new AltExpression(new Expression[]
             {
-                new CharExpression('x'),
+                new TextExpression("x"),
                 new PassExpression()
             }));
 
