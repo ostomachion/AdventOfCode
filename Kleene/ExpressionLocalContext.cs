@@ -8,6 +8,7 @@ namespace Kleene
     {
         public bool Consuming { get; set; } = true;
         public bool Producing { get; set; } = true;
+        public bool IsAtStart => Index == 0;
         public bool IsAtEnd => Index == Input.Length;
         public string Input { get; }
         public int Index { get; set; }
