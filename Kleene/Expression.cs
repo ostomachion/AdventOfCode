@@ -82,6 +82,7 @@ namespace Kleene
                     - <call>
                     - <char-class>
                     - <anchor>
+                    - <ratchet>
                     - <special>
                     - <text>
                 }
@@ -142,13 +143,16 @@ namespace Kleene
                 <positive-predefined-char-class> {
                     ::CharClassExpression
                     (
-                        - '\\' / '\' ::TextExpression
-                        - '\n' / '[n]' ::TextExpression
-                        - '\t' / '[t]' ::TextExpression
+                        - '\\' / '\'
+                        - '\n' / '[n]'
+                        - '\t' / '[t]'
                         - '\h' / ' [t]'
                         - '\s' / ' [t][n]'
-                        - '\d' / '0..9'
-                        - '\w' / 'A..Za..z0..9'
+                        - '\d' / '0123456789'
+                        - '\u' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        - '\l' / 'abcdefghijklmnopqrstuvwxyz'
+                        - '\a' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+                        - '\w' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
                     ) ;
                 }
 
@@ -156,13 +160,16 @@ namespace Kleene
                     ::CharClassExpression
                     ?:Negated
                     (
-                        - '.' / '' ::AnyExpression
+                        - '.'  / ''
                         - '\N' / '[n]'
                         - '\T' / '[t]'
                         - '\H' / ' [t]'
                         - '\S' / ' [t][n]'
-                        - '\D' / '0..9'
-                        - '\W' / 'A..Za..z0..9'
+                        - '\D' / '0123456789'
+                        - '\U' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        - '\L' / 'abcdefghijklmnopqrstuvwxyz'
+                        - '\A' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+                        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
                     ) ;
                 }
                 
@@ -170,22 +177,17 @@ namespace Kleene
                     '[<]'
                     ('^':Negated)?
                     (
-                        - <char-class-range>
-                        - [^[<][>]]+
                         - <character-escape>
                         - <positive-predefined-char-class>
+                        - [^[<][>]\\]+
                     )
                     '[>]' ;
-                }
-
-                <char-class-range> {
-                    [A-Za-z0-9] '..' [A-Za-z0-9] ;
                 }
 
                 <anchor> { <predefined-anchor> | <literal-anchor> }
 
                 <predefined-anchor> {
-                    [<>):start
+                    [<>]:start
                     ('!':Negated)
                     (
                         - <char-class>:CharClass
@@ -214,6 +216,8 @@ namespace Kleene
                     ::AnchorExpression
                 }
 
+                <ratchet> { ';' ::RatchetExpression }
+
                 <special> {
                     - <pass>
                     - <fail>
@@ -231,7 +235,7 @@ namespace Kleene
                 }
 
                 <literal> {
-                    [A..Za..z0..9_]+
+                    [\w_]+
                     ::TextExpression
                 }
 
@@ -258,7 +262,7 @@ namespace Kleene
 
                 <line-comment> { '#' [^[n]]* ; }
 
-                <name> { ([A..Za..z] [A..Za..z0..9]*)+ % '[-_]' ; }
+                <name> { (\a \w*)+ % '[-_]' ; }
 
                 <capture-name> { '@' <name> ; }
 
@@ -267,13 +271,13 @@ namespace Kleene
                 <dotted-capture-name> { '@' <dotted-name> ; }
 
                 <type-prop-name> {
-                    [A-Za-z_][A-Za-z0-9_]+ ;
+                    [\a_][\w_]+ ;
                     ('<' <type-prop-name>+ % (',' \s*) '>')? ;
                 }
 
                 <dotted-type-prop-name> { (<name>:Name)+ % '.' ; }
                 
-                <hex> { [0-9A-Fa-f] }
+                <hex> { [\dABCDEFabcdef] }
             */
             throw new NotImplementedException();
         }
