@@ -9,13 +9,26 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new RepExpression(new CharExpression('x'), new RepCount(0, -1));
+            var expression = new RepExpression(new CharExpression('x'), null, new RepCount(0, -1));
 
             // When
             var result = expression.Transform("xxxx");
 
             // Then
             Assert.Equal("xxxx", result);
+        }
+
+        [Fact]
+        public void Separator()
+        {
+            // Given
+            var expression = new RepExpression(new CharExpression('x'), new CharExpression('y'), new RepCount(0, -1));
+
+            // When
+            var result = expression.Transform("xyxyxyx");
+
+            // Then
+            Assert.Equal("xyxyxyx", result);
         }
 
         // TODO: More tests.

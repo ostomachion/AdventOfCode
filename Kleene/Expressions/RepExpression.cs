@@ -7,18 +7,22 @@ namespace Kleene
     public class RepExpression : Expression
     {
         public Expression Expression { get; }
+        public Expression? Separator { get; }
         public RepCount Count { get; }
         public MatchOrder Order { get; }
 
-        public RepExpression(Expression expression, RepCount count, MatchOrder order = MatchOrder.Greedy)
+        public RepExpression(Expression expression, Expression? separator, RepCount count, MatchOrder order = MatchOrder.Greedy)
         {
             Expression = expression;
+            Separator = separator;
             Count = count;
             Order = order;
         }
 
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
+            var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
+
             if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)
             {
                 yield return new ExpressionResult("");
@@ -49,7 +53,7 @@ namespace Kleene
                                 String.Join("", stack.Reverse().Select(x => x.Current.Input)),
                                 String.Join("", stack.Reverse().Select(x => x.Current.Output)));
                         }
-                        stack.Push(this.Expression.Run(context).GetEnumerator());
+                        stack.Push(separated.Run(context).GetEnumerator());
                     }
                 }
                 else
