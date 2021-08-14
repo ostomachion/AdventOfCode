@@ -11,7 +11,7 @@ namespace Kleene
             Expression = expression;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             foreach (var result in Expression.Run(context))
             {

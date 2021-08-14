@@ -15,7 +15,7 @@ namespace Kleene
             CharacterClass = characterClass;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             var prev = context.Local.IsAtStart ? (char?)null : context.Local.Input[context.Local.Index - 1];
             var next = context.Local.IsAtEnd ? (char?)null : context.Local.Input[context.Local.Index];

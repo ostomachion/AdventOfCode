@@ -19,8 +19,11 @@ namespace Kleene
             Order = order;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
+            if (!context.Local.Consuming && Count.IsUnbounded)
+                throw new InvalidOperationException("Unbounded repetitions cannot be used without an input.");
+
             var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
 
             if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)

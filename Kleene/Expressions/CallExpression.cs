@@ -11,15 +11,17 @@ namespace Kleene
             Name = name;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
-            if (context.FunctionList[Name] is Expression expression)
+            if (context.FunctionList[Name] is not Expression expression)
+                yield break;
+
+            foreach (var result in expression.Run(context))
             {
-                foreach (var result in expression.Run(context))
-                {
-                    yield return result;
-                }
+                yield return result;
             }
+
+            context.Ratchet = false;
         }
     }
 }

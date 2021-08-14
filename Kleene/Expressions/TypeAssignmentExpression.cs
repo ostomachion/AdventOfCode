@@ -16,7 +16,7 @@ namespace Kleene
             Scope = scope;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             context.CaptureTree.Open("!T");
             context.CaptureTree.Set("FullName", new(TypeName));

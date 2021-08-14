@@ -14,7 +14,7 @@ namespace Kleene
             Expression = expression;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             var sub = Input.GetValue(context);
             if (sub is null)

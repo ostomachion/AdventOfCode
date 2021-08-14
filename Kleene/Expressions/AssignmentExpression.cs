@@ -14,7 +14,7 @@ namespace Kleene
             Value = value;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             var value = Value.GetValue(context);
             if (value is null)

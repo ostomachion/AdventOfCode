@@ -13,7 +13,7 @@ namespace Kleene
             Expressions = expressions;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (!this.Expressions.Any())
             {

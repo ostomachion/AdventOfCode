@@ -13,7 +13,7 @@ namespace Kleene
             Order = order;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (Order is MatchOrder.Greedy)
                 yield return new();

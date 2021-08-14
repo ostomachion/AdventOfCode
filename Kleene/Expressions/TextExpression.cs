@@ -15,7 +15,7 @@ namespace Kleene
             this.expression = new ConcatExpression(value.Select(c => new CharExpression(c)));
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             // TODO: Make this more efficient.
             foreach (var result in this.expression.Run(context))

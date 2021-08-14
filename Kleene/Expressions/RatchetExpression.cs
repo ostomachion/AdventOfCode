@@ -5,9 +5,10 @@ namespace Kleene
 {
     public class RatchetExpression : Expression
     {
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             yield return new();
+
             // TODO:
             throw new NotImplementedException();
         }

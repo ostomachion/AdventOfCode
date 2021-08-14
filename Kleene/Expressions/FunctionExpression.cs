@@ -13,7 +13,7 @@ namespace Kleene
             Value = value;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             context.FunctionList.Define(Name, Value);
             yield return new();

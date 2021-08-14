@@ -1,3 +1,4 @@
+using System;
 namespace Kleene
 {
     public class ExpressionContext
@@ -5,6 +6,8 @@ namespace Kleene
         public ExpressionLocalContext Local { get; set; }
         public CaptureTree CaptureTree { get; } = new();
         public FunctionList FunctionList { get; } = new();
+
+        public bool Ratchet { get; set; }
 
         public ExpressionContext(string input)
         {

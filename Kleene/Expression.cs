@@ -17,7 +17,19 @@ namespace Kleene
             return null;
         }
 
-        public abstract IEnumerable<ExpressionResult> Run(ExpressionContext context);
+        public abstract IEnumerable<ExpressionResult> RunInternal(ExpressionContext context);
+
+        public IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        {
+            if (context.Ratchet)
+                yield break;
+            
+            foreach (var result in RunInternal(context))
+            {
+                if (!context.Ratchet)
+                    yield return result;
+            }
+        }
 
         public static Expression Parse(string pattern)
         {

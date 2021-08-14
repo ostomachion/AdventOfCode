@@ -11,7 +11,7 @@ namespace Kleene
             Value = value;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (context.Local.Consuming && context.Local.IsAtEnd)
                 yield break;

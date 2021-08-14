@@ -11,7 +11,7 @@ namespace Kleene
             Name = name;
         }
 
-        public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
+        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             var capture = GetValue(context);
             if (capture is null)
