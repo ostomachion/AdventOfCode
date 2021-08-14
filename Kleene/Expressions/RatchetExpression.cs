@@ -8,9 +8,7 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             yield return new();
-
-            // TODO:
-            throw new NotImplementedException();
+            context.Ratchet = true;
         }
     }
 }
