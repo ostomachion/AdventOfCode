@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Kleene
 {
-    public class BackreferenceExpression : TextlikeExpression
+    public class BackreferenceExpression : TextValueExpression
     {
         public CaptureName Name { get; }
 
@@ -13,7 +13,7 @@ namespace Kleene
 
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
-            var capture = context.CaptureTree[Name]?.Value;
+            var capture = GetValue(context);
             if (capture is null)
                 yield break;
 
@@ -24,5 +24,7 @@ namespace Kleene
                 yield return result;
             }
         }
+
+        public override ExpressionResult? GetValue(ExpressionContext context) => context.CaptureTree[Name]?.Value;
     }
 }

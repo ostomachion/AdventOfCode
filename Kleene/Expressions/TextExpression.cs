@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Kleene
 {
-    public class TextExpression : TextlikeExpression
+    public class TextExpression : TextValueExpression
     {
         public string Value { get; }
 
@@ -23,5 +23,7 @@ namespace Kleene
                 yield return result;
             }
         }
+
+        public override ExpressionResult? GetValue(ExpressionContext context) => new(Value);
     }
 }
