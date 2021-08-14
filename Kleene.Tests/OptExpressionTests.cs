@@ -30,5 +30,7 @@ namespace Kleene.Tests
             // Then
             Assert.Equal("", result);
         }
+
+        // TODO: Lazy tests.
     }
 }
