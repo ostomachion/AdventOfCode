@@ -7,7 +7,7 @@ namespace Kleene
     {
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
-            yield return new("");
+            yield return new();
             // TODO:
             throw new NotImplementedException();
         }

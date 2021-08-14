@@ -5,11 +5,9 @@ namespace Kleene
         public string Input { get; }
         public string Output { get; }
 
-        public ExpressionResult(string value)
-        {
-            Input = value;
-            Output = value;
-        }
+
+        public ExpressionResult() : this("") { }
+        public ExpressionResult(string value) : this(value, value) { }
 
         public ExpressionResult(string input, string output)
         {

@@ -27,7 +27,7 @@ namespace Kleene
             foreach (var _ in Expression.Run(context))
             {
                 context.Local = originalContext;
-                yield return new ExpressionResult("");
+                yield return new();
                 context.Local = subContext;
             }
             context.Local = originalContext;

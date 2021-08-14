@@ -16,7 +16,7 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
             if (Order is MatchOrder.Greedy)
-                yield return new ExpressionResult("");
+                yield return new();
             
             foreach (var result in Expression.Run(context))
             {
@@ -24,7 +24,7 @@ namespace Kleene
             }
 
             if (Order is MatchOrder.Lazy)
-                yield return new ExpressionResult("");
+                yield return new();
         }
     }
 }

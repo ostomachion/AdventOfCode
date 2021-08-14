@@ -17,7 +17,7 @@ namespace Kleene
         {
             if (!this.Expressions.Any())
             {
-                yield return new ExpressionResult("");
+                yield return new();
                 yield break;
             }
 
@@ -30,7 +30,7 @@ namespace Kleene
                 {
                     if (stack.Count == this.Expressions.Count())
                     {
-                        yield return new ExpressionResult(
+                        yield return new(
                             String.Join("", stack.Reverse().Select(x => x.Current.Input)),
                             String.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }

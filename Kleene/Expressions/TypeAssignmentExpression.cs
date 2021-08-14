@@ -31,9 +31,9 @@ namespace Kleene
                     context.CaptureTree.Set(property.Name, value);
                 }
             }
-            context.CaptureTree.Close("!T", new ExpressionResult(""));
+            context.CaptureTree.Close("!T", new());
 
-            yield return new("");
+            yield return new();
 
             context.CaptureTree.Unclose("!T");
             foreach (var property in Properties.OrderByDescending(x => x.Name))

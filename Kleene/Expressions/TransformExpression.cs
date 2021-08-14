@@ -28,7 +28,7 @@ namespace Kleene
                 {
                     context.Local.Producing = true;
                     context.Local.Consuming = true;
-                    yield return new ExpressionResult(inputResult.Input, outputResult.Output);
+                    yield return new(inputResult.Input, outputResult.Output);
                     context.Local.Consuming = false;
                 }
                 context.Local.Producing = false;

@@ -25,7 +25,7 @@ namespace Kleene
 
             if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)
             {
-                yield return new ExpressionResult("");
+                yield return new();
                 if (Count.Max == 0)
                 {
                     yield break;
@@ -41,7 +41,7 @@ namespace Kleene
                 {
                     if (stack.Count == Count.Max)
                     {
-                        yield return new ExpressionResult(
+                        yield return new(
                             String.Join("", stack.Reverse().Select(x => x.Current.Input)),
                             String.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }
@@ -49,7 +49,7 @@ namespace Kleene
                     {
                         if (Order == MatchOrder.Lazy && stack.Count >= Count.Min)
                         {
-                            yield return new ExpressionResult(
+                            yield return new(
                                 String.Join("", stack.Reverse().Select(x => x.Current.Input)),
                                 String.Join("", stack.Reverse().Select(x => x.Current.Output)));
                         }
@@ -64,7 +64,7 @@ namespace Kleene
                     {
                         if (stack.Any() && stack.Count >= Count.Min || Count.Min == 0)
                         {
-                            yield return new ExpressionResult(
+                            yield return new(
                                 String.Join("", stack.Reverse().Select(x => x.Current.Input)),
                                 String.Join("", stack.Reverse().Select(x => x.Current.Output)));
                         }

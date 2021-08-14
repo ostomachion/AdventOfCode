@@ -20,7 +20,7 @@ namespace Kleene
             {
                 context.Consume(1);
                 context.Produce(Value.ToString());
-                yield return new ExpressionResult(Value.ToString());
+                yield return new(Value.ToString());
                 context.Unproduce();
                 context.Unconsume(1);
             }

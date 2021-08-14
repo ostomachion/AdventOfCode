@@ -26,7 +26,7 @@ namespace Kleene
             {
                 context.Consume(1);
                 context.Produce(c.ToString());
-                yield return new ExpressionResult(c.ToString());
+                yield return new(c.ToString());
                 context.Unproduce();
                 context.Unconsume(1);
             }

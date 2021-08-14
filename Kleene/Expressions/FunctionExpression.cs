@@ -16,7 +16,7 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
             context.FunctionList.Define(Name, Value);
-            yield return new ExpressionResult("");
+            yield return new();
             context.FunctionList.Undefine(Name);
         }
     }

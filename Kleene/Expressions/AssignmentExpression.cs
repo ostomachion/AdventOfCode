@@ -21,7 +21,7 @@ namespace Kleene
                 yield break;
 
             context.CaptureTree.Set(Name, value);
-            yield return new ExpressionResult("");
+            yield return new();
             context.CaptureTree.Unset(Name);
         }
     }

@@ -6,7 +6,7 @@ namespace Kleene
     {
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
-            yield return new ExpressionResult("");
+            yield return new();
         }
     }
 }
