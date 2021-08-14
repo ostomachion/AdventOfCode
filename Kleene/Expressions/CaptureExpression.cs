@@ -5,10 +5,10 @@ namespace Kleene
 {
     public class CaptureExpression : Expression
     {
-        public string Name { get; }
+        public CaptureName Name { get; }
         public Expression Expression { get; }
 
-        public CaptureExpression(string name, Expression expression)
+        public CaptureExpression(CaptureName name, Expression expression)
         {
             Name = name;
             Expression = expression;
@@ -19,11 +19,11 @@ namespace Kleene
             context.CaptureTree.Open(Name);
             foreach (var result in Expression.Run(context))
             {
-                context.CaptureTree.Close(result);
+                context.CaptureTree.Close(Name, result);
                 yield return result;
-                context.CaptureTree.Unclose();
+                context.CaptureTree.Unclose(Name);
             }
-            context.CaptureTree.Unopen();
+            context.CaptureTree.Unopen(Name);
         }
     }
 }

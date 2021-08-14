@@ -100,5 +100,39 @@ namespace Kleene.Tests
                 }
             );
         }
+
+        [Fact]
+        public void NestedSugar()
+        {
+            // Given
+            var expression = new CaptureExpression("foo.bar", new CharExpression('x'));
+
+            // When
+            var context = new ExpressionContext("x");
+            var result = expression.Run(context).FirstOrDefault();
+
+            // Then
+            Assert.Equal("x", result?.Input);
+            Assert.Equal("x", result?.Output);
+            Assert.Collection(context.CaptureTree.Current.Children,
+                item =>
+                {
+                    Assert.Equal("foo", item.Name);
+                    Assert.NotNull(item.Value);
+                    Assert.Equal("x", item.Value!.Input);
+                    Assert.Equal("x", item.Value!.Output);
+                    Assert.Collection(item.Children,
+                        item =>
+                        {
+                            Assert.Equal("bar", item.Name);
+                            Assert.NotNull(item.Value);
+                            Assert.Equal("x", item.Value!.Input);
+                            Assert.Equal("x", item.Value!.Output);
+                            Assert.Empty(item.Children);
+                        }
+                    );
+                }
+            );
+        }
     }
 }

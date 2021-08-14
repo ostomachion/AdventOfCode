@@ -29,31 +29,52 @@ namespace Kleene
             this.Current = Root;
         }
 
-        public void Open(string name)
+        public void Open(CaptureName name)
         {
-            var node = new CaptureTreeNode(this, name);
-            this.Current.Add(node);
-            this.Current = node;
+            foreach (var part in name.Parts)
+            {
+                var node = new CaptureTreeNode(this, part);
+                this.Current.Add(node);
+                this.Current = node;
+            }
         }
 
-        public void Unopen()
+        public void Unopen(CaptureName name)
         {
-            this.Current = this.Current.Parent ?? throw new InvalidOperationException();
-            this.Current.Unadd();
+            foreach (var part in name.Parts.Reverse())
+            {
+                if (this.Current.Name != part)
+                    throw new InvalidOperationException();
+                
+                this.Current = this.Current.Parent ?? throw new InvalidOperationException();
+                this.Current.Unadd();
+            }
         }
 
-        public void Close(ExpressionResult value)
+        public void Close(CaptureName name, ExpressionResult value)
         {
-            this.Current.IsOpen = false;
-            this.Current.Value = value;
-            this.Current = this.Current.Parent ?? throw new InvalidOperationException();
+            foreach (var part in name.Parts.Reverse())
+            {
+                if (this.Current.Name != part)
+                    throw new InvalidOperationException();
+                
+                this.Current.IsOpen = false;
+                this.Current.Value = value;
+                this.Current = this.Current.Parent ?? throw new InvalidOperationException();
+            }
         }
 
-        public void Unclose()
+        public void Unclose(CaptureName name)
         {
-            this.Current = this.Current.Children.Last();
-            this.Current.Value = null;
-            this.Current.IsOpen = true;
+            foreach (var part in name.Parts.Reverse())
+            {   
+                this.Current = this.Current.Children.Last();
+                if (this.Current.Name != part)
+                    throw new InvalidOperationException();
+
+                this.Current.Value = null;
+                this.Current.IsOpen = true;
+            }
         }
     }
 }
