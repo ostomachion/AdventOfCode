@@ -9,7 +9,7 @@ namespace Kleene.Tests
         public void MatchFirst()
         {
             // Given
-            var expression = new ConcatExpression(new[]
+            var expression = new ConcatExpression(new Expression[]
             {
                 new CharExpression('x'),
                 new CharExpression('y')
@@ -26,7 +26,7 @@ namespace Kleene.Tests
         public void Mismatch()
         {
             // Given
-            var expression = new ConcatExpression(new[]
+            var expression = new ConcatExpression(new Expression[]
             {
                 new CharExpression('x'),
                 new CharExpression('y')
@@ -43,7 +43,7 @@ namespace Kleene.Tests
         public void PartialMatch()
         {
             // Given
-            var expression = new ConcatExpression(new[]
+            var expression = new ConcatExpression(new Expression[]
             {
                 new CharExpression('x'),
                 new CharExpression('y')
@@ -60,7 +60,7 @@ namespace Kleene.Tests
         public void PartialMatchShort()
         {
             // Given
-            var expression = new ConcatExpression(new[]
+            var expression = new ConcatExpression(new Expression[]
             {
                 new CharExpression('x'),
                 new CharExpression('y')
@@ -77,7 +77,7 @@ namespace Kleene.Tests
         public void PartialMatchLong()
         {
             // Given
-            var expression = new ConcatExpression(new[]
+            var expression = new ConcatExpression(new Expression[]
             {
                 new CharExpression('x'),
                 new CharExpression('y')
@@ -88,6 +88,23 @@ namespace Kleene.Tests
 
             // Then
             Assert.Null(result);
+        }
+
+        [Fact]
+        public void Backtrack()
+        {
+            // Given
+            var expression = new ConcatExpression(new Expression[]
+            {
+                new OptExpression(new CharExpression('x')),
+                new CharExpression('x')
+            });
+
+            // When
+            var result = expression.Transform("x");
+
+            // Then
+            Assert.Equal("x", result);
         }
     }
 }

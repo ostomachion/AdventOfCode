@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Kleene
 {
-    // TODO: Make this more efficient.
     public class ConcatExpression : Expression
     {
         public IEnumerable<Expression> Expressions { get; }
@@ -15,19 +15,33 @@ namespace Kleene
 
         public override IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
-            if (!Expressions.Any())
+            if (!this.Expressions.Any())
             {
                 yield return new ExpressionResult("");
                 yield break;
             }
 
-            var head = Expressions.First();
-            var tail = new ConcatExpression(Expressions.Skip(1));
-            foreach (var headResult in head.Run(context))
+            var stack = new Stack<IEnumerator<ExpressionResult>>();
+            stack.Push(this.Expressions.First().Run(context).GetEnumerator());
+
+            while (stack.Any())
             {
-                foreach (var tailResult in tail.Run(context))
+                if (stack.Peek().MoveNext())
                 {
-                    yield return new ExpressionResult(headResult.Input + tailResult.Input, headResult.Output + tailResult.Output);
+                    if (stack.Count == this.Expressions.Count())
+                    {
+                        yield return new ExpressionResult(
+                            String.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                            String.Join("", stack.Reverse().Select(x => x.Current.Output)));
+                    }
+                    else
+                    {
+                        stack.Push(this.Expressions.ElementAt(stack.Count).Run(context).GetEnumerator());
+                    }
+                }
+                else
+                {
+                    stack.Pop();
                 }
             }
         }
