@@ -15,6 +15,7 @@ namespace Kleene
         public string Output => String.Join("", outputStack.Reverse());
 
         public CaptureTree CaptureTree { get; } = new();
+        public FunctionList FunctionList { get; } = new();
 
         public ExpressionContext(string input)
         {

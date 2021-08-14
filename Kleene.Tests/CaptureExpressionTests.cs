@@ -23,13 +23,80 @@ namespace Kleene.Tests
                 item =>
                 {
                     Assert.Equal("foo", item.Name);
-                    Assert.Collection(item.Values,
-                    item =>
-                    {
-                        Assert.NotNull(item);
-                        Assert.Equal("x", item.Input);
-                        Assert.Equal("x", item.Output);
-                    });
+                    Assert.NotNull(item.Value);
+                    Assert.Equal("x", item.Value!.Input);
+                    Assert.Equal("x", item.Value!.Output);
+                    Assert.Empty(item.Children);
+                }
+            );
+        }
+
+        [Fact]
+        public void Shadow()
+        {
+            // Given
+            var expression = new ConcatExpression(new Expression[] {
+                new CaptureExpression("foo", new CharExpression('x')),
+                new CaptureExpression("foo", new CharExpression('y'))
+            });
+
+            // When
+            var context = new ExpressionContext("xy");
+            var result = expression.Run(context).FirstOrDefault();
+
+            // Then
+            Assert.Equal("xy", result?.Input);
+            Assert.Equal("xy", result?.Output);
+            Assert.Collection(context.CaptureTree.Current.Children,
+                item =>
+                {
+                    Assert.Equal("foo", item.Name);
+                    Assert.NotNull(item.Value);
+                    Assert.Equal("y", item.Value!.Input);
+                    Assert.Equal("y", item.Value!.Output);
+                    Assert.Empty(item.Children);
+                },
+                item =>
+                {
+                    Assert.Equal("foo", item.Name);
+                    Assert.NotNull(item.Value);
+                    Assert.Equal("x", item.Value!.Input);
+                    Assert.Equal("x", item.Value!.Output);
+                    Assert.Empty(item.Children);
+                }
+            );
+        }
+
+        [Fact]
+        public void Nested()
+        {
+            // Given
+            var expression = new CaptureExpression("foo", new CaptureExpression("bar", new CharExpression('x')));
+
+            // When
+            var context = new ExpressionContext("x");
+            var result = expression.Run(context).FirstOrDefault();
+
+            // Then
+            Assert.Equal("x", result?.Input);
+            Assert.Equal("x", result?.Output);
+            Assert.Collection(context.CaptureTree.Current.Children,
+                item =>
+                {
+                    Assert.Equal("foo", item.Name);
+                    Assert.NotNull(item.Value);
+                    Assert.Equal("x", item.Value!.Input);
+                    Assert.Equal("x", item.Value!.Output);
+                    Assert.Collection(item.Children,
+                        item =>
+                        {
+                            Assert.Equal("bar", item.Name);
+                            Assert.NotNull(item.Value);
+                            Assert.Equal("x", item.Value!.Input);
+                            Assert.Equal("x", item.Value!.Output);
+                            Assert.Empty(item.Children);
+                        }
+                    );
                 }
             );
         }

@@ -15,7 +15,7 @@ namespace Kleene
                 if (name is null)
                     return Current;
                 
-                var head = Current.Children.LastOrDefault(x => x.Name == name.Head);
+                var head = Current.Children.FirstOrDefault(x => x.Name == name.Head);
                 if (head is not null)
                     return head[name.Tail];
 
@@ -45,14 +45,14 @@ namespace Kleene
         public void Close(ExpressionResult value)
         {
             this.Current.IsOpen = false;
-            this.Current.Values.Push(value);
+            this.Current.Value = value;
             this.Current = this.Current.Parent ?? throw new InvalidOperationException();
         }
 
         public void Unclose()
         {
             this.Current = this.Current.Children.Last();
-            this.Current.Values.Pop();
+            this.Current.Value = null;
             this.Current.IsOpen = true;
         }
     }
