@@ -11,7 +11,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new AssignmentExpression("foo", new TextExpression("x")),
+                new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"))
             });
 
@@ -27,7 +27,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new AssignmentExpression("foo", new TextExpression("x")),
+                new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("y"))
             });
 
@@ -55,7 +55,7 @@ namespace Kleene.Tests
         public void Text()
         {
             // Given
-            var expression = new SubExpression(new TextExpression("x"), new TextExpression("x"));
+            var expression = new SubExpression("x", new TextExpression("x"));
 
             // When
             var result = expression.Transform("");
@@ -68,7 +68,7 @@ namespace Kleene.Tests
         public void TextMismatch()
         {
             // Given
-            var expression = new SubExpression(new TextExpression("x"), new TextExpression("y"));
+            var expression = new SubExpression("x", new TextExpression("y"));
 
             // When
             var result = expression.Transform("");

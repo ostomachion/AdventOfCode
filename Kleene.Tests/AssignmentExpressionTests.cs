@@ -12,7 +12,7 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new AssignmentExpression("foo", new TextExpression("x")),
+                new AssignmentExpression("foo", "x"),
                 new BackreferenceExpression("foo")
             });
 
@@ -48,7 +48,7 @@ namespace Kleene.Tests
             var expression = new ConcatExpression(new Expression[]
             {
                 new CaptureExpression("foo", new TextExpression("x")),
-                new AssignmentExpression("foo", new TextExpression("y")),
+                new AssignmentExpression("foo", "y"),
                 new BackreferenceExpression("foo")
             });
 
@@ -65,7 +65,7 @@ namespace Kleene.Tests
             // Given
             var expression = new ConcatExpression(new Expression[]
             {
-                new AssignmentExpression("foo.bar", new TextExpression("x")),
+                new AssignmentExpression("foo.bar", "x"),
                 new BackreferenceExpression("foo.bar")
             });
 

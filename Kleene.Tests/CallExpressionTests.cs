@@ -93,7 +93,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new FunctionExpression("foo", new AssignmentExpression("baz", new TextExpression("x"))),
+                new FunctionExpression("foo", new AssignmentExpression("baz", "x")),
                 new CallExpression("foo", "bar"),
                 new BackreferenceExpression("bar.baz")
             });
@@ -110,7 +110,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new FunctionExpression("foo", new AssignmentExpression("bar", new TextExpression("x"))),
+                new FunctionExpression("foo", new AssignmentExpression("bar", "x")),
                 new CallExpression("foo"),
                 new BackreferenceExpression("bar")
             });
@@ -127,7 +127,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new AssignmentExpression("bar", new TextExpression("x")),
+                new AssignmentExpression("bar", "x"),
                 new FunctionExpression("foo", new BackreferenceExpression("bar")),
                 new CallExpression("foo")
             });
@@ -144,7 +144,7 @@ namespace Kleene.Tests
         {
             // Given
             var expression = new ConcatExpression(new Expression[] {
-                new AssignmentExpression("bar", new TextExpression("x")),
+                new AssignmentExpression("bar", "x"),
                 new FunctionExpression("foo", new BackreferenceExpression("bar")),
                 new CallExpression("foo", "baz")
             });

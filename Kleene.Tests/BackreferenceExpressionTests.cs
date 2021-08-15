@@ -91,5 +91,24 @@ namespace Kleene.Tests
             // Then
             Assert.Equal("xx", result);
         }
+
+
+        [Fact]
+        public void Ancestor()
+        {
+            // Given
+            var expression = new ConcatExpression(new Expression[]
+            {
+                new AssignmentExpression("foo", "x"),
+                new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x"))),
+                new BackreferenceExpression("foo.bar")
+            });
+
+            // When
+            var result = expression.Transform("xx");
+
+            // Then
+            Assert.Equal("xx", result);
+        }
     }
 }
