@@ -100,15 +100,49 @@ namespace Kleene.Tests
             var expression = new ConcatExpression(new Expression[]
             {
                 new AssignmentExpression("foo", "x"),
-                new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x"))),
-                new BackreferenceExpression("foo.bar")
+                new CaptureExpression("bar", new BackreferenceExpression("foo"))
             });
 
             // When
-            var result = expression.Transform("xx");
+            var result = expression.Transform("x");
 
             // Then
-            Assert.Equal("xx", result);
+            Assert.Equal("x", result);
+        }
+
+
+        [Fact]
+        public void AncestorNested()
+        {
+            // Given
+            var expression = new ConcatExpression(new Expression[]
+            {
+                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+                new CaptureExpression("baz", new BackreferenceExpression("foo.bar"))
+            });
+
+            // When
+            var result = expression.Transform("x");
+
+            // Then
+            Assert.Equal("x", result);
+        }
+
+
+        [Fact]
+        public void OpenCapture()
+        {
+            // Given
+            var expression = new TransformExpression(
+                new PassExpression(),
+                new CaptureExpression("foo", new BackreferenceExpression("foo"))
+            );
+
+            // When
+            var result = expression.Transform("");
+
+            // Then
+            Assert.Null(result);
         }
     }
 }
