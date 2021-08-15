@@ -57,6 +57,13 @@ namespace Kleene
                 }
 
                 <capture> {
+                    # Special case. Captures on calls have to be handled by the call expression itself.
+                    <call>:expression
+                    (=expression
+                        (':' <dotted-name>:CaptureName ::CaptureExpression)? ;
+                        ::CallExpression
+                    )
+                    |
                     <req>:Expression ;
                     (':' <dotted-name>:Name ::CaptureExpression)? ;
                 }
@@ -87,6 +94,8 @@ namespace Kleene
                 <item> {
                     - <assignment>
                     - <subexpression>
+                    - <scope>
+                    - <atomic>
                     - <group>
                     - <backreference>
                     - <type-set>
@@ -103,11 +112,6 @@ namespace Kleene
                     '(:' <dotted-name> <ws> '=' <ws> <static> ')' ;
                 }
 
-                <static> {
-                    - <dotted-capture-name>::Name ::StaticCapture
-                    - <text>::Value ::StaticText
-                }
-
                 <subexpression> {
                     '(?'
                     <ws> <static> <ws> ;
@@ -115,9 +119,23 @@ namespace Kleene
                     ')' ;
                 }
 
+                <scope> {
+                    '(='
+                    <ws> <dotted-name>:Name <ws> ;
+                    (<expression>:Expression <ws>)?
+                    ')' ;
+                    ::ScopeExpression
+                }
+
+                <atomic> {
+                    '(>'
+                    <ws> <expression>:Expression <ws>
+                    ')' ;
+                    ::AtomicExpression
+                }
+
                 <group> {
-                    '(' ('>' ::AtomicExpression)? ;
-                    <ws> <expression>:Expression <ws> ')' ;
+                    '(' <ws> <expression>:Expression <ws> ')' ;
                 }
 
                 <backreference> {
@@ -131,7 +149,6 @@ namespace Kleene
                         ((<type-prop-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
                         <ws> '}'
                     )? ;
-                    (<ws> '=' <ws> <quant>:Scope)? ;
                     ::TypeSetExpression
                 }
 
@@ -263,6 +280,11 @@ namespace Kleene
                         # - <UnicodeEscapes> # [U+0000]
                     )
                     ('[>]'/?);
+                }
+
+                <static> {
+                    - <dotted-capture-name>::Name ::StaticCapture
+                    - <text>::Value ::StaticText
                 }
 
 

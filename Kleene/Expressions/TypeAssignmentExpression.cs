@@ -7,21 +7,17 @@ namespace Kleene
     {
         public string TypeName { get; }
         public IEnumerable<TypeAssignmentProperty> Properties { get; }
-        public CaptureName? Scope { get; }
 
-        public TypeAssignmentExpression(string typeName, IEnumerable<TypeAssignmentProperty> properties, CaptureName? scope = null)
+        public TypeAssignmentExpression(string typeName, IEnumerable<TypeAssignmentProperty> properties)
         {
             TypeName = typeName;
             Properties = properties;
-            Scope = scope;
         }
 
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             context.CaptureTree.Open("!T");
             context.CaptureTree.Set("FullName", new(TypeName));
-            if (Scope is not null)
-                context.CaptureTree.Set("Scope", new(Scope.ToString()!));
             context.CaptureTree.Open("Properties");
             foreach (var property in Properties.OrderBy(x => x.Name))
             {
@@ -45,8 +41,6 @@ namespace Kleene
                 }
             }
             context.CaptureTree.Unopen("Properties");
-            if (Scope is not null)
-                context.CaptureTree.Unset("Scope");
             context.CaptureTree.Unset("FullName");
             context.CaptureTree.Unopen("!T");
         }

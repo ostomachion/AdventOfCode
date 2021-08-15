@@ -130,6 +130,24 @@ namespace Kleene.Tests
 
 
         [Fact]
+        public void BlockDescendants()
+        {
+            // Given
+            var expression = new ConcatExpression(new Expression[]
+            {
+                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+                new BackreferenceExpression("bar")
+            });
+
+            // When
+            var result = expression.Transform("x");
+
+            // Then
+            Assert.Null(result);
+        }
+
+
+        [Fact]
         public void OpenCapture()
         {
             // Given

@@ -6,7 +6,7 @@ namespace Kleene
     public class CaptureTree
     {
         public CaptureTreeNode Root { get; }
-        public CaptureTreeNode Current { get; private set; }
+        public CaptureTreeNode Current { get; set; }
 
         public CaptureTreeNode? this[CaptureName? name]
         {
