@@ -12,6 +12,7 @@ namespace Kleene
         public ExpressionResult? Value { get; set; }
         public IEnumerable<CaptureTreeNode> Children => this.children;
         public bool IsOpen { get; set; }
+        public bool IsFunctionBoundary { get; set; }
 
         public CaptureTreeNode? this[CaptureName? name]
         {

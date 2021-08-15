@@ -19,7 +19,7 @@ namespace Kleene
                 if (head is not null)
                     return head[name.Tail];
 
-                return Current.Parent?[name];
+                return (Current.IsFunctionBoundary || Current.Parent is null) ? null : Current.Parent[name];
             }
         }
 
