@@ -8,7 +8,7 @@ namespace Kleene
     {
         public IEnumerable<Expression> Expressions { get; }
 
-        public ConcatExpression(IEnumerable<Expression> expressions)
+        public ConcatExpression(params Expression[] expressions)
         {
             Expressions = expressions;
         }

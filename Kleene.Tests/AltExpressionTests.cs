@@ -9,11 +9,10 @@ namespace Kleene.Tests
         public void MatchFirst()
         {
             // Given
-            var expression = new AltExpression(new[]
-            {
+            var expression = new AltExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -26,11 +25,10 @@ namespace Kleene.Tests
         public void MatchSecond()
         {
             // Given
-            var expression = new AltExpression(new[]
-            {
+            var expression = new AltExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("y");
@@ -43,11 +41,10 @@ namespace Kleene.Tests
         public void MatchNeither()
         {
             // Given
-            var expression = new AltExpression(new[]
-            {
+            var expression = new AltExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("z");
@@ -60,11 +57,10 @@ namespace Kleene.Tests
         public void EmptyInput()
         {
             // Given
-            var expression = new AltExpression(new[]
-            {
+            var expression = new AltExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("");

@@ -10,10 +10,10 @@ namespace Kleene.Tests
         public void Backreference()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"))
-            });
+            );
 
             // When
             var result = expression.Transform("");
@@ -26,10 +26,10 @@ namespace Kleene.Tests
         public void BackreferenceMismatch()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("y"))
-            });
+            );
 
             // When
             var result = expression.Transform("");

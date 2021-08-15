@@ -9,11 +9,10 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new ReqExpression(new AltExpression(new Expression[]
-            {
-                new TextExpression("x"),
-                new PassExpression()
-            }));
+            var expression = new ReqExpression(new AltExpression(
+            new TextExpression("x"),
+            new PassExpression()
+            ));
 
             // When
             var result = expression.Transform("x");
@@ -26,11 +25,10 @@ namespace Kleene.Tests
         public void Empty()
         {
             // Given
-            var expression = new ReqExpression(new AltExpression(new Expression[]
-            {
+            var expression = new ReqExpression(new AltExpression(
                 new TextExpression("x"),
                 new PassExpression()
-            }));
+            ));
 
             // When
             var result = expression.Transform("");

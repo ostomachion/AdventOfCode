@@ -35,10 +35,10 @@ namespace Kleene.Tests
         public void Shadow()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new CaptureExpression("foo", new TextExpression("y"))
-            });
+            );
 
             // When
             var context = new ExpressionContext("xy");

@@ -6,7 +6,7 @@ namespace Kleene
     {
         public IEnumerable<Expression> Expressions { get; }
 
-        public AltExpression(IEnumerable<Expression> expressions)
+        public AltExpression(params Expression[] expressions)
         {
             Expressions = expressions;
         }

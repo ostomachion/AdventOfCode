@@ -10,10 +10,10 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new TextExpression("x")),
                 new CallExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -26,10 +26,10 @@ namespace Kleene.Tests
         public void Mismatch()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new TextExpression("x")),
                 new CallExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("y");
@@ -42,10 +42,10 @@ namespace Kleene.Tests
         public void Undefined()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new TextExpression("x")),
                 new CallExpression("bar")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -58,11 +58,11 @@ namespace Kleene.Tests
         public void Shadow()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new TextExpression("x")),
                 new FunctionExpression("foo", new TextExpression("y")),
                 new CallExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("y");
@@ -75,11 +75,11 @@ namespace Kleene.Tests
         public void Capture()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new TextExpression("x")),
                 new CallExpression("foo", "bar"),
                 new BackreferenceExpression("bar")
-            });
+            );
 
             // When
             var result = expression.Transform("xx");
@@ -92,11 +92,11 @@ namespace Kleene.Tests
         public void Subcapture()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new AssignmentExpression("baz", "x")),
                 new CallExpression("foo", "bar"),
                 new BackreferenceExpression("bar.baz")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -109,11 +109,11 @@ namespace Kleene.Tests
         public void BlockedSubcapture()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new FunctionExpression("foo", new AssignmentExpression("bar", "x")),
                 new CallExpression("foo"),
                 new BackreferenceExpression("bar")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -126,11 +126,11 @@ namespace Kleene.Tests
         public void BlockOuterCapture()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new AssignmentExpression("bar", "x"),
                 new FunctionExpression("foo", new BackreferenceExpression("bar")),
                 new CallExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -143,11 +143,11 @@ namespace Kleene.Tests
         public void BlockOuterCaptureWithCallCapture()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[] {
+            var expression = new ConcatExpression(
                 new AssignmentExpression("bar", "x"),
                 new FunctionExpression("foo", new BackreferenceExpression("bar")),
                 new CallExpression("foo", "baz")
-            });
+            );
 
             // When
             var result = expression.Transform("x");

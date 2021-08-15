@@ -9,11 +9,10 @@ namespace Kleene.Tests
         public void MatchFirst()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("xy");
@@ -26,11 +25,10 @@ namespace Kleene.Tests
         public void Mismatch()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("yx");
@@ -43,11 +41,10 @@ namespace Kleene.Tests
         public void PartialMatch()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("xz");
@@ -60,11 +57,10 @@ namespace Kleene.Tests
         public void PartialMatchShort()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -77,11 +73,10 @@ namespace Kleene.Tests
         public void PartialMatchLong()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+            );
 
             // When
             var result = expression.Transform("xyz");
@@ -94,11 +89,10 @@ namespace Kleene.Tests
         public void Backtrack()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new OptExpression(new TextExpression("x")),
                 new TextExpression("x")
-            });
+            );
 
             // When
             var result = expression.Transform("x");

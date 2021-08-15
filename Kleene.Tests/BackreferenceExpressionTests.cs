@@ -10,11 +10,10 @@ namespace Kleene.Tests
         public void Match()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new BackreferenceExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("xx");
@@ -27,11 +26,10 @@ namespace Kleene.Tests
         public void Mismatch()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new BackreferenceExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("xy");
@@ -44,11 +42,10 @@ namespace Kleene.Tests
         public void Undefined()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new BackreferenceExpression("bar")
-            });
+            );
 
             // When
             var result = expression.Transform("xx");
@@ -61,12 +58,11 @@ namespace Kleene.Tests
         public void Shadow()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new CaptureExpression("foo", new TextExpression("y")),
                 new BackreferenceExpression("foo")
-            });
+            );
 
             // When
             var result = expression.Transform("xyy");
@@ -79,11 +75,10 @@ namespace Kleene.Tests
         public void Nested()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x"))),
                 new BackreferenceExpression("foo.bar")
-            });
+            );
 
             // When
             var result = expression.Transform("xx");
@@ -97,11 +92,10 @@ namespace Kleene.Tests
         public void Ancestor()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new AssignmentExpression("foo", "x"),
                 new CaptureExpression("bar", new BackreferenceExpression("foo"))
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -115,11 +109,10 @@ namespace Kleene.Tests
         public void AncestorNested()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
                 new CaptureExpression("baz", new BackreferenceExpression("foo.bar"))
-            });
+            );
 
             // When
             var result = expression.Transform("x");
@@ -133,11 +126,10 @@ namespace Kleene.Tests
         public void BlockDescendants()
         {
             // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
                 new BackreferenceExpression("bar")
-            });
+            );
 
             // When
             var result = expression.Transform("x");
