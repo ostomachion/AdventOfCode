@@ -1,6 +1,5 @@
 using AdventOfCode.Helpers.Cartesian.Boxes;
 using AdventOfCode.Helpers.DataStructures;
-using System.Collections;
 
 namespace AdventOfCode.Helpers.Cartesian.Grids;
 

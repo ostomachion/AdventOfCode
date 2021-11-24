@@ -1,6 +1,3 @@
-using AdventOfCode.Helpers.Extensions;
-using System.Text.RegularExpressions;
-
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day05 : Day

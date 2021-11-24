@@ -1,6 +1,3 @@
-using AdventOfCode.Helpers.Cartesian.Boxes;
-using AdventOfCode.Helpers.Extensions;
-
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day02 : Day

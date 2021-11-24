@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Helpers.Extensions;
 

@@ -1,5 +1,3 @@
-using AdventOfCode.Helpers.Extensions;
-
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day01 : Day

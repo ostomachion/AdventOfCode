@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace Kleene;
 
 public class FunctionList : IEnumerable<KeyValuePair<string, Expression>>

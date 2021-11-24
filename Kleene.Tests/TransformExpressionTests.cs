@@ -1,5 +1,3 @@
-using Xunit;
-
 namespace Kleene.Tests;
 
 public class TransformExpressionTests

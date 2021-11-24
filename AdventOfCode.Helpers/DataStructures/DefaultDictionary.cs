@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace AdventOfCode.Helpers.DataStructures;
 
 public class DefaultDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>

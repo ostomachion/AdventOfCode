@@ -1,4 +1,5 @@
 using System.Numerics;
+
 namespace AdventOfCode.Puzzles;
 
 public class Output

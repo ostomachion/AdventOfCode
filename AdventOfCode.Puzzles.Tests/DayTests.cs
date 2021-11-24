@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using Xunit;
 
 namespace AdventOfCode.Puzzles.Tests;
 
@@ -13,7 +12,6 @@ public abstract class DayTests
 
     protected static async void Test(string? input, string? output, [CallerFilePath] string callerFilePath = null!, [CallerMemberName] string callerMemberName = null!)
     {
-        // C:\Users\josh\Source\Repos\AdventOfCode\AdventOfCode.Puzzles.Y2015.Tests\Days\Day05Tests.cs
         var match = Regex.Match(callerFilePath, $@"\\AdventOfCode\.Puzzles\.Y(?<year>\d\d\d\d)\.Tests\\Days\\Day(?<day>\d\d)Tests\.cs$");
 
         if (!match.Success)

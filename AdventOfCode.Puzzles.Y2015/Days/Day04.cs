@@ -1,4 +1,3 @@
-using AdventOfCode.Helpers.Extensions;
 using System.Security.Cryptography;
 
 namespace AdventOfCode.Puzzles.Y2015.Days;

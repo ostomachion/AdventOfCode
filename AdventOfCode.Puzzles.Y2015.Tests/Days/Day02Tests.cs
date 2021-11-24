@@ -1,6 +1,3 @@
-using AdventOfCode.Puzzles.Tests;
-using Xunit;
-
 namespace AdventOfCode.Puzzles.Y2015.Tests;
 
 public class Day02 : DayTests

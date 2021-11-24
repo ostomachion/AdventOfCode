@@ -1,8 +1,3 @@
-using AdventOfCode.Helpers.Cartesian;
-using AdventOfCode.Helpers.Cartesian.Grids;
-using AdventOfCode.Helpers.Extensions;
-using AdventOfCode.Helpers.Numeric;
-
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day06 : Day
