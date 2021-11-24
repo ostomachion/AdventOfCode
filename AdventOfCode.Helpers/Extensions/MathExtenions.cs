@@ -1,4 +1,3 @@
-using System;
 namespace AdventOfCode.Helpers.Extensions;
 
 public static class MathExtenions

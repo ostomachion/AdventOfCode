@@ -1,5 +1,4 @@
 using AdventOfCode.Helpers.Extensions;
-using System;
 
 namespace AdventOfCode.Helpers.Cartesian;
 

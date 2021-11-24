@@ -1,6 +1,3 @@
-using System;
-using System.Text;
-
 namespace AdventOfCode.Helpers.Extensions;
 
 public static class BinaryExtensions

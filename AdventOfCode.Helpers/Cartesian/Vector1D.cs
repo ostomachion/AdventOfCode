@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace AdventOfCode.Helpers.Cartesian;
 
 public record Vector1D(long X)
