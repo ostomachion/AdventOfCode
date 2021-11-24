@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using AdventOfCode.Helpers.Cartesian.Boxes;
 
 namespace AdventOfCode.Helpers.Cartesian
 {

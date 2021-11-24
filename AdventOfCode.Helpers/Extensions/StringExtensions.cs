@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,9 @@ namespace AdventOfCode.Helpers.Extensions
         public static HashSet<int> Find(this string text, string needle)
         {
             if (needle.Length == 0)
+            {
                 return Enumerable.Range(0, text.Length).ToHashSet();
+            }
 
             var value = new HashSet<int>();
             var index = 0;
@@ -18,7 +19,10 @@ namespace AdventOfCode.Helpers.Extensions
             {
                 index = text.IndexOf(needle, index);
                 if (index == -1)
+                {
                     break;
+                }
+
                 value.Add(index);
                 index += needle.Length;
             }
@@ -38,7 +42,10 @@ namespace AdventOfCode.Helpers.Extensions
             {
                 index = text.IndexOf(needle, index);
                 if (index == -1)
+                {
                     break;
+                }
+
                 value.Add(index);
                 index++;
             }
@@ -57,6 +64,6 @@ namespace AdventOfCode.Helpers.Extensions
             throw new NotImplementedException();
         }
 
-        public static int ParseInt(this string text) => Int32.Parse(text);
+        public static int ParseInt(this string text) => int.Parse(text);
     }
 }

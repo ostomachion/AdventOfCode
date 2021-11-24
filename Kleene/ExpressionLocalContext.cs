@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kleene
@@ -13,7 +13,7 @@ namespace Kleene
         public string Input { get; }
         public int Index { get; set; }
         public Stack<string> OutputStack { get; } = new();
-        public string Output => String.Join("", OutputStack.Reverse());
+        public string Output => string.Join("", OutputStack.Reverse());
 
         public ExpressionLocalContext(string input)
         {
@@ -23,25 +23,33 @@ namespace Kleene
         public void Consume(int length)
         {
             if (Consuming)
+            {
                 Index += length;
+            }
         }
 
         public void Unconsume(int length)
         {
             if (Consuming)
+            {
                 Index -= length;
+            }
         }
 
         public void Produce(string value)
         {
             if (Producing)
+            {
                 OutputStack.Push(value);
+            }
         }
 
         public void Unproduce()
         {
             if (Producing)
+            {
                 OutputStack.Pop();
+            }
         }
     }
 }

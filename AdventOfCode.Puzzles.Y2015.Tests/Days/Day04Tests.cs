@@ -1,8 +1,5 @@
-using Microsoft.VisualBasic.CompilerServices;
-using System;
-using Xunit;
-using AdventOfCode.Puzzles;
 using AdventOfCode.Puzzles.Tests;
+using Xunit;
 
 namespace AdventOfCode.Puzzles.Y2015.Tests
 {

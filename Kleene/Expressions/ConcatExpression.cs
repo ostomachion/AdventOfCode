@@ -15,28 +15,28 @@ namespace Kleene
 
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
-            if (!this.Expressions.Any())
+            if (!Expressions.Any())
             {
                 yield return new();
                 yield break;
             }
 
             var stack = new Stack<IEnumerator<ExpressionResult>>();
-            stack.Push(this.Expressions.First().Run(context).GetEnumerator());
+            stack.Push(Expressions.First().Run(context).GetEnumerator());
 
             while (stack.Any())
             {
                 if (stack.Peek().MoveNext())
                 {
-                    if (stack.Count == this.Expressions.Count())
+                    if (stack.Count == Expressions.Count())
                     {
                         yield return new(
-                            String.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                            String.Join("", stack.Reverse().Select(x => x.Current.Output)));
+                            string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                            string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }
                     else
                     {
-                        stack.Push(this.Expressions.ElementAt(stack.Count).Run(context).GetEnumerator());
+                        stack.Push(Expressions.ElementAt(stack.Count).Run(context).GetEnumerator());
                     }
                 }
                 else

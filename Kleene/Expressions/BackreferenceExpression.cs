@@ -15,7 +15,9 @@ namespace Kleene
         {
             var capture = GetValue(context);
             if (capture is null)
+            {
                 yield break;
+            }
 
             // TODO: Should this be rewritten?
             var expression = new TransformExpression(new TextExpression(capture.Input), new TextExpression(capture.Output));

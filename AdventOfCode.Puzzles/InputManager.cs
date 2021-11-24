@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace AdventOfCode.Puzzles
             if (!File.Exists(path))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-                File.WriteAllText(path, await this.client.GetInputAsync(year, day));
+                File.WriteAllText(path, await client.GetInputAsync(year, day));
             }
 
             return File.ReadAllText(path);

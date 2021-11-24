@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Kleene
 {
@@ -18,7 +17,9 @@ namespace Kleene
         {
             var value = Value.GetValue(context);
             if (value is null)
+            {
                 yield break;
+            }
 
             context.CaptureTree.Set(Name, value);
             yield return new();

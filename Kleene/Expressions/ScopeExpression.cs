@@ -18,8 +18,10 @@ namespace Kleene
             var originalScope = context.CaptureTree.Current;
             var newScope = context.CaptureTree.Current[Name];
             if (newScope is null)
+            {
                 yield break;
-            
+            }
+
             context.CaptureTree.Current = newScope;
             foreach (var result in Expression.Run(context))
             {

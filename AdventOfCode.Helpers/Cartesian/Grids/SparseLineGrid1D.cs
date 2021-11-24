@@ -1,20 +1,20 @@
+using AdventOfCode.Helpers.Cartesian.Boxes;
+using AdventOfCode.Helpers.DataStructures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AdventOfCode.Helpers.Cartesian.Boxes;
-using AdventOfCode.Helpers.DataStructures;
 
 namespace AdventOfCode.Helpers.Cartesian.Grids
 {
     public record SparseLineGrid1D<T> : Line1D, IEnumerable<KeyValuePair<Coordinate1D, T>>
         where T : notnull
     {
-        public new static SparseLineGrid1D<T> Infinite => new(Interval.Infinite);
+        public static new SparseLineGrid1D<T> Infinite => new(Interval.Infinite);
 
         private readonly DefaultDictionary<Coordinate1D, T> values = new();
 
-        public IEnumerable<Coordinate1D> Keys => this.values.Keys;
-        public IEnumerable<T> Values => this.values.Values;
+        public IEnumerable<Coordinate1D> Keys => values.Keys;
+        public IEnumerable<T> Values => values.Values;
 
         public T? this[Coordinate1D c]
         {
@@ -31,8 +31,8 @@ namespace AdventOfCode.Helpers.Cartesian.Grids
         public SparseLineGrid1D(Interval i)
             : base(i) { }
 
-        public IEnumerator<KeyValuePair<Coordinate1D, T>> GetEnumerator() => this.values.GetEnumerator();
+        public IEnumerator<KeyValuePair<Coordinate1D, T>> GetEnumerator() => values.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

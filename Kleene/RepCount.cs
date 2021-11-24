@@ -13,10 +13,14 @@ namespace Kleene
         public RepCount(int min, int max)
         {
             if (min < 0)
+            {
                 throw new ArgumentException("Min must be non-negative.", nameof(min));
-                
+            }
+
             if (max != -1 && max < min)
+            {
                 throw new ArgumentException("Max must not be smaller than min.", nameof(max));
+            }
 
             Min = min;
             Max = max;

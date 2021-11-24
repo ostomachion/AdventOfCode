@@ -1,5 +1,3 @@
-using System;
-
 namespace AdventOfCode.Helpers.Cartesian.Boxes
 {
     public record Line1D(Interval I)

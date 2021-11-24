@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using AdventOfCode.Puzzles;
 using Xunit;
 
 namespace AdventOfCode.Puzzles.Tests
@@ -15,16 +13,18 @@ namespace AdventOfCode.Puzzles.Tests
         public abstract void Part1(string? input, string? output);
         public abstract void Part2(string? input, string? output);
 
-        protected static async void Test(string? input, string? output, [CallerFilePath]string callerFilePath = null!, [CallerMemberName]string callerMemberName = null!)
+        protected static async void Test(string? input, string? output, [CallerFilePath] string callerFilePath = null!, [CallerMemberName] string callerMemberName = null!)
         {
             // C:\Users\josh\Source\Repos\AdventOfCode\AdventOfCode.Puzzles.Y2015.Tests\Days\Day05Tests.cs
             var match = Regex.Match(callerFilePath, $@"\\AdventOfCode\.Puzzles\.Y(?<year>\d\d\d\d)\.Tests\\Days\\Day(?<day>\d\d)Tests\.cs$");
-            
-            if (!match.Success)
-                throw new InvalidOperationException();
 
-            int year = Int32.Parse(match.Groups["year"].Value);
-            int day = Int32.Parse(match.Groups["day"].Value);
+            if (!match.Success)
+            {
+                throw new InvalidOperationException();
+            }
+
+            int year = int.Parse(match.Groups["year"].Value);
+            int day = int.Parse(match.Groups["day"].Value);
             int part = callerMemberName switch
             {
                 "Part1" => 1,

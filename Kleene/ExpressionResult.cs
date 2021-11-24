@@ -7,7 +7,7 @@ namespace Kleene
 
 
         public ExpressionResult() : this("") { }
-        
+
         public ExpressionResult(string value) : this(value, value) { }
 
         public ExpressionResult(string input, string output)

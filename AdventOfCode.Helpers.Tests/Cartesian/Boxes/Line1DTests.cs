@@ -1,6 +1,6 @@
-using System.Linq;
 using AdventOfCode.Helpers.Cartesian;
 using AdventOfCode.Helpers.Cartesian.Boxes;
+using System.Linq;
 using Xunit;
 
 namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
@@ -13,13 +13,15 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
             var line = new Line1D(new(1, 2));
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector1D.LeftToRight, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 
                     Assert.Equal(1, item.X);
                 },
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector1D.RightToLeft, item.Orientation.XAxis);
                     Assert.Equal(-1, item.Orientation.Determinant);
 
@@ -34,13 +36,15 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
             var line = new Line1D(new(1, 2)) { Orientation = new(Vector1D.RightToLeft) };
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector1D.RightToLeft, item.Orientation.XAxis);
                     Assert.Equal(-1, item.Orientation.Determinant);
 
                     Assert.Equal(-1, item.X);
                 },
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector1D.LeftToRight, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 

@@ -1,6 +1,6 @@
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kleene
 {
@@ -13,7 +13,9 @@ namespace Kleene
         public void Define(string name, Expression expression)
         {
             if (!functions.ContainsKey(name))
+            {
                 functions.Add(name, new());
+            }
 
             functions[name].Push(expression);
         }
@@ -23,7 +25,9 @@ namespace Kleene
             functions[name].Pop();
 
             if (!functions[name].Any())
+            {
                 functions.Remove(name);
+            }
         }
 
         public IEnumerator<KeyValuePair<string, Expression>> GetEnumerator()

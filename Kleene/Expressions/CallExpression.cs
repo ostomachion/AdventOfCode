@@ -16,7 +16,9 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (context.FunctionList[Name] is not Expression expression)
+            {
                 yield break;
+            }
 
             var captureName = CaptureName ?? new("!F");
             context.CaptureTree.Open(captureName);

@@ -17,8 +17,10 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (!context.Local.Producing || !context.Local.Consuming)
+            {
                 throw new InvalidOperationException("Cannot nest transform expressions.");
-                
+            }
+
             context.Local.Producing = false;
             foreach (var inputResult in Input.Run(context))
             {

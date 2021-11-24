@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Kleene
 {
@@ -15,13 +15,15 @@ namespace Kleene
         public CaptureName(params string[] parts)
         {
             if (!parts.Any())
+            {
                 throw new ArgumentException("CaptureName cannot be empty.", nameof(parts));
+            }
 
             Parts = parts;
         }
 
         public static implicit operator CaptureName(string value) => new(value);
 
-        public override string ToString() => String.Join('.', Parts);
+        public override string ToString() => string.Join('.', Parts);
     }
 }

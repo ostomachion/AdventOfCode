@@ -1,5 +1,3 @@
-using System;
-
 namespace AdventOfCode.Helpers.Cartesian.Boxes
 {
     public record Point3D(long I, long J, long K)

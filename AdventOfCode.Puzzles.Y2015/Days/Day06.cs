@@ -1,13 +1,8 @@
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System;
-using System.Linq;
-using AdventOfCode.Puzzles;
-using AdventOfCode.Helpers;
 using AdventOfCode.Helpers.Cartesian;
+using AdventOfCode.Helpers.Cartesian.Grids;
 using AdventOfCode.Helpers.Extensions;
 using AdventOfCode.Helpers.Numeric;
-using AdventOfCode.Helpers.Cartesian.Grids;
+using System.Linq;
 
 namespace AdventOfCode.Puzzles.Y2015.Days
 {
@@ -54,7 +49,7 @@ namespace AdventOfCode.Puzzles.Y2015.Days
                 (('turn on'/'1') | ('toggle'/'0') | ('turn off'/'1')):Toggle
                 <coord>:Start ' through ' <coord>:End
             ");
-            
+
             var grid = new SparsePlaneGrid2D<Natural>(1000, 1000);
             foreach (var item in input)
             {

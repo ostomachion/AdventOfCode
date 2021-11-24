@@ -1,5 +1,5 @@
-using System;
 using AdventOfCode.Helpers.Extensions;
+using System;
 
 namespace AdventOfCode.Helpers.Cartesian
 {
@@ -21,10 +21,14 @@ namespace AdventOfCode.Helpers.Cartesian
         public Interval(long? start = null, long? end = null, bool looping = false)
         {
             if (looping && (start is null || end is null))
+            {
                 throw new ArgumentException("Only finite dimensions can loop.", nameof(looping));
+            }
 
             if (end < start)
+            {
                 throw new ArgumentException("End cannot be less than start.", nameof(end));
+            }
 
             OptionalStart = start;
             OptionalEnd = end;

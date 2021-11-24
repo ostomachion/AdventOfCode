@@ -10,7 +10,7 @@ namespace Kleene
         public CaptureTreeNode? Parent { get; set; }
         private readonly Stack<CaptureTreeNode> children = new();
         public ExpressionResult? Value { get; set; }
-        public IEnumerable<CaptureTreeNode> Children => this.children;
+        public IEnumerable<CaptureTreeNode> Children => children;
         public bool IsOpen { get; set; }
         public bool IsFunctionBoundary { get; set; }
 
@@ -19,9 +19,11 @@ namespace Kleene
             get
             {
                 if (name is null)
+                {
                     return this;
+                }
 
-                var head = this.children.FirstOrDefault(x => x.Name == name.Head);
+                var head = children.FirstOrDefault(x => x.Name == name.Head);
                 return head?[name.Tail];
             }
         }
@@ -35,12 +37,12 @@ namespace Kleene
         public void Add(CaptureTreeNode node)
         {
             node.Parent = this;
-            this.children.Push(node);
+            children.Push(node);
         }
 
         public void Unadd()
         {
-            var node = this.children.Pop();
+            var node = children.Pop();
             node.Parent = null;
         }
     }

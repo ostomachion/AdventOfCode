@@ -16,15 +16,19 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (Order is MatchOrder.Greedy)
+            {
                 yield return new();
-            
+            }
+
             foreach (var result in Expression.Run(context))
             {
                 yield return result;
             }
 
             if (Order is MatchOrder.Lazy)
+            {
                 yield return new();
+            }
         }
     }
 }

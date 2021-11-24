@@ -1,9 +1,3 @@
-using System.Numerics;
-using System.Linq;
-using AdventOfCode.Helpers.Cartesian;
-using AdventOfCode.Helpers.Cartesian.Boxes;
-using Xunit;
-
 namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
 {
     public class Space3DTests

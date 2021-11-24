@@ -1,5 +1,3 @@
-using AdventOfCode.Puzzles;
-using AdventOfCode.Helpers;
 using AdventOfCode.Helpers.Extensions;
 
 namespace AdventOfCode.Puzzles.Y2015.Days
@@ -18,9 +16,11 @@ namespace AdventOfCode.Puzzles.Y2015.Days
             {
                 l += c == '(' ? 1 : -1;
                 if (l < 0)
+                {
                     return i + 1;
+                }
             }
-            
+
             return AnswerNotFound();
         }
     }

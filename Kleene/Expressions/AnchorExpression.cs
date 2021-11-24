@@ -33,7 +33,9 @@ namespace Kleene
             };
 
             if (pass ^ Negated)
+            {
                 yield return new();
+            }
         }
     }
 }

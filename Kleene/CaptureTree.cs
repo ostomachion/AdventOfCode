@@ -13,11 +13,15 @@ namespace Kleene
             get
             {
                 if (name is null)
+                {
                     return Current;
-                
+                }
+
                 var head = Current.Children.FirstOrDefault(x => x.Name == name.Head);
                 if (head is not null)
+                {
                     return head[name.Tail];
+                }
 
                 return (Current.IsFunctionBoundary || Current.Parent is null) ? null : Current.Parent[name];
             }
@@ -25,8 +29,8 @@ namespace Kleene
 
         public CaptureTree()
         {
-            this.Root = new(this, "root");
-            this.Current = Root;
+            Root = new(this, "root");
+            Current = Root;
         }
 
         public void Set(CaptureName name, ExpressionResult value)
@@ -46,8 +50,8 @@ namespace Kleene
             foreach (var part in name.Parts)
             {
                 var node = new CaptureTreeNode(this, part);
-                this.Current.Add(node);
-                this.Current = node;
+                Current.Add(node);
+                Current = node;
             }
         }
 
@@ -55,11 +59,13 @@ namespace Kleene
         {
             foreach (var part in name.Parts.Reverse())
             {
-                if (this.Current.Name != part)
+                if (Current.Name != part)
+                {
                     throw new InvalidOperationException();
-                
-                this.Current = this.Current.Parent ?? throw new InvalidOperationException();
-                this.Current.Unadd();
+                }
+
+                Current = Current.Parent ?? throw new InvalidOperationException();
+                Current.Unadd();
             }
         }
 
@@ -67,25 +73,29 @@ namespace Kleene
         {
             foreach (var part in name.Parts.Reverse())
             {
-                if (this.Current.Name != part)
+                if (Current.Name != part)
+                {
                     throw new InvalidOperationException();
-                
-                this.Current.IsOpen = false;
-                this.Current.Value = value;
-                this.Current = this.Current.Parent ?? throw new InvalidOperationException();
+                }
+
+                Current.IsOpen = false;
+                Current.Value = value;
+                Current = Current.Parent ?? throw new InvalidOperationException();
             }
         }
 
         public void Unclose(CaptureName name)
         {
             foreach (var part in name.Parts.Reverse())
-            {   
-                this.Current = this.Current.Children.Last();
-                if (this.Current.Name != part)
+            {
+                Current = Current.Children.Last();
+                if (Current.Name != part)
+                {
                     throw new InvalidOperationException();
+                }
 
-                this.Current.Value = null;
-                this.Current.IsOpen = true;
+                Current.Value = null;
+                Current.IsOpen = true;
             }
         }
     }

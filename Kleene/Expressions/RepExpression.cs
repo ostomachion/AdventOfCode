@@ -22,7 +22,9 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (!context.Local.Consuming && Count.IsUnbounded)
+            {
                 throw new InvalidOperationException("Unbounded repetitions cannot be used without an input.");
+            }
 
             var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
 
@@ -36,7 +38,7 @@ namespace Kleene
             }
 
             var stack = new Stack<IEnumerator<ExpressionResult>>();
-            stack.Push(this.Expression.Run(context).GetEnumerator());
+            stack.Push(Expression.Run(context).GetEnumerator());
 
             while (stack.Any())
             {
@@ -45,16 +47,16 @@ namespace Kleene
                     if (stack.Count == Count.Max)
                     {
                         yield return new(
-                            String.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                            String.Join("", stack.Reverse().Select(x => x.Current.Output)));
+                            string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                            string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }
                     else
                     {
                         if (Order == MatchOrder.Lazy && stack.Count >= Count.Min)
                         {
                             yield return new(
-                                String.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                                String.Join("", stack.Reverse().Select(x => x.Current.Output)));
+                                string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                                string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                         }
                         stack.Push(separated.Run(context).GetEnumerator());
                     }
@@ -68,8 +70,8 @@ namespace Kleene
                         if (stack.Any() && stack.Count >= Count.Min || Count.Min == 0)
                         {
                             yield return new(
-                                String.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                                String.Join("", stack.Reverse().Select(x => x.Current.Output)));
+                                string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                                string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                         }
                     }
                 }

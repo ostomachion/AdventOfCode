@@ -20,7 +20,9 @@ namespace AdventOfCode.Helpers.Cartesian
             : this((int)xAxis.X)
         {
             if (Determinant is not (1 or -1))
+            {
                 throw new ArgumentException("Must be an orthonormal basis.");
+            }
         }
 
         public Orientation1D Inverse() => this;

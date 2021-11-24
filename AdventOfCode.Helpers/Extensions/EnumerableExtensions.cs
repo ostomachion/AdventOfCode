@@ -1,7 +1,7 @@
-using System.Numerics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Numerics;
 
 namespace AdventOfCode.Helpers.Extensions
 {

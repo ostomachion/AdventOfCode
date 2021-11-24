@@ -1,5 +1,3 @@
-using System.Linq;
-using System;
 using Xunit;
 
 namespace Kleene.Tests

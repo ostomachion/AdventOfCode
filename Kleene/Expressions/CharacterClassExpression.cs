@@ -1,4 +1,3 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -16,10 +15,14 @@ namespace Kleene
         public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
         {
             if (!context.Local.Consuming)
+            {
                 throw new InvalidOperationException("Character classes cannot be used without input.");
+            }
 
             if (context.Local.IsAtEnd)
+            {
                 yield break;
+            }
 
             var c = context.Local.Input[context.Local.Index];
             if (CharacterClass.Accepts(c))

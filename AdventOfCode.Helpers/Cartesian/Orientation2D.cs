@@ -28,7 +28,9 @@ namespace AdventOfCode.Helpers.Cartesian
             : this((int)xAxis.X, (int)xAxis.Y, (int)yAxis.X, (int)yAxis.Y)
         {
             if (xAxis * yAxis != 0 || Determinant is not (1 or -1))
+            {
                 throw new ArgumentException("Must be an orthonormal basis.");
+            }
         }
 
         public Orientation2D Inverse()

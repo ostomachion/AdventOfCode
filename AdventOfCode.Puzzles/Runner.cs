@@ -1,9 +1,4 @@
-using System.Runtime.CompilerServices;
-using System.Reflection;
 using System;
-using AdventOfCode.Puzzles;
-using System.IO;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace AdventOfCode.Puzzles
@@ -15,21 +10,24 @@ namespace AdventOfCode.Puzzles
 
         public Runner()
         {
-            this.client = new();
-            this.inputManager = new(client);
+            client = new();
+            inputManager = new(client);
         }
 
         public static (int year, int day) GetCurrentDecemberDate()
         {
             var date = DateTimeOffset.Now.ToOffset(new TimeSpan(-5, 0, 0)).Date;
             if (date.Month != 12)
+            {
                 throw new InvalidOperationException("The current date is not in December.");
+            }
+
             return (date.Year, date.Day);
         }
 
         public async Task<int> GetCurrentPartAsync(int year, int day)
         {
-            var puzzle = await this.client.GetPuzzleAsync(year, day);
+            var puzzle = await client.GetPuzzleAsync(year, day);
             return puzzle.Contains("--- Part Two ---") ? 2 : 1;
         }
 
@@ -41,10 +39,10 @@ namespace AdventOfCode.Puzzles
         }
 
         public async Task<Output> RunAsync(int year, int day, int part, string? input = null)
-        {   
+        {
             var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
             var instance = (Day)type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
-            instance.Input = input ?? await this.inputManager.GetAsync(year, day);
+            instance.Input = input ?? await inputManager.GetAsync(year, day);
             return part == 1 ? instance.Part1() : instance.Part2();
         }
 

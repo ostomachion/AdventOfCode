@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Kleene
@@ -12,7 +11,9 @@ namespace Kleene
             foreach (var result in Run(context))
             {
                 if (context.Local.IsAtEnd)
+                {
                     return result.Output;
+                }
             }
             return null;
         }
@@ -22,12 +23,16 @@ namespace Kleene
         public IEnumerable<ExpressionResult> Run(ExpressionContext context)
         {
             if (context.Ratchet)
+            {
                 yield break;
-            
+            }
+
             foreach (var result in RunInternal(context))
             {
                 if (!context.Ratchet)
+                {
                     yield return result;
+                }
             }
         }
 

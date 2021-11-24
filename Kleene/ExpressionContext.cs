@@ -1,4 +1,3 @@
-using System;
 namespace Kleene
 {
     public class ExpressionContext

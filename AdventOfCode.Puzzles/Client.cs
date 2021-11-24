@@ -1,4 +1,3 @@
-using System.Net;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -13,11 +12,11 @@ namespace AdventOfCode.Puzzles
         private readonly HttpClient httpClient = new();
         private bool disposedValue;
 
-        private string session;
+        private readonly string session;
 
         public Client()
         {
-            this.session = File.ReadAllText(Paths.SessionPath);
+            session = File.ReadAllText(Paths.SessionPath);
         }
 
         private async Task<string> DownloadStringAsync(string url)
@@ -27,7 +26,7 @@ namespace AdventOfCode.Puzzles
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Get,
             };
-            request.Headers.Add("Cookie", $"session={this.session}");
+            request.Headers.Add("Cookie", $"session={session}");
             var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
@@ -35,12 +34,12 @@ namespace AdventOfCode.Puzzles
 
         public async Task<string> GetPuzzleAsync(int year, int day)
         {
-            return await this.DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
+            return await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
         }
 
         public async Task<string> GetInputAsync(int year, int day)
         {
-            return (await this.DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
+            return (await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
         }
 
         protected virtual void Dispose(bool disposing)
@@ -49,7 +48,7 @@ namespace AdventOfCode.Puzzles
             {
                 if (disposing)
                 {
-                    this.httpClient.Dispose();
+                    httpClient.Dispose();
                 }
 
                 disposedValue = true;

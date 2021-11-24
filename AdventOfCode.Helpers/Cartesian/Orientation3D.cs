@@ -48,7 +48,9 @@ namespace AdventOfCode.Helpers.Cartesian
                 (int)zAxis.X, (int)zAxis.Y, (int)zAxis.Z)
         {
             if (xAxis * yAxis != 0 || yAxis * zAxis != 0 || zAxis * xAxis != 0 || Determinant is not (1 or -1))
+            {
                 throw new ArgumentException("Must be an orthonormal basis.");
+            }
         }
 
         public static Orientation3D operator *(Orientation3D left, Orientation3D right) => new(

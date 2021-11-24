@@ -1,6 +1,6 @@
-using System.Linq;
 using AdventOfCode.Helpers.Cartesian;
 using AdventOfCode.Helpers.Cartesian.Boxes;
+using System.Linq;
 using Xunit;
 
 namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
@@ -13,14 +13,16 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
             var line = new Line2D(new(1, 2), 3);
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.LeftToRight, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 
                     Assert.Equal(1, item.X);
                     Assert.Equal(3, item.Y);
                 },
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.RightToLeft, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 
@@ -36,14 +38,16 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
             var line = new Line2D(new(1, 2), 3) { Orientation = new(Vector2D.BottomToTop, Vector2D.RightToLeft) };
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.BottomToTop, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 
                     Assert.Equal(-3, item.X);
                     Assert.Equal(1, item.Y);
                 },
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.TopToBottom, item.Orientation.XAxis);
                     Assert.Equal(1, item.Orientation.Determinant);
 
@@ -59,14 +63,16 @@ namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes
             var line = new Line2D(new(1, 2), 3) { Orientation = new(Vector2D.BottomToTop, Vector2D.LeftToRight) };
             var vertices = line.Vertices.ToList();
             Assert.Collection(vertices,
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.BottomToTop, item.Orientation.XAxis);
                     Assert.Equal(-1, item.Orientation.Determinant);
 
                     Assert.Equal(3, item.X);
                     Assert.Equal(1, item.Y);
                 },
-                item => {
+                item =>
+                {
                     Assert.Equal(Vector2D.TopToBottom, item.Orientation.XAxis);
                     Assert.Equal(-1, item.Orientation.Determinant);
 
