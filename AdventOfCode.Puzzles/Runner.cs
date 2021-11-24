@@ -4,6 +4,7 @@ using System;
 using AdventOfCode.Puzzles;
 using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace AdventOfCode.Puzzles
 {
@@ -26,37 +27,38 @@ namespace AdventOfCode.Puzzles
             return (date.Year, date.Day);
         }
 
-        public int GetCurrentPart(int year, int day)
+        public async Task<int> GetCurrentPartAsync(int year, int day)
         {
-            return this.client.GetPuzzle(year, day).Contains("--- Part Two ---") ? 2 : 1;
+            var puzzle = await this.client.GetPuzzleAsync(year, day);
+            return puzzle.Contains("--- Part Two ---") ? 2 : 1;
         }
 
-        public Output Run()
+        public async Task<Output> RunAsync()
         {
             var (year, day) = GetCurrentDecemberDate();
-            var part = GetCurrentPart(year, day);
-            return Run(year, day, part);
+            var part = await GetCurrentPartAsync(year, day);
+            return await RunAsync(year, day, part);
         }
 
-        public Output Run(int year, int day, int part, string? input = null)
+        public async Task<Output> RunAsync(int year, int day, int part, string? input = null)
         {   
             var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
             var instance = (Day)type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
-            instance.Input = input ?? this.inputManager.Get(year, day);
+            instance.Input = input ?? await this.inputManager.GetAsync(year, day);
             return part == 1 ? instance.Part1() : instance.Part2();
         }
 
-        public void Print()
+        public async Task PrintAsync()
         {
             var (year, day) = GetCurrentDecemberDate();
-            var part = GetCurrentPart(year, day);
-            Print(year, day, part);
+            var part = await GetCurrentPartAsync(year, day);
+            await PrintAsync(year, day, part);
         }
 
-        public void Print(int year, int day, int part, string? input = null)
+        public async Task PrintAsync(int year, int day, int part, string? input = null)
         {
             Console.WriteLine($"Advent of Code {year} day {day} part {part}...");
-            Console.WriteLine(Run(year, day, part, input));
+            Console.WriteLine(await RunAsync(year, day, part, input));
         }
     }
 }

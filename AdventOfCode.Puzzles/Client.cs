@@ -1,6 +1,8 @@
 using System.Net;
 using System;
 using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace AdventOfCode.Puzzles
 {
@@ -8,23 +10,37 @@ namespace AdventOfCode.Puzzles
     {
         public const string BaseUrl = "https://adventofcode.com";
 
-        private readonly WebClient webClient = new();
+        private readonly HttpClient httpClient = new();
         private bool disposedValue;
+
+        private string session;
 
         public Client()
         {
-            var session = File.ReadAllText(Paths.SessionPath);
-            this.webClient.Headers.Add("Cookie", $"session={session}");
+            this.session = File.ReadAllText(Paths.SessionPath);
         }
 
-        public string GetPuzzle(int year, int day)
+        private async Task<string> DownloadStringAsync(string url)
         {
-            return this.webClient.DownloadString($"{BaseUrl}/{year}/day/{day}");
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get,
+            };
+            request.Headers.Add("Cookie", $"session={this.session}");
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
-        public string GetInput(int year, int day)
+        public async Task<string> GetPuzzleAsync(int year, int day)
         {
-            return this.webClient.DownloadString($"{BaseUrl}/{year}/day/{day}/input").TrimEnd('\n');
+            return await this.DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
+        }
+
+        public async Task<string> GetInputAsync(int year, int day)
+        {
+            return (await this.DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
         }
 
         protected virtual void Dispose(bool disposing)
@@ -33,7 +49,7 @@ namespace AdventOfCode.Puzzles
             {
                 if (disposing)
                 {
-                    this.webClient.Dispose();
+                    this.httpClient.Dispose();
                 }
 
                 disposedValue = true;
