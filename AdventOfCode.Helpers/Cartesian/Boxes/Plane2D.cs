@@ -13,15 +13,15 @@ public record Plane2D(Interval I, Interval J)
 
     public Line2D[] Edges => new[]
     {
-            JStart, IEnd,
-            JEnd, IStart
-        };
+        JStart, IEnd,
+        JEnd, IStart
+    };
 
     public Point2D[] Vertices => new[]
     {
-            JStart.IStart, IEnd.IStart,
-            JEnd.IStart, IStart.IStart
-        };
+        JStart.IStart, IEnd.IStart,
+        JEnd.IStart, IStart.IStart
+    };
 
     public long Perimeter => 2 * (IStart.Length + IEnd.Length);
     public long? Area => I.Length * J.Length;

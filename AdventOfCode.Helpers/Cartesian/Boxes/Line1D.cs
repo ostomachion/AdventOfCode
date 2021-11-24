@@ -11,8 +11,8 @@ public record Line1D(Interval I)
 
     public Point1D[] Vertices => new[]
     {
-            IStart, IEnd
-        };
+        IStart, IEnd
+    };
 
     public long Length => I.Length;
 

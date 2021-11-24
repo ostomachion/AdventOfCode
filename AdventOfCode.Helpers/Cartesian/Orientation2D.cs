@@ -1,3 +1,5 @@
+using System;
+
 namespace AdventOfCode.Helpers.Cartesian;
 
 public record Orientation2D

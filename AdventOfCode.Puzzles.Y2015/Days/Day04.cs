@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text;
 
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
@@ -9,7 +10,7 @@ public class Day04 : Day
         var i = 0;
         while (true)
         {
-            var bytes = System.Text.Encoding.UTF8.GetBytes(Input + i.ToString());
+            var bytes = Encoding.UTF8.GetBytes(Input + i.ToString());
             var result = MD5.HashData(bytes).ToHexString();
             if (result.StartsWith("00000"))
             {
@@ -25,7 +26,7 @@ public class Day04 : Day
         var i = 0;
         while (true)
         {
-            var bytes = System.Text.Encoding.UTF8.GetBytes(Input + i.ToString());
+            var bytes = Encoding.UTF8.GetBytes(Input + i.ToString());
             var result = MD5.HashData(bytes).ToHexString();
             if (result.StartsWith("000000"))
             {

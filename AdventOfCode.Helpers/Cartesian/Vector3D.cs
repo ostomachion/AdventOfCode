@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace AdventOfCode.Helpers.Cartesian;
 
 public record Vector3D(long X, long Y, long Z)

@@ -14,7 +14,7 @@ public class Client : IDisposable
         session = File.ReadAllText(Paths.SessionPath);
     }
 
-    private async Task<string> DownloadStringAsync(string url)
+    private string DownloadString(string url)
     {
         var request = new HttpRequestMessage()
         {
@@ -22,19 +22,24 @@ public class Client : IDisposable
             Method = HttpMethod.Get,
         };
         request.Headers.Add("Cookie", $"session={session}");
-        var response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStringAsync();
+
+        var response = httpClient.SendAsync(request);
+        response.Wait();
+        response.Result.EnsureSuccessStatusCode();
+
+        var task = response.Result.Content.ReadAsStringAsync();
+        task.Wait();
+        return task.Result;
     }
 
-    public async Task<string> GetPuzzleAsync(int year, int day)
+    public string GetPuzzle(int year, int day)
     {
-        return await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
+        return DownloadString($"{BaseUrl}/{year}/day/{day}");
     }
 
-    public async Task<string> GetInputAsync(int year, int day)
+    public string GetInput(int year, int day)
     {
-        return (await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
+        return DownloadString($"{BaseUrl}/{year}/day/{day}/input").TrimEnd('\n');
     }
 
     protected virtual void Dispose(bool disposing)

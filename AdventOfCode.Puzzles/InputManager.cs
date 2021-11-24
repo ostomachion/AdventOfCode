@@ -9,13 +9,13 @@ public class InputManager
         this.client = client;
     }
 
-    public async Task<string> GetAsync(int year, int day)
+    public string Get(int year, int day)
     {
         string path = Paths.GetInputPath(year, day);
         if (!File.Exists(path))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            File.WriteAllText(path, await client.GetInputAsync(year, day));
+            File.WriteAllText(path, client.GetInput(year, day));
         }
 
         return File.ReadAllText(path);

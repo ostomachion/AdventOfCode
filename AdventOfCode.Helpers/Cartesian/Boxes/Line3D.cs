@@ -11,8 +11,8 @@ public record Line3D(Interval I, long J = 0, long K = 0)
 
     public Point3D[] Vertices => new[]
     {
-            IStart, IEnd
-        };
+        IStart, IEnd
+    };
 
     public long Length => I.Length;
 

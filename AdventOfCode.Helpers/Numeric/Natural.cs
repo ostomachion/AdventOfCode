@@ -1,3 +1,5 @@
+using System;
+using System.Numerics;
 namespace AdventOfCode.Helpers.Numeric;
 
 public struct Natural

@@ -22,37 +22,37 @@ public class Runner
         return (date.Year, date.Day);
     }
 
-    public async Task<int> GetCurrentPartAsync(int year, int day)
+    public int GetCurrentPart(int year, int day)
     {
-        var puzzle = await client.GetPuzzleAsync(year, day);
+        var puzzle = client.GetPuzzle(year, day);
         return puzzle.Contains("--- Part Two ---") ? 2 : 1;
     }
 
-    public async Task<Output> RunAsync()
+    public Output Run()
     {
         var (year, day) = GetCurrentDecemberDate();
-        var part = await GetCurrentPartAsync(year, day);
-        return await RunAsync(year, day, part);
+        var part = GetCurrentPart(year, day);
+        return Run(year, day, part);
     }
 
-    public async Task<Output> RunAsync(int year, int day, int part, string? input = null)
+    public Output Run(int year, int day, int part, string? input = null)
     {
         var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
         var instance = (Day)type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
-        instance.Input = input ?? await inputManager.GetAsync(year, day);
+        instance.Input = input ?? inputManager.Get(year, day);
         return part == 1 ? instance.Part1() : instance.Part2();
     }
 
-    public async Task PrintAsync()
+    public void Print()
     {
         var (year, day) = GetCurrentDecemberDate();
-        var part = await GetCurrentPartAsync(year, day);
-        await PrintAsync(year, day, part);
+        var part = GetCurrentPart(year, day);
+        Print(year, day, part);
     }
 
-    public async Task PrintAsync(int year, int day, int part, string? input = null)
+    public void Print(int year, int day, int part, string? input = null)
     {
         Console.WriteLine($"Advent of Code {year} day {day} part {part}...");
-        Console.WriteLine(await RunAsync(year, day, part, input));
+        Console.WriteLine(Run(year, day, part, input));
     }
 }

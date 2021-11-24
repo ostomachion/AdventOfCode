@@ -21,21 +21,21 @@ public record Space3D(Interval I, Interval J, Interval K)
 
     public Line3D[] Edges => new[]
     {
-            KStart.IStart, IStart.IEnd,
-            JStart.IStart, JStart.IEnd,
-            IStart.IStart, IStart.IEnd,
-            KEnd.IStart, KEnd.IEnd,
-            JEnd.IStart, JEnd.IEnd,
-            IEnd.IStart, IEnd.IEnd
-        };
+        KStart.IStart, IStart.IEnd,
+        JStart.IStart, JStart.IEnd,
+        IStart.IStart, IStart.IEnd,
+        KEnd.IStart, KEnd.IEnd,
+        JEnd.IStart, JEnd.IEnd,
+        IEnd.IStart, IEnd.IEnd
+    };
 
     public Point3D[] Vertices => new[]
     {
-            IStart.IStart.IStart, IStart.IStart.IEnd,
-            IStart.IEnd.IStart, IStart.IEnd.IEnd,
-            IEnd.IStart.IStart, IEnd.IStart.IEnd,
-            IEnd.IEnd.IStart, IEnd.IEnd.IEnd
-        };
+        IStart.IStart.IStart, IStart.IStart.IEnd,
+        IStart.IEnd.IStart, IStart.IEnd.IEnd,
+        IEnd.IStart.IStart, IEnd.IStart.IEnd,
+        IEnd.IEnd.IStart, IEnd.IEnd.IEnd
+    };
 
     public bool Contains(Coordinate3D coordinate)
     {

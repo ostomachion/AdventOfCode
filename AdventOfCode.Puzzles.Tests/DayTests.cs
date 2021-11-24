@@ -10,7 +10,7 @@ public abstract class DayTests
     public abstract void Part1(string? input, string? output);
     public abstract void Part2(string? input, string? output);
 
-    protected static async void Test(string? input, string? output, [CallerFilePath] string callerFilePath = null!, [CallerMemberName] string callerMemberName = null!)
+    protected static void Test(string? input, string? output, [CallerFilePath] string callerFilePath = null!, [CallerMemberName] string callerMemberName = null!)
     {
         var match = Regex.Match(callerFilePath, $@"\\AdventOfCode\.Puzzles\.Y(?<year>\d\d\d\d)\.Tests\\Days\\Day(?<day>\d\d)Tests\.cs$");
 
@@ -30,7 +30,7 @@ public abstract class DayTests
 
         output ??= GetOutput(year, day, part);
 
-        var actual = await DayTests.runner.RunAsync(year, day, part, input);
+        var actual = runner.Run(year, day, part, input);
         Assert.Equal(output, actual);
     }
 
