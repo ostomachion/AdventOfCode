@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class FailExpression : Expression
 {
-    public class FailExpression : Expression
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
-        {
-            yield break;
-        }
+        yield break;
     }
 }

@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class ReqExpression : Expression
 {
-    public class ReqExpression : Expression
+    public Expression Expression { get; }
+
+    public ReqExpression(Expression expression)
     {
-        public Expression Expression { get; }
+        Expression = expression;
+    }
 
-        public ReqExpression(Expression expression)
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        foreach (var result in Expression.Run(context))
         {
-            Expression = expression;
-        }
-
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
-        {
-            foreach (var result in Expression.Run(context))
+            if (result.Input.Length != 0)
             {
-                if (result.Input.Length != 0)
-                {
-                    yield return result;
-                }
+                yield return result;
             }
         }
     }

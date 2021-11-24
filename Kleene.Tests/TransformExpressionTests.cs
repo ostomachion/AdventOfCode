@@ -1,37 +1,36 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class TransformExpressionTests
 {
-    public class TransformExpressionTests
+    [Fact]
+    public void Match()
     {
-        [Fact]
-        public void Match()
-        {
-            // Given
-            var expression = new TransformExpression(
-                new TextExpression("x"),
-                new TextExpression("y"));
+        // Given
+        var expression = new TransformExpression(
+            new TextExpression("x"),
+            new TextExpression("y"));
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("y", result);
-        }
+        // Then
+        Assert.Equal("y", result);
+    }
 
-        [Fact]
-        public void Mismatch()
-        {
-            // Given
-            var expression = new TransformExpression(
-                new TextExpression("x"),
-                new TextExpression("y"));
+    [Fact]
+    public void Mismatch()
+    {
+        // Given
+        var expression = new TransformExpression(
+            new TextExpression("x"),
+            new TextExpression("y"));
 
-            // When
-            var result = expression.Transform("y");
+        // When
+        var result = expression.Transform("y");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
     }
 }

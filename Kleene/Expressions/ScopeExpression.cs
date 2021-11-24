@@ -1,35 +1,34 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class ScopeExpression : Expression
 {
-    public class ScopeExpression : Expression
+    public CaptureName Name { get; }
+    public Expression Expression { get; }
+
+    public ScopeExpression(CaptureName name, Expression expression)
     {
-        public CaptureName Name { get; }
-        public Expression Expression { get; }
+        Name = name;
+        Expression = expression;
+    }
 
-        public ScopeExpression(CaptureName name, Expression expression)
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        var originalScope = context.CaptureTree.Current;
+        var newScope = context.CaptureTree.Current[Name];
+        if (newScope is null)
         {
-            Name = name;
-            Expression = expression;
+            yield break;
         }
 
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+        context.CaptureTree.Current = newScope;
+        foreach (var result in Expression.Run(context))
         {
-            var originalScope = context.CaptureTree.Current;
-            var newScope = context.CaptureTree.Current[Name];
-            if (newScope is null)
-            {
-                yield break;
-            }
-
-            context.CaptureTree.Current = newScope;
-            foreach (var result in Expression.Run(context))
-            {
-                context.CaptureTree.Current = originalScope;
-                yield return result;
-                context.CaptureTree.Current = newScope;
-            }
             context.CaptureTree.Current = originalScope;
+            yield return result;
+            context.CaptureTree.Current = newScope;
         }
+        context.CaptureTree.Current = originalScope;
     }
 }

@@ -1,77 +1,76 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class AssignmentExpressionTests
 {
-    public class AssignmentExpressionTests
+    [Fact]
+    public void Text()
     {
-        [Fact]
-        public void Text()
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new AssignmentExpression("foo", "x"),
                 new BackreferenceExpression("foo")
-            });
+        });
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("x", result);
-        }
+        // Then
+        Assert.Equal("x", result);
+    }
 
-        [Fact]
-        public void Capture()
+    [Fact]
+    public void Capture()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new CaptureExpression("foo", new TextExpression("x")),
                 new AssignmentExpression("bar", new BackreferenceExpression("foo")),
                 new BackreferenceExpression("bar")
-            });
+        });
 
-            // When
-            var result = expression.Transform("xx");
+        // When
+        var result = expression.Transform("xx");
 
-            // Then
-            Assert.Equal("xx", result);
-        }
+        // Then
+        Assert.Equal("xx", result);
+    }
 
-        [Fact]
-        public void Shadow()
+    [Fact]
+    public void Shadow()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new CaptureExpression("foo", new TextExpression("x")),
                 new AssignmentExpression("foo", "y"),
                 new BackreferenceExpression("foo")
-            });
+        });
 
-            // When
-            var result = expression.Transform("xy");
+        // When
+        var result = expression.Transform("xy");
 
-            // Then
-            Assert.Equal("xy", result);
-        }
+        // Then
+        Assert.Equal("xy", result);
+    }
 
-        [Fact]
-        public void Nested()
+    [Fact]
+    public void Nested()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new AssignmentExpression("foo.bar", "x"),
                 new BackreferenceExpression("foo.bar")
-            });
+        });
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("x", result);
-        }
+        // Then
+        Assert.Equal("x", result);
     }
 }

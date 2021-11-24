@@ -2,77 +2,76 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kleene
-{
-    public class RepExpression : Expression
-    {
-        public Expression Expression { get; }
-        public Expression? Separator { get; }
-        public RepCount Count { get; }
-        public MatchOrder Order { get; }
+namespace Kleene;
 
-        public RepExpression(Expression expression, Expression? separator, RepCount count, MatchOrder order = MatchOrder.Greedy)
+public class RepExpression : Expression
+{
+    public Expression Expression { get; }
+    public Expression? Separator { get; }
+    public RepCount Count { get; }
+    public MatchOrder Order { get; }
+
+    public RepExpression(Expression expression, Expression? separator, RepCount count, MatchOrder order = MatchOrder.Greedy)
+    {
+        Expression = expression;
+        Separator = separator;
+        Count = count;
+        Order = order;
+    }
+
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        if (!context.Local.Consuming && Count.IsUnbounded)
         {
-            Expression = expression;
-            Separator = separator;
-            Count = count;
-            Order = order;
+            throw new InvalidOperationException("Unbounded repetitions cannot be used without an input.");
         }
 
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+        var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
+
+        if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)
         {
-            if (!context.Local.Consuming && Count.IsUnbounded)
+            yield return new();
+            if (Count.Max == 0)
             {
-                throw new InvalidOperationException("Unbounded repetitions cannot be used without an input.");
+                yield break;
             }
+        }
 
-            var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
+        var stack = new Stack<IEnumerator<ExpressionResult>>();
+        stack.Push(Expression.Run(context).GetEnumerator());
 
-            if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)
+        while (stack.Any())
+        {
+            if (stack.Peek().MoveNext())
             {
-                yield return new();
-                if (Count.Max == 0)
+                if (stack.Count == Count.Max)
                 {
-                    yield break;
+                    yield return new(
+                        string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                        string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                 }
-            }
-
-            var stack = new Stack<IEnumerator<ExpressionResult>>();
-            stack.Push(Expression.Run(context).GetEnumerator());
-
-            while (stack.Any())
-            {
-                if (stack.Peek().MoveNext())
+                else
                 {
-                    if (stack.Count == Count.Max)
+                    if (Order == MatchOrder.Lazy && stack.Count >= Count.Min)
                     {
                         yield return new(
                             string.Join("", stack.Reverse().Select(x => x.Current.Input)),
                             string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }
-                    else
-                    {
-                        if (Order == MatchOrder.Lazy && stack.Count >= Count.Min)
-                        {
-                            yield return new(
-                                string.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                                string.Join("", stack.Reverse().Select(x => x.Current.Output)));
-                        }
-                        stack.Push(separated.Run(context).GetEnumerator());
-                    }
+                    stack.Push(separated.Run(context).GetEnumerator());
                 }
-                else
-                {
-                    stack.Pop();
+            }
+            else
+            {
+                stack.Pop();
 
-                    if (Order == MatchOrder.Greedy)
+                if (Order == MatchOrder.Greedy)
+                {
+                    if (stack.Any() && stack.Count >= Count.Min || Count.Min == 0)
                     {
-                        if (stack.Any() && stack.Count >= Count.Min || Count.Min == 0)
-                        {
-                            yield return new(
-                                string.Join("", stack.Reverse().Select(x => x.Current.Input)),
-                                string.Join("", stack.Reverse().Select(x => x.Current.Output)));
-                        }
+                        yield return new(
+                            string.Join("", stack.Reverse().Select(x => x.Current.Input)),
+                            string.Join("", stack.Reverse().Select(x => x.Current.Output)));
                     }
                 }
             }

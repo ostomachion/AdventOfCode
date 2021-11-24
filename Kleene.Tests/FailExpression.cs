@@ -1,33 +1,32 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class FailExpressionTests
 {
-    public class FailExpressionTests
+    [Fact]
+    public void Empty()
     {
-        [Fact]
-        public void Empty()
-        {
-            // Given
-            var expression = new FailExpression();
+        // Given
+        var expression = new FailExpression();
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void NonEmpty()
-        {
-            // Given
-            var expression = new FailExpression();
+    [Fact]
+    public void NonEmpty()
+    {
+        // Given
+        var expression = new FailExpression();
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
     }
 }

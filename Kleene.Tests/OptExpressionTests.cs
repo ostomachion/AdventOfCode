@@ -1,35 +1,34 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class OptExpressionTests
 {
-    public class OptExpressionTests
+    [Fact]
+    public void NonEmpty()
     {
-        [Fact]
-        public void NonEmpty()
-        {
-            // Given
-            var expression = new OptExpression(new TextExpression("x"));
+        // Given
+        var expression = new OptExpression(new TextExpression("x"));
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("x", result);
-        }
-
-        [Fact]
-        public void Empty()
-        {
-            // Given
-            var expression = new OptExpression(new TextExpression("x"));
-
-            // When
-            var result = expression.Transform("");
-
-            // Then
-            Assert.Equal("", result);
-        }
-
-        // TODO: Lazy tests.
+        // Then
+        Assert.Equal("x", result);
     }
+
+    [Fact]
+    public void Empty()
+    {
+        // Given
+        var expression = new OptExpression(new TextExpression("x"));
+
+        // When
+        var result = expression.Transform("");
+
+        // Then
+        Assert.Equal("", result);
+    }
+
+    // TODO: Lazy tests.
 }

@@ -1,48 +1,47 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kleene
+namespace Kleene;
+
+public class TypeAssignmentExpression : Expression
 {
-    public class TypeAssignmentExpression : Expression
+    public string TypeName { get; }
+    public IEnumerable<TypeAssignmentProperty> Properties { get; }
+
+    public TypeAssignmentExpression(string typeName, IEnumerable<TypeAssignmentProperty> properties)
     {
-        public string TypeName { get; }
-        public IEnumerable<TypeAssignmentProperty> Properties { get; }
+        TypeName = typeName;
+        Properties = properties;
+    }
 
-        public TypeAssignmentExpression(string typeName, IEnumerable<TypeAssignmentProperty> properties)
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        context.CaptureTree.Open("!T");
+        context.CaptureTree.Set("FullName", new(TypeName));
+        context.CaptureTree.Open("Properties");
+        foreach (var property in Properties.OrderBy(x => x.Name))
         {
-            TypeName = typeName;
-            Properties = properties;
+            ExpressionResult? value = property.Value.GetValue(context);
+            if (value is not null)
+            {
+                context.CaptureTree.Set(property.Name, value);
+            }
         }
+        context.CaptureTree.Close("!T", new());
 
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+        yield return new();
+
+        context.CaptureTree.Unclose("!T");
+        foreach (var property in Properties.OrderByDescending(x => x.Name))
         {
-            context.CaptureTree.Open("!T");
-            context.CaptureTree.Set("FullName", new(TypeName));
-            context.CaptureTree.Open("Properties");
-            foreach (var property in Properties.OrderBy(x => x.Name))
+            ExpressionResult? value = property.Value.GetValue(context);
+            if (value is not null)
             {
-                ExpressionResult? value = property.Value.GetValue(context);
-                if (value is not null)
-                {
-                    context.CaptureTree.Set(property.Name, value);
-                }
+                context.CaptureTree.Unset(property.Name);
             }
-            context.CaptureTree.Close("!T", new());
-
-            yield return new();
-
-            context.CaptureTree.Unclose("!T");
-            foreach (var property in Properties.OrderByDescending(x => x.Name))
-            {
-                ExpressionResult? value = property.Value.GetValue(context);
-                if (value is not null)
-                {
-                    context.CaptureTree.Unset(property.Name);
-                }
-            }
-            context.CaptureTree.Unopen("Properties");
-            context.CaptureTree.Unset("FullName");
-            context.CaptureTree.Unopen("!T");
         }
+        context.CaptureTree.Unopen("Properties");
+        context.CaptureTree.Unset("FullName");
+        context.CaptureTree.Unopen("!T");
     }
 }

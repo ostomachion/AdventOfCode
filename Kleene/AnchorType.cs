@@ -1,4 +1,3 @@
-namespace Kleene
-{
-    public enum AnchorType { Left, Right, Outer, Inner }
-}
+namespace Kleene;
+
+public enum AnchorType { Left, Right, Outer, Inner }

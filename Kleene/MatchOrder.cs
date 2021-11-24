@@ -1,4 +1,3 @@
-namespace Kleene
-{
-    public enum MatchOrder { Greedy, Lazy }
-}
+namespace Kleene;
+
+public enum MatchOrder { Greedy, Lazy }

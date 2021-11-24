@@ -3,63 +3,62 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AdventOfCode.Puzzles
+namespace AdventOfCode.Puzzles;
+
+public class Client : IDisposable
 {
-    public class Client : IDisposable
+    public const string BaseUrl = "https://adventofcode.com";
+
+    private readonly HttpClient httpClient = new();
+    private bool disposedValue;
+
+    private readonly string session;
+
+    public Client()
     {
-        public const string BaseUrl = "https://adventofcode.com";
+        session = File.ReadAllText(Paths.SessionPath);
+    }
 
-        private readonly HttpClient httpClient = new();
-        private bool disposedValue;
-
-        private readonly string session;
-
-        public Client()
+    private async Task<string> DownloadStringAsync(string url)
+    {
+        var request = new HttpRequestMessage()
         {
-            session = File.ReadAllText(Paths.SessionPath);
-        }
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get,
+        };
+        request.Headers.Add("Cookie", $"session={session}");
+        var response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
+    }
 
-        private async Task<string> DownloadStringAsync(string url)
+    public async Task<string> GetPuzzleAsync(int year, int day)
+    {
+        return await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
+    }
+
+    public async Task<string> GetInputAsync(int year, int day)
+    {
+        return (await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
         {
-            var request = new HttpRequestMessage()
+            if (disposing)
             {
-                RequestUri = new Uri(url),
-                Method = HttpMethod.Get,
-            };
-            request.Headers.Add("Cookie", $"session={session}");
-            var response = await httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
-        }
-
-        public async Task<string> GetPuzzleAsync(int year, int day)
-        {
-            return await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}");
-        }
-
-        public async Task<string> GetInputAsync(int year, int day)
-        {
-            return (await DownloadStringAsync($"{BaseUrl}/{year}/day/{day}/input")).TrimEnd('\n');
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    httpClient.Dispose();
-                }
-
-                disposedValue = true;
+                httpClient.Dispose();
             }
-        }
 
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            disposedValue = true;
         }
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

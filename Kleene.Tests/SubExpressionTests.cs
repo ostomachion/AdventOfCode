@@ -1,78 +1,77 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class SubExpressionTests
 {
-    public class SubExpressionTests
+    [Fact]
+    public void Backreference()
     {
-        [Fact]
-        public void Backreference()
-        {
-            // Given
-            var expression = new ConcatExpression(new Expression[] {
+        // Given
+        var expression = new ConcatExpression(new Expression[] {
                 new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"))
             });
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Equal("", result);
-        }
+        // Then
+        Assert.Equal("", result);
+    }
 
-        [Fact]
-        public void BackreferenceMismatch()
-        {
-            // Given
-            var expression = new ConcatExpression(new Expression[] {
+    [Fact]
+    public void BackreferenceMismatch()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[] {
                 new AssignmentExpression("foo", "x"),
                 new SubExpression(new BackreferenceExpression("foo"), new TextExpression("y"))
             });
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void BackreferenceUndefined()
-        {
-            // Given
-            var expression = new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"));
+    [Fact]
+    public void BackreferenceUndefined()
+    {
+        // Given
+        var expression = new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"));
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void Text()
-        {
-            // Given
-            var expression = new SubExpression("x", new TextExpression("x"));
+    [Fact]
+    public void Text()
+    {
+        // Given
+        var expression = new SubExpression("x", new TextExpression("x"));
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Equal("", result);
-        }
+        // Then
+        Assert.Equal("", result);
+    }
 
-        [Fact]
-        public void TextMismatch()
-        {
-            // Given
-            var expression = new SubExpression("x", new TextExpression("y"));
+    [Fact]
+    public void TextMismatch()
+    {
+        // Given
+        var expression = new SubExpression("x", new TextExpression("y"));
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
     }
 }

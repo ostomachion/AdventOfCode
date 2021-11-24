@@ -1,23 +1,22 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class AtomicExpression : Expression
 {
-    public class AtomicExpression : Expression
+    public Expression Expression { get; }
+
+    public AtomicExpression(Expression expression)
     {
-        public Expression Expression { get; }
+        Expression = expression;
+    }
 
-        public AtomicExpression(Expression expression)
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        foreach (var result in Expression.Run(context))
         {
-            Expression = expression;
-        }
-
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
-        {
-            foreach (var result in Expression.Run(context))
-            {
-                yield return result;
-                yield break;
-            }
+            yield return result;
+            yield break;
         }
     }
 }

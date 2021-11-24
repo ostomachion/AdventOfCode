@@ -1,75 +1,74 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class AltExpressionTests
 {
-    public class AltExpressionTests
+    [Fact]
+    public void MatchFirst()
     {
-        [Fact]
-        public void MatchFirst()
+        // Given
+        var expression = new AltExpression(new[]
         {
-            // Given
-            var expression = new AltExpression(new[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
             });
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("x", result);
-        }
+        // Then
+        Assert.Equal("x", result);
+    }
 
-        [Fact]
-        public void MatchSecond()
+    [Fact]
+    public void MatchSecond()
+    {
+        // Given
+        var expression = new AltExpression(new[]
         {
-            // Given
-            var expression = new AltExpression(new[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
             });
 
-            // When
-            var result = expression.Transform("y");
+        // When
+        var result = expression.Transform("y");
 
-            // Then
-            Assert.Equal("y", result);
-        }
+        // Then
+        Assert.Equal("y", result);
+    }
 
-        [Fact]
-        public void MatchNeither()
+    [Fact]
+    public void MatchNeither()
+    {
+        // Given
+        var expression = new AltExpression(new[]
         {
-            // Given
-            var expression = new AltExpression(new[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
             });
 
-            // When
-            var result = expression.Transform("z");
+        // When
+        var result = expression.Transform("z");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void EmptyInput()
+    [Fact]
+    public void EmptyInput()
+    {
+        // Given
+        var expression = new AltExpression(new[]
         {
-            // Given
-            var expression = new AltExpression(new[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
             });
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
     }
 }

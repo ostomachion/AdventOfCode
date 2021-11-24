@@ -1,28 +1,27 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class CaptureExpression : Expression
 {
-    public class CaptureExpression : Expression
+    public CaptureName Name { get; }
+    public Expression Expression { get; }
+
+    public CaptureExpression(CaptureName name, Expression expression)
     {
-        public CaptureName Name { get; }
-        public Expression Expression { get; }
+        Name = name;
+        Expression = expression;
+    }
 
-        public CaptureExpression(CaptureName name, Expression expression)
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        context.CaptureTree.Open(Name);
+        foreach (var result in Expression.Run(context))
         {
-            Name = name;
-            Expression = expression;
+            context.CaptureTree.Close(Name, result);
+            yield return result;
+            context.CaptureTree.Unclose(Name);
         }
-
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
-        {
-            context.CaptureTree.Open(Name);
-            foreach (var result in Expression.Run(context))
-            {
-                context.CaptureTree.Close(Name, result);
-                yield return result;
-                context.CaptureTree.Unclose(Name);
-            }
-            context.CaptureTree.Unopen(Name);
-        }
+        context.CaptureTree.Unopen(Name);
     }
 }

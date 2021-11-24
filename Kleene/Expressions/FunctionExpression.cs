@@ -1,23 +1,22 @@
 using System.Collections.Generic;
 
-namespace Kleene
+namespace Kleene;
+
+public class FunctionExpression : Expression
 {
-    public class FunctionExpression : Expression
+    public string Name { get; }
+    public Expression Value { get; }
+
+    public FunctionExpression(string name, Expression value)
     {
-        public string Name { get; }
-        public Expression Value { get; }
+        Name = name;
+        Value = value;
+    }
 
-        public FunctionExpression(string name, Expression value)
-        {
-            Name = name;
-            Value = value;
-        }
-
-        public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
-        {
-            context.FunctionList.Define(Name, Value);
-            yield return new();
-            context.FunctionList.Undefine(Name);
-        }
+    public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
+    {
+        context.FunctionList.Define(Name, Value);
+        yield return new();
+        context.FunctionList.Undefine(Name);
     }
 }

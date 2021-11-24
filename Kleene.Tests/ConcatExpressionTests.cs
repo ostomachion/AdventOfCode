@@ -1,109 +1,108 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class ConcatExpressionTests
 {
-    public class ConcatExpressionTests
+    [Fact]
+    public void MatchFirst()
     {
-        [Fact]
-        public void MatchFirst()
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+        });
 
-            // When
-            var result = expression.Transform("xy");
+        // When
+        var result = expression.Transform("xy");
 
-            // Then
-            Assert.Equal("xy", result);
-        }
+        // Then
+        Assert.Equal("xy", result);
+    }
 
-        [Fact]
-        public void Mismatch()
+    [Fact]
+    public void Mismatch()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+        });
 
-            // When
-            var result = expression.Transform("yx");
+        // When
+        var result = expression.Transform("yx");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void PartialMatch()
+    [Fact]
+    public void PartialMatch()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+        });
 
-            // When
-            var result = expression.Transform("xz");
+        // When
+        var result = expression.Transform("xz");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void PartialMatchShort()
+    [Fact]
+    public void PartialMatchShort()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+        });
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void PartialMatchLong()
+    [Fact]
+    public void PartialMatchLong()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new TextExpression("x"),
                 new TextExpression("y")
-            });
+        });
 
-            // When
-            var result = expression.Transform("xyz");
+        // When
+        var result = expression.Transform("xyz");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
+    }
 
-        [Fact]
-        public void Backtrack()
+    [Fact]
+    public void Backtrack()
+    {
+        // Given
+        var expression = new ConcatExpression(new Expression[]
         {
-            // Given
-            var expression = new ConcatExpression(new Expression[]
-            {
                 new OptExpression(new TextExpression("x")),
                 new TextExpression("x")
-            });
+        });
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Equal("x", result);
-        }
+        // Then
+        Assert.Equal("x", result);
     }
 }

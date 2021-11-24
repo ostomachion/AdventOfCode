@@ -1,33 +1,32 @@
 using Xunit;
 
-namespace Kleene.Tests
+namespace Kleene.Tests;
+
+public class PassExpressionTests
 {
-    public class PassExpressionTests
+    [Fact]
+    public void Match()
     {
-        [Fact]
-        public void Match()
-        {
-            // Given
-            var expression = new PassExpression();
+        // Given
+        var expression = new PassExpression();
 
-            // When
-            var result = expression.Transform("");
+        // When
+        var result = expression.Transform("");
 
-            // Then
-            Assert.Equal("", result);
-        }
+        // Then
+        Assert.Equal("", result);
+    }
 
-        [Fact]
-        public void NonEmpty()
-        {
-            // Given
-            var expression = new PassExpression();
+    [Fact]
+    public void NonEmpty()
+    {
+        // Given
+        var expression = new PassExpression();
 
-            // When
-            var result = expression.Transform("x");
+        // When
+        var result = expression.Transform("x");
 
-            // Then
-            Assert.Null(result);
-        }
+        // Then
+        Assert.Null(result);
     }
 }
