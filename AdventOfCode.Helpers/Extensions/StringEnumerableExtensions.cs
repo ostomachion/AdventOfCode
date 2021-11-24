@@ -36,5 +36,3 @@ public static class StringEnumerableExtensions
 
     public static IEnumerable<T?> Parse<T>(this IEnumerable<string> text, params string[] rules) => throw new NotImplementedException();
 }
-
-public record ParseRule<T>(string Pattern, Func<Match, T?> F);
