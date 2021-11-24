@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Kleene;
+﻿namespace Kleene;
 
 public class TransformExpression : Expression
 {

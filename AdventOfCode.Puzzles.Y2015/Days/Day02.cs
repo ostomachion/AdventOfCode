@@ -1,6 +1,5 @@
 using AdventOfCode.Helpers.Cartesian.Boxes;
 using AdventOfCode.Helpers.Extensions;
-using System.Linq;
 
 namespace AdventOfCode.Puzzles.Y2015.Days;
 

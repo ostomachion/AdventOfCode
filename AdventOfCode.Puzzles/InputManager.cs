@@ -1,6 +1,3 @@
-using System.IO;
-using System.Threading.Tasks;
-
 namespace AdventOfCode.Puzzles;
 
 public class InputManager

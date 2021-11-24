@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace AdventOfCode.Helpers.Cartesian;
 
 public record Vector2D(long X, long Y)

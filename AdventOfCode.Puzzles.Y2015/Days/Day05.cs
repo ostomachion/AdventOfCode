@@ -1,5 +1,4 @@
 using AdventOfCode.Helpers.Extensions;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Puzzles.Y2015.Days;

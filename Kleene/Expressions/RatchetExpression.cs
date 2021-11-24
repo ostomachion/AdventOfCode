@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Kleene;
 
 public class RatchetExpression : Expression

@@ -1,6 +1,5 @@
 using AdventOfCode.Helpers.Cartesian;
 using AdventOfCode.Helpers.Cartesian.Boxes;
-using System.Linq;
 using Xunit;
 
 namespace AdventOfCode.Helpers.Tests.Cartesian.Boxes;

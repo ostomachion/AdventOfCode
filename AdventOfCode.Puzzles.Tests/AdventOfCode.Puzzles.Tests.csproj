@@ -13,6 +13,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <IsTestProject>false</IsTestProject>
     <Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
 </Project>
