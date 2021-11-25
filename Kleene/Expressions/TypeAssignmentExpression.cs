@@ -8,7 +8,7 @@ namespace Kleene
         public string TypeName { get; }
         public IEnumerable<TypeAssignmentProperty> Properties { get; }
 
-        public TypeAssignmentExpression(string typeName, IEnumerable<TypeAssignmentProperty> properties)
+        public TypeAssignmentExpression(string typeName, params TypeAssignmentProperty[] properties)
         {
             TypeName = typeName;
             Properties = properties;
@@ -27,11 +27,13 @@ namespace Kleene
                     context.CaptureTree.Set(property.Name, value);
                 }
             }
+            context.CaptureTree.Close("Properties", new());
             context.CaptureTree.Close("!T", new());
 
             yield return new();
 
             context.CaptureTree.Unclose("!T");
+            context.CaptureTree.Unclose("Properties");
             foreach (var property in Properties.OrderByDescending(x => x.Name))
             {
                 ExpressionResult? value = property.Value.GetValue(context);

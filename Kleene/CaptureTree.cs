@@ -80,7 +80,7 @@ namespace Kleene
         {
             foreach (var part in name.Parts.Reverse())
             {   
-                this.Current = this.Current.Children.Last();
+                this.Current = this.Current.Children.First();
                 if (this.Current.Name != part)
                     throw new InvalidOperationException();
 
