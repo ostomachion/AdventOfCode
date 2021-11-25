@@ -1,16 +1,17 @@
 namespace Kleene.Tests;
 
-public class ScopeExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void BlockDescendants()
+    public class ScopeExpressionTests
     {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void BlockDescendants()
         {
-            new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
-            new ScopeExpression("foo", new BackreferenceExpression("bar"))
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+                new ScopeExpression("foo", new BackreferenceExpression("bar"))
+            );
 
         // When
         var result = expression.Transform("x");

@@ -27,14 +27,14 @@ public class CaptureExpressionTests
         );
     }
 
-    [Fact]
-    public void Shadow()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[] {
+        [Fact]
+        public void Shadow()
+        {
+            // Given
+            var expression = new ConcatExpression(
                 new CaptureExpression("foo", new TextExpression("x")),
                 new CaptureExpression("foo", new TextExpression("y"))
-            });
+            );
 
         // When
         var context = new ExpressionContext("xy");

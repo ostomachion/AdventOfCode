@@ -1,16 +1,17 @@
 namespace Kleene.Tests;
 
-public class AssignmentExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void Text()
+    public class AssignmentExpressionTests
     {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Text()
         {
-            new AssignmentExpression("foo", "x"),
-            new BackreferenceExpression("foo")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new AssignmentExpression("foo", "x"),
+                new BackreferenceExpression("foo")
+            );
 
         // When
         var result = expression.Transform("x");
@@ -19,16 +20,15 @@ public class AssignmentExpressionTests
         Assert.Equal("x", result);
     }
 
-    [Fact]
-    public void Capture()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Capture()
         {
-            new CaptureExpression("foo", new TextExpression("x")),
-            new AssignmentExpression("bar", new BackreferenceExpression("foo")),
-            new BackreferenceExpression("bar")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new CaptureExpression("foo", new TextExpression("x")),
+                new AssignmentExpression("bar", new BackreferenceExpression("foo")),
+                new BackreferenceExpression("bar")
+            );
 
         // When
         var result = expression.Transform("xx");
@@ -37,16 +37,15 @@ public class AssignmentExpressionTests
         Assert.Equal("xx", result);
     }
 
-    [Fact]
-    public void Shadow()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Shadow()
         {
-            new CaptureExpression("foo", new TextExpression("x")),
-            new AssignmentExpression("foo", "y"),
-            new BackreferenceExpression("foo")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new CaptureExpression("foo", new TextExpression("x")),
+                new AssignmentExpression("foo", "y"),
+                new BackreferenceExpression("foo")
+            );
 
         // When
         var result = expression.Transform("xy");
@@ -55,15 +54,14 @@ public class AssignmentExpressionTests
         Assert.Equal("xy", result);
     }
 
-    [Fact]
-    public void Nested()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Nested()
         {
-            new AssignmentExpression("foo.bar", "x"),
-            new BackreferenceExpression("foo.bar")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new AssignmentExpression("foo.bar", "x"),
+                new BackreferenceExpression("foo.bar")
+            );
 
         // When
         var result = expression.Transform("x");

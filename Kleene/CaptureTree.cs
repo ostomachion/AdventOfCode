@@ -81,15 +81,13 @@ public class CaptureTree
         }
     }
 
-    public void Unclose(CaptureName name)
-    {
-        foreach (var part in name.Parts.Reverse())
+        public void Unclose(CaptureName name)
         {
-            Current = Current.Children.Last();
-            if (Current.Name != part)
-            {
-                throw new InvalidOperationException();
-            }
+            foreach (var part in name.Parts.Reverse())
+            {   
+                this.Current = this.Current.Children.First();
+                if (this.Current.Name != part)
+                    throw new InvalidOperationException();
 
             Current.Value = null;
             Current.IsOpen = true;

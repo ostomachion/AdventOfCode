@@ -4,10 +4,10 @@ public class ConcatExpression : Expression
 {
     public IEnumerable<Expression> Expressions { get; }
 
-    public ConcatExpression(IEnumerable<Expression> expressions)
-    {
-        Expressions = expressions;
-    }
+        public ConcatExpression(params Expression[] expressions)
+        {
+            Expressions = expressions;
+        }
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {

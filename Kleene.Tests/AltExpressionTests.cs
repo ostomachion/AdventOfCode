@@ -1,16 +1,17 @@
 namespace Kleene.Tests;
 
-public class AltExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void MatchFirst()
+    public class AltExpressionTests
     {
-        // Given
-        var expression = new AltExpression(new[]
+        [Fact]
+        public void MatchFirst()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new AltExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("x");
@@ -19,15 +20,14 @@ public class AltExpressionTests
         Assert.Equal("x", result);
     }
 
-    [Fact]
-    public void MatchSecond()
-    {
-        // Given
-        var expression = new AltExpression(new[]
+        [Fact]
+        public void MatchSecond()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new AltExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("y");
@@ -36,15 +36,14 @@ public class AltExpressionTests
         Assert.Equal("y", result);
     }
 
-    [Fact]
-    public void MatchNeither()
-    {
-        // Given
-        var expression = new AltExpression(new[]
+        [Fact]
+        public void MatchNeither()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new AltExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("z");
@@ -53,15 +52,14 @@ public class AltExpressionTests
         Assert.Null(result);
     }
 
-    [Fact]
-    public void EmptyInput()
-    {
-        // Given
-        var expression = new AltExpression(new[]
+        [Fact]
+        public void EmptyInput()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new AltExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("");

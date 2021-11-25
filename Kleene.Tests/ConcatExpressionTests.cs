@@ -1,16 +1,17 @@
 namespace Kleene.Tests;
 
-public class ConcatExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void MatchFirst()
+    public class ConcatExpressionTests
     {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void MatchFirst()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("xy");
@@ -19,15 +20,14 @@ public class ConcatExpressionTests
         Assert.Equal("xy", result);
     }
 
-    [Fact]
-    public void Mismatch()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Mismatch()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("yx");
@@ -36,15 +36,14 @@ public class ConcatExpressionTests
         Assert.Null(result);
     }
 
-    [Fact]
-    public void PartialMatch()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void PartialMatch()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("xz");
@@ -53,15 +52,14 @@ public class ConcatExpressionTests
         Assert.Null(result);
     }
 
-    [Fact]
-    public void PartialMatchShort()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void PartialMatchShort()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("x");
@@ -70,15 +68,14 @@ public class ConcatExpressionTests
         Assert.Null(result);
     }
 
-    [Fact]
-    public void PartialMatchLong()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void PartialMatchLong()
         {
-            new TextExpression("x"),
-            new TextExpression("y")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new TextExpression("x"),
+                new TextExpression("y")
+            );
 
         // When
         var result = expression.Transform("xyz");
@@ -87,15 +84,14 @@ public class ConcatExpressionTests
         Assert.Null(result);
     }
 
-    [Fact]
-    public void Backtrack()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[]
+        [Fact]
+        public void Backtrack()
         {
-            new OptExpression(new TextExpression("x")),
-            new TextExpression("x")
-        });
+            // Given
+            var expression = new ConcatExpression(
+                new OptExpression(new TextExpression("x")),
+                new TextExpression("x")
+            );
 
         // When
         var result = expression.Transform("x");

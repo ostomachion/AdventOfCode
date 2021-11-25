@@ -22,7 +22,7 @@ public class RepExpression : Expression
             throw new InvalidOperationException("Unbounded repetitions cannot be used without an input.");
         }
 
-        var separated = Separator is null ? Expression : new ConcatExpression(new Expression[] { Separator, Expression });
+            var separated = Separator is null ? Expression : new ConcatExpression(Separator, Expression);
 
         if (Order == MatchOrder.Lazy && Count.Min == 0 || Count.Max == 0)
         {

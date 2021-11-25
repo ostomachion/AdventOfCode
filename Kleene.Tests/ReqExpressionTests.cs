@@ -1,16 +1,17 @@
 namespace Kleene.Tests;
 
-public class ReqExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void Match()
+    public class ReqExpressionTests
     {
-        // Given
-        var expression = new ReqExpression(new AltExpression(new Expression[]
+        [Fact]
+        public void Match()
         {
+            // Given
+            var expression = new ReqExpression(new AltExpression(
             new TextExpression("x"),
             new PassExpression()
-        }));
+            ));
 
         // When
         var result = expression.Transform("x");
@@ -19,15 +20,14 @@ public class ReqExpressionTests
         Assert.Equal("x", result);
     }
 
-    [Fact]
-    public void Empty()
-    {
-        // Given
-        var expression = new ReqExpression(new AltExpression(new Expression[]
+        [Fact]
+        public void Empty()
         {
-            new TextExpression("x"),
-            new PassExpression()
-        }));
+            // Given
+            var expression = new ReqExpression(new AltExpression(
+                new TextExpression("x"),
+                new PassExpression()
+            ));
 
         // When
         var result = expression.Transform("");

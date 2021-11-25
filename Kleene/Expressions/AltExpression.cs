@@ -4,10 +4,10 @@ public class AltExpression : Expression
 {
     public IEnumerable<Expression> Expressions { get; }
 
-    public AltExpression(IEnumerable<Expression> expressions)
-    {
-        Expressions = expressions;
-    }
+        public AltExpression(params Expression[] expressions)
+        {
+            Expressions = expressions;
+        }
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {

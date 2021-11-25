@@ -1,15 +1,17 @@
 namespace Kleene.Tests;
 
-public class SubExpressionTests
+namespace Kleene.Tests
 {
-    [Fact]
-    public void Backreference()
+    public class SubExpressionTests
     {
-        // Given
-        var expression = new ConcatExpression(new Expression[] {
-            new AssignmentExpression("foo", "x"),
-            new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"))
-        });
+        [Fact]
+        public void Backreference()
+        {
+            // Given
+            var expression = new ConcatExpression(
+                new AssignmentExpression("foo", "x"),
+                new SubExpression(new BackreferenceExpression("foo"), new TextExpression("x"))
+            );
 
         // When
         var result = expression.Transform("");
@@ -18,14 +20,14 @@ public class SubExpressionTests
         Assert.Equal("", result);
     }
 
-    [Fact]
-    public void BackreferenceMismatch()
-    {
-        // Given
-        var expression = new ConcatExpression(new Expression[] {
-            new AssignmentExpression("foo", "x"),
-            new SubExpression(new BackreferenceExpression("foo"), new TextExpression("y"))
-        });
+        [Fact]
+        public void BackreferenceMismatch()
+        {
+            // Given
+            var expression = new ConcatExpression(
+                new AssignmentExpression("foo", "x"),
+                new SubExpression(new BackreferenceExpression("foo"), new TextExpression("y"))
+            );
 
         // When
         var result = expression.Transform("");
