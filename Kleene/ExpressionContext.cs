@@ -10,6 +10,7 @@ public class ExpressionContext
 
     public ExpressionContext(string input)
     {
+        input = input.ReplaceLineEndings("\n");
         Local = new(input);
     }
 

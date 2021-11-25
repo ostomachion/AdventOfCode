@@ -28,7 +28,7 @@ namespace Kleene.Tests
 
 <capture> {
     # Special case. Captures on calls have to be handled by the call expression itself.
-    <call>:expression
+    <call>:expression ;
     (=expression
         (':' <dotted-name>:CaptureName)? ;
         ::CallExpression

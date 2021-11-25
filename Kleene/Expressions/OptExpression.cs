@@ -13,7 +13,7 @@ public class OptExpression : Expression
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
-        if (Order is MatchOrder.Greedy)
+        if (Order is MatchOrder.Lazy)
         {
             yield return new();
         }
@@ -23,7 +23,7 @@ public class OptExpression : Expression
             yield return result;
         }
 
-        if (Order is MatchOrder.Lazy)
+        if (Order is MatchOrder.Greedy)
         {
             yield return new();
         }

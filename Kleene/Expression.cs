@@ -78,7 +78,7 @@ public abstract class Expression
         Fun("capture", Alt(
             Concat(
                 // Special case. Captures on calls have to be handled by the call expression itself.
-                Call("call", "expression"),
+                Call("call", "expression"), R,
                 Scope("expression",
                     Opt(Text(":"), Call("dotted-name", "CaptureName")), R,
                     Type<CallExpression>()
@@ -345,6 +345,7 @@ public abstract class Expression
 
     public string? RunFull(string input, out CaptureTree? captureTree)
     {
+        input = input.ReplaceLineEndings("\n");
         var context = new ExpressionContext(input);
         if (Run(context).FirstOrDefault(_ => context.Local.Index == input.Length) is ExpressionResult result)
         {
