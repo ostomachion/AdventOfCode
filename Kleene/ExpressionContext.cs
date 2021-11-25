@@ -32,6 +32,9 @@ public class ExpressionContext
             return value;
 
         var types = Usings.Select(x => Type.GetType(x + "." + name)).OfType<Type>().ToList();
+        if (Type.GetType(name) is Type type)
+            types.Add(type);
+
         return types.Count switch
         {
             0 => throw new Exception($"The type name '{name}' could not be found."),
