@@ -2,7 +2,9 @@ namespace Kleene.Tests
 {
     public static class Meta
     {
-        public static readonly string Expression = @"<root> { <ws> <expression>:value <ws> ; }
+        public static readonly string Expression = @":::Kleene
+
+<root> { <ws> <expression>:value <ws> ; }
 
 <expression> { <bullet-alt>:value | <trans>:value }
 
@@ -62,6 +64,7 @@ namespace Kleene.Tests
     - <atomic>
     - <group>
     - <backreference>
+    - <using>
     - <type-set>
     - <function>
     - <call>
@@ -108,11 +111,13 @@ namespace Kleene.Tests
     <dotted-capture-name>:Name ::BackreferenceExpression ;
 }
 
+<using> { ':::' <dotnet-namespace-name>:Name ::UsingExpression ; }
+
 <type-set> {
-    '::' <type-prop-name>:Name ;
+    '::' <dotnet-type-name>:Name ;
     (
         <ws> '{' <ws>
-        ((<type-prop-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
+        ((<dotnet-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
     ::TypeSetExpression
@@ -262,10 +267,15 @@ namespace Kleene.Tests
 
 <dotted-capture-name> { '@' <dotted-name> ; }
 
-<type-prop-name> {
-    [\a_][\w_]* ;
-    ('<' <type-prop-name>+ % (',' \s*) '>')? ;
+<dotnet-namespace-name> { <dotnet-name>+ % '.' ; }
+
+<dotnet-type-name> {
+    (<dotnet-namespace-name> '.')?
+    <dotnet-name>
+    ('<' <dotnet-type-name>+ % (',' WS) '>')? ;
 }
+
+<dotnet-name> { [\a_][\w_]* ; }
 
 <root>";
     }

@@ -48,9 +48,12 @@ public abstract class Expression
     private static CharacterClassExpression CC(string chars) => new(new(chars, false));
     private static CharacterClassExpression CCN(string chars) => new(new(chars, true));
 
+    private static UsingExpression Use(string name) => new(name);
     private static TypeAssignmentExpression Type<T>(params TypeAssignmentProperty[] props) => new(typeof(T).Name, props);
 
     public static readonly Expression Meta = Concat(
+        Use("Kleene"),
+
         Fun("root", WS, Call("expression", "value"), WS, R),
 
         Fun("expression", Alt(Call("bullet-alt", "value"), Call("trans", "value"))),
@@ -110,6 +113,7 @@ public abstract class Expression
             Call("atomic"),
             Call("group"),
             Call("backreference"),
+            Call("using"),
             Call("type-set"),
             Call("function"),
             Call("call"),
@@ -156,11 +160,15 @@ public abstract class Expression
             Call("dotted-capture-name", "Name"), Type<BackreferenceExpression>(), R
         ),
 
+        Fun("using",
+            Text(":::"), Call("dotnet-namespace-name", "Name"), Type<UsingExpression>(), R
+        ),
+
         Fun("type-set",
-            Text("::"), Call("type-prop-name", "Name"), R,
+            Text("::"), Call("dotnet-type-name", "Name"), R,
             Opt(
                 WS, Text("{"), WS,
-                Sep(Star(Cap("Properties", Call("type-prop-name", "Name"), WS, Text("="), WS, Call("static", "Value"))), Concat(Text(","), WS)),
+                Sep(Star(Cap("Properties", Call("dotnet-name", "Name"), WS, Text("="), WS, Call("static", "Value"))), Concat(Text(","), WS)),
                 WS, Text("}")
             ), R
         ),
@@ -312,10 +320,26 @@ public abstract class Expression
 
         Fun("dotted-capture-name", Text("@"), Call("dotted-name")),
 
-        Fun("type-prop-name",
+        Fun("dotnet-namespace-name",
+            Sep(
+                Plus(Call("dotnet-name")),
+                Text(".")
+            ), R
+        ),
+
+        Fun("dotnet-type-name",
+            Opt(Call("dotnet-namespace-name"), Text(".")),
+            Call("dotnet-name"),
+            Opt(
+                Text("<"),
+                Sep(Plus(Call("dotnet-type-name")), Concat(Text(","), WS)),
+                Text(">")
+            ), R
+        ),
+
+        Fun("dotnet-name",
             CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"),
-                Star(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")), R,
-            Opt(Text("<"), Sep(Plus(Call("type-prop-name")), Concat(Text(","), Star(S))), Text(">")), R
+                Star(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")), R
         ),
 
         Call("root")

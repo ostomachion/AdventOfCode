@@ -24,11 +24,12 @@ public class CallExpression : Expression
         context.CallStack.Push(new(Name, expression));
         foreach (var result in expression.Run(context))
         {
-            context.CallStack.Pop();
+            var frame = context.CallStack.Pop();
             context.CaptureTree.Close(captureName, result);
             yield return result;
             context.CaptureTree.Unclose(captureName);
-            context.CallStack.Push(new(Name, expression));
+            frame.Ratchet = false;
+            context.CallStack.Push(frame);
         }
         context.CallStack.Pop();
         context.CaptureTree.Unopen(captureName);
