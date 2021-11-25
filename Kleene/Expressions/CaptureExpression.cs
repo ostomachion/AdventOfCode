@@ -8,7 +8,7 @@ public class CaptureExpression : Expression
     public CaptureExpression(CaptureName name, Expression expression)
     {
         Name = name;
-        Expression = expression;
+        Expression = expression; 
     }
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)

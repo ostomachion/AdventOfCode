@@ -325,10 +325,6 @@ public abstract class Expression
             Opt(Text("<"), Sep(Plus(Call("type-prop-name")), Concat(Text(","), Star(S))), Text(">")), R
         ),
 
-        Fun("dotted-type-prop-name",
-            Sep(Plus(Call("name", "Name")), Text(".")), R
-        ),
-
         Call("root")
     );
 

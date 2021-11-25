@@ -1,3 +1,5 @@
+@using Kleene
+
 <root> { <ws> <expression>:value <ws> ; }
 
 <expression> { <bullet-alt>:value | <trans>:value }
@@ -268,7 +270,5 @@
     [\a_][\w_]* ;
     ('<' <type-prop-name>+ % (',' \s*) '>')? ;
 }
-
-<dotted-type-prop-name> { (<name>:Name)+ % '.' ; }
 
 <root>

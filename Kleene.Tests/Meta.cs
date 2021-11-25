@@ -273,8 +273,6 @@ namespace Kleene.Tests
     ('<' <type-prop-name>+ % (',' \s*) '>')? ;
 }
 
-<dotted-type-prop-name> { (<name>:Name)+ % '.' ; }
-
 <root>";
     }
 }
