@@ -5,12 +5,15 @@ public class ExpressionContext
     public ExpressionLocalContext Local { get; set; }
     public CaptureTree CaptureTree { get; } = new();
     public FunctionList FunctionList { get; } = new();
-
-    public bool Ratchet { get; set; }
+    public Stack<StackFrame> CallStack { get; } = new();
+    public bool Ratchet
+    {
+        get => CallStack.Peek().Ratchet;
+        set => CallStack.Peek().Ratchet = value;
+    }
 
     public ExpressionContext(string input)
     {
-        input = input.ReplaceLineEndings("\n");
         Local = new(input);
     }
 

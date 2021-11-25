@@ -21,14 +21,16 @@ public class CallExpression : Expression
         var captureName = CaptureName ?? new("!F");
         context.CaptureTree.Open(captureName);
         context.CaptureTree.Current.IsFunctionBoundary = true;
+        context.CallStack.Push(new(Name, expression));
         foreach (var result in expression.Run(context))
         {
+            context.CallStack.Pop();
             context.CaptureTree.Close(captureName, result);
             yield return result;
             context.CaptureTree.Unclose(captureName);
+            context.CallStack.Push(new(Name, expression));
         }
+        context.CallStack.Pop();
         context.CaptureTree.Unopen(captureName);
-
-        context.Ratchet = false;
     }
 }

@@ -1,5 +1,3 @@
-@using Kleene
-
 <root> { <ws> <expression>:value <ws> ; }
 
 <expression> { <bullet-alt>:value | <trans>:value }
@@ -26,13 +24,6 @@
 }
 
 <capture> {
-    # Special case. Captures on calls have to be handled by the call expression itself.
-    <call>:expression ;
-    (=expression
-        (':' <dotted-name>:CaptureName)? ;
-        ::CallExpression
-    )
-    |
     <quant>:Expression ;
     (':' <dotted-name>:Name ::CaptureExpression)? ;
 }
@@ -130,6 +121,7 @@
 
 <call> {
     '<' <name>:Name '>' ;
+     (':' <dotted-name>:CaptureName)? ;
     ::CallExpression
 }
 
