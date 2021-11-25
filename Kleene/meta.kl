@@ -3,7 +3,7 @@
 <expression> { <bullet-alt>:value | <trans>:value }
 
 <bullet-alt> {
-    ('-' <trans>:Items)+ ;
+    ('-' <ws> <trans>:Items)+ % <ws>;
     ::AltExpression
 }
 
@@ -13,18 +13,19 @@
 }
 
 <alt> {
-    <concat>:Items+ % (<ws> '|' <ws> ::AltExpression) ;
+    (<concat>:Items)+ % (<ws> '|' <ws> ::AltExpression) ;
 }
 
 #TODO: Use <postfix> for items once left-recursion is implemented.
+# For now, you have to put parentheses around captures to add a quantifier.
 
 <concat> {
-    <capture>:Items+ % (<ws> ::ConcatExpression) ;
+    (<capture>:Items)+ % (<ws> ::ConcatExpression) ;
 }
 
 <capture> {
     # Special case. Captures on calls have to be handled by the call expression itself.
-    <call>:expression
+    <call>:expression ;
     (=expression
         (':' <dotted-name>:CaptureName)? ;
         ::CallExpression
@@ -35,7 +36,7 @@
 }
 
 <quant> {
-    <item>:Expression ;
+    <req>:Expression ;
     (
         ::RepExpression
         (
@@ -111,7 +112,7 @@
 }
 
 <type-set> {
-    ':' <type-prop-name>:Name ;
+    '::' <type-prop-name>:Name ;
     (
         <ws> '{' <ws>
         ((<type-prop-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
@@ -121,7 +122,7 @@
 }
 
 <function> {
-    '<' <name>:Name '>' <ws> '{' <ws> <expression Expression>  <ws> '}' ;
+    '<' <name>:Name '>' <ws> '{' <ws> <expression>:Expression <ws> '}' ;
     ::FunctionExpression
 }
 
@@ -140,7 +141,6 @@
 <positive-predefined-char-class> {
     (
         - '\\' / '\'
-        - '\r' / '[r]'
         - '\t' / '[t]'
         - '\h' / ' [t]'
         - '\s' / ' [t][n]'
@@ -164,7 +164,7 @@
         - '\U' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         - '\L' / 'abcdefghijklmnopqrstuvwxyz'
         - '\A' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     ) ;
     ?:Negated
     ::CharClassExpression
@@ -174,14 +174,14 @@
     '[<]'
     ('^':Negated)?
     (
-        - <character-escape>
+        - <char-escape>
         - <positive-predefined-char-class>
         - [^[<][>]\\]+
-    )
+    )+
     '[>]' ;
 }
 
-<anchor> { <predefined-anchor> | <literal-anchor> }\
+<anchor> { <predefined-anchor> | <literal-anchor> }
 
 <predefined-anchor> {
     [<>]:start
@@ -233,7 +233,7 @@
     ::TextExpression
 }
 
-<character-escape> {
+<char-escape> {
     ('[<]'/?)
     (
         - ('[']')
