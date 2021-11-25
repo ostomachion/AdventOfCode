@@ -8,8 +8,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
+            new TextExpression("x"),
+            new TextExpression("y")
         });
 
         // When
@@ -25,8 +25,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
+            new TextExpression("x"),
+            new TextExpression("y")
         });
 
         // When
@@ -42,8 +42,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
+            new TextExpression("x"),
+            new TextExpression("y")
         });
 
         // When
@@ -59,8 +59,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
+            new TextExpression("x"),
+            new TextExpression("y")
         });
 
         // When
@@ -76,8 +76,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
+            new TextExpression("x"),
+            new TextExpression("y")
         });
 
         // When
@@ -93,8 +93,8 @@ public class ConcatExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new OptExpression(new TextExpression("x")),
-                new TextExpression("x")
+            new OptExpression(new TextExpression("x")),
+            new TextExpression("x")
         });
 
         // When

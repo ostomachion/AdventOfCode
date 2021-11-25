@@ -8,8 +8,8 @@ public class AssignmentExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new AssignmentExpression("foo", "x"),
-                new BackreferenceExpression("foo")
+            new AssignmentExpression("foo", "x"),
+            new BackreferenceExpression("foo")
         });
 
         // When
@@ -25,9 +25,9 @@ public class AssignmentExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new AssignmentExpression("bar", new BackreferenceExpression("foo")),
-                new BackreferenceExpression("bar")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new AssignmentExpression("bar", new BackreferenceExpression("foo")),
+            new BackreferenceExpression("bar")
         });
 
         // When
@@ -43,9 +43,9 @@ public class AssignmentExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new AssignmentExpression("foo", "y"),
-                new BackreferenceExpression("foo")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new AssignmentExpression("foo", "y"),
+            new BackreferenceExpression("foo")
         });
 
         // When
@@ -61,8 +61,8 @@ public class AssignmentExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new AssignmentExpression("foo.bar", "x"),
-                new BackreferenceExpression("foo.bar")
+            new AssignmentExpression("foo.bar", "x"),
+            new BackreferenceExpression("foo.bar")
         });
 
         // When

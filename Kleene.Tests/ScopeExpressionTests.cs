@@ -8,8 +8,8 @@ public class ScopeExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
-                new ScopeExpression("foo", new BackreferenceExpression("bar"))
+            new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+            new ScopeExpression("foo", new BackreferenceExpression("bar"))
         });
 
         // When

@@ -8,8 +8,8 @@ public class ReqExpressionTests
         // Given
         var expression = new ReqExpression(new AltExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new PassExpression()
+            new TextExpression("x"),
+            new PassExpression()
         }));
 
         // When
@@ -25,8 +25,8 @@ public class ReqExpressionTests
         // Given
         var expression = new ReqExpression(new AltExpression(new Expression[]
         {
-                new TextExpression("x"),
-                new PassExpression()
+            new TextExpression("x"),
+            new PassExpression()
         }));
 
         // When

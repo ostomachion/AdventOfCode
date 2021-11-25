@@ -8,8 +8,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new BackreferenceExpression("foo")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new BackreferenceExpression("foo")
         });
 
         // When
@@ -25,8 +25,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new BackreferenceExpression("foo")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new BackreferenceExpression("foo")
         });
 
         // When
@@ -42,8 +42,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new BackreferenceExpression("bar")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new BackreferenceExpression("bar")
         });
 
         // When
@@ -59,9 +59,9 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new TextExpression("x")),
-                new CaptureExpression("foo", new TextExpression("y")),
-                new BackreferenceExpression("foo")
+            new CaptureExpression("foo", new TextExpression("x")),
+            new CaptureExpression("foo", new TextExpression("y")),
+            new BackreferenceExpression("foo")
         });
 
         // When
@@ -77,8 +77,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x"))),
-                new BackreferenceExpression("foo.bar")
+            new CaptureExpression("foo", new CaptureExpression("bar", new TextExpression("x"))),
+            new BackreferenceExpression("foo.bar")
         });
 
         // When
@@ -95,8 +95,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new AssignmentExpression("foo", "x"),
-                new CaptureExpression("bar", new BackreferenceExpression("foo"))
+            new AssignmentExpression("foo", "x"),
+            new CaptureExpression("bar", new BackreferenceExpression("foo"))
         });
 
         // When
@@ -113,8 +113,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
-                new CaptureExpression("baz", new BackreferenceExpression("foo.bar"))
+            new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+            new CaptureExpression("baz", new BackreferenceExpression("foo.bar"))
         });
 
         // When
@@ -131,8 +131,8 @@ public class BackreferenceExpressionTests
         // Given
         var expression = new ConcatExpression(new Expression[]
         {
-                new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
-                new BackreferenceExpression("bar")
+            new CaptureExpression("foo", new AssignmentExpression("bar", "x")),
+            new BackreferenceExpression("bar")
         });
 
         // When

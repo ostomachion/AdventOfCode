@@ -8,9 +8,9 @@ public class AltExpressionTests
         // Given
         var expression = new AltExpression(new[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
-            });
+            new TextExpression("x"),
+            new TextExpression("y")
+        });
 
         // When
         var result = expression.Transform("x");
@@ -25,9 +25,9 @@ public class AltExpressionTests
         // Given
         var expression = new AltExpression(new[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
-            });
+            new TextExpression("x"),
+            new TextExpression("y")
+        });
 
         // When
         var result = expression.Transform("y");
@@ -42,9 +42,9 @@ public class AltExpressionTests
         // Given
         var expression = new AltExpression(new[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
-            });
+            new TextExpression("x"),
+            new TextExpression("y")
+        });
 
         // When
         var result = expression.Transform("z");
@@ -59,9 +59,9 @@ public class AltExpressionTests
         // Given
         var expression = new AltExpression(new[]
         {
-                new TextExpression("x"),
-                new TextExpression("y")
-            });
+            new TextExpression("x"),
+            new TextExpression("y")
+        });
 
         // When
         var result = expression.Transform("");

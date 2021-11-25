@@ -20,8 +20,7 @@ public class FunctionExpressionTests
             {
                 Assert.Equal("foo", item.Key);
                 Assert.IsType<TextExpression>(item.Value);
-                Assert.Equal("bar", (item.Value as TextExpression)!.Value)
-                ;
+                Assert.Equal("bar", (item.Value as TextExpression)!.Value);
             }
         );
     }
