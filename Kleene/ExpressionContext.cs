@@ -26,7 +26,7 @@ public class ExpressionContext
 
     public void Unproduce() => Local.Unproduce();
 
-    public Type ParseTypeName(string name)
+    public Type ResolveTypeName(string name)
     {
         if (ParseTypeKeyword(name) is Type value)
             return value;

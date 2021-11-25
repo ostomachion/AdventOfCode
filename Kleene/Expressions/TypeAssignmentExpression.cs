@@ -14,7 +14,7 @@ public class TypeAssignmentExpression : Expression
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
         context.CaptureTree.Open("!T");
-        context.CaptureTree.Set("FullName", new(context.ParseTypeName(TypeName).FullName!));
+        context.CaptureTree.Set("FullName", new(context.ResolveTypeName(TypeName).FullName!));
         context.CaptureTree.Open("Properties");
         foreach (var property in Properties.OrderBy(x => x.Name))
         {
