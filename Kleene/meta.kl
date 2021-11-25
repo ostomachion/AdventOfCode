@@ -13,14 +13,14 @@
 }
 
 <alt> {
-    (<concat>:Items)+ % (<ws> '|' <ws> ::AltExpression) ;
+    <concat>:Items+ % (<ws> '|' <ws> ::AltExpression) ;
 }
 
 #TODO: Use <postfix> for items once left-recursion is implemented.
 # For now, you have to put parentheses around captures to add a quantifier.
 
 <concat> {
-    (<capture>:Items)+ % (<ws> ::ConcatExpression) ;
+    <capture>:Items+ % (<ws> ::ConcatExpression) ;
 }
 
 <capture> {
