@@ -39,7 +39,7 @@ namespace Kleene.Tests
 }
 
 <quant> {
-    <item>:Expression ;
+    <req>:Expression ;
     (
         ::RepExpression
         (
@@ -115,7 +115,7 @@ namespace Kleene.Tests
 }
 
 <type-set> {
-    ':' <type-prop-name>:Name ;
+    '::' <type-prop-name>:Name ;
     (
         <ws> '{' <ws>
         ((<type-prop-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
@@ -125,7 +125,7 @@ namespace Kleene.Tests
 }
 
 <function> {
-    '<' <name>:Name '>' <ws> '{' <ws> <expression Expression>  <ws> '}' ;
+    '<' <name>:Name '>' <ws> '{' <ws> <expression>:Expression <ws> '}' ;
     ::FunctionExpression
 }
 
@@ -185,7 +185,7 @@ namespace Kleene.Tests
     '[>]' ;
 }
 
-<anchor> { <predefined-anchor> | <literal-anchor> }\
+<anchor> { <predefined-anchor> | <literal-anchor> }
 
 <predefined-anchor> {
     [<>]:start

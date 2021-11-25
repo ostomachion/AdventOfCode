@@ -91,7 +91,7 @@ public abstract class Expression
         )),
 
         Fun("quant",
-            Call("item", "Expression"), R,
+            Call("req", "Expression"), R,
             Opt(
                 Type<RepExpression>(),
                 Alt(
@@ -107,7 +107,7 @@ public abstract class Expression
         ),
 
         Fun("req",
-            Call("Item", "Expression"), R,
+            Call("item", "Expression"), R,
             Opt(Text("!"), Type<ReqExpression>()), R
         ),
 
@@ -165,7 +165,7 @@ public abstract class Expression
         ),
 
         Fun("type-set",
-            Text(":"), Call("type-prop-name", "Name"), R,
+            Text("::"), Call("type-prop-name", "Name"), R,
             Opt(
                 WS, Text("{"), WS,
                 Sep(Star(Cap("Properties", Call("type-prop-name", "Name"), WS, Text("="), WS, Call("static", "Value"))), Concat(Text(","), WS)),
@@ -296,7 +296,7 @@ public abstract class Expression
                 Trans(Text(">"), Text("]")),
                 Trans(Text("n"), Text("\n")),
                 Trans(Text("t"), Text("\t"))
-            // TODO: Unicode escapes.
+                // TODO: Unicode escapes.
             ),
             Trans(Text("]"), Concat()), R
         ),
