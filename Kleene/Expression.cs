@@ -56,7 +56,7 @@ public abstract class Expression
         Fun("expression", Alt(Call("bullet-alt", "value"), Call("trans", "value"))),
 
         Fun("bullet-alt",
-            Plus(Text("-"), Call("trans", "Items")), R,
+            Sep(Plus(Text("-"), WS, Call("trans", "Items")), WS), R,
             Type<AltExpression>()
         ),
 
@@ -226,11 +226,11 @@ public abstract class Expression
         Fun("literal-char-class",
             Text("["),
             Opt(Cap("Negated", Text("^"))),
-            Alt(
-                Call("character-escape"),
+            Plus(Alt(
+                Call("char-escape"),
                 Call("positive-predefined-char-class"),
-                Plus(CCN("<>\\"))
-            ),
+                Plus(CCN("[]\\"))
+            )),
             Text("]"), R
         ),
 
@@ -274,7 +274,7 @@ public abstract class Expression
 
         Fun("pass", Text("?"), Type<PassExpression>()),
 
-        Fun("pass", Text("?"), Type<FailExpression>()),
+        Fun("fail", Text("!"), Type<FailExpression>()),
 
         Fun("text", Alt(Call("string"), Call("literal"))),
 
@@ -288,7 +288,7 @@ public abstract class Expression
             Type<TextExpression>()
         ),
 
-        Fun("character-escape",
+        Fun("char-escape",
             Trans(Text("["), Concat()),
             Alt(
                 Text("'"),

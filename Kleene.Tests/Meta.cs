@@ -7,7 +7,7 @@ namespace Kleene.Tests
 <expression> { <bullet-alt>:value | <trans>:value }
 
 <bullet-alt> {
-    ('-' <trans>:Items)+ ;
+    ('-' <ws> <trans>:Items)+ % <ws>;
     ::AltExpression
 }
 
@@ -17,13 +17,14 @@ namespace Kleene.Tests
 }
 
 <alt> {
-    <concat>:Items+ % (<ws> '|' <ws> ::AltExpression) ;
+    (<concat>:Items)+ % (<ws> '|' <ws> ::AltExpression) ;
 }
 
 #TODO: Use <postfix> for items once left-recursion is implemented.
+# For now, you have to put parentheses around captures to add a quantifier.
 
 <concat> {
-    <capture>:Items+ % (<ws> ::ConcatExpression) ;
+    (<capture>:Items)+ % (<ws> ::ConcatExpression) ;
 }
 
 <capture> {
@@ -144,7 +145,6 @@ namespace Kleene.Tests
 <positive-predefined-char-class> {
     (
         - '\\' / '\'
-        - '\r' / '[r]'
         - '\t' / '[t]'
         - '\h' / ' [t]'
         - '\s' / ' [t][n]'
@@ -168,7 +168,7 @@ namespace Kleene.Tests
         - '\U' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         - '\L' / 'abcdefghijklmnopqrstuvwxyz'
         - '\A' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     ) ;
     ?:Negated
     ::CharClassExpression
@@ -178,10 +178,10 @@ namespace Kleene.Tests
     '[<]'
     ('^':Negated)?
     (
-        - <character-escape>
+        - <char-escape>
         - <positive-predefined-char-class>
         - [^[<][>]\\]+
-    )
+    )+
     '[>]' ;
 }
 
@@ -237,7 +237,7 @@ namespace Kleene.Tests
     ::TextExpression
 }
 
-<character-escape> {
+<char-escape> {
     ('[<]'/?)
     (
         - ('[']')
