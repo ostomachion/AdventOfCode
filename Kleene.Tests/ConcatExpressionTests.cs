@@ -1,17 +1,15 @@
 namespace Kleene.Tests;
 
-namespace Kleene.Tests
+public class ConcatExpressionTests
 {
-    public class ConcatExpressionTests
+    [Fact]
+    public void MatchFirst()
     {
-        [Fact]
-        public void MatchFirst()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new TextExpression("x"),
-                new TextExpression("y")
-            );
+        // Given
+        var expression = new ConcatExpression(
+            new TextExpression("x"),
+            new TextExpression("y")
+        );
 
         // When
         var result = expression.Transform("xy");
@@ -20,14 +18,14 @@ namespace Kleene.Tests
         Assert.Equal("xy", result);
     }
 
-        [Fact]
-        public void Mismatch()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new TextExpression("x"),
-                new TextExpression("y")
-            );
+    [Fact]
+    public void Mismatch()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new TextExpression("x"),
+            new TextExpression("y")
+        );
 
         // When
         var result = expression.Transform("yx");
@@ -36,14 +34,14 @@ namespace Kleene.Tests
         Assert.Null(result);
     }
 
-        [Fact]
-        public void PartialMatch()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new TextExpression("x"),
-                new TextExpression("y")
-            );
+    [Fact]
+    public void PartialMatch()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new TextExpression("x"),
+            new TextExpression("y")
+        );
 
         // When
         var result = expression.Transform("xz");
@@ -52,14 +50,14 @@ namespace Kleene.Tests
         Assert.Null(result);
     }
 
-        [Fact]
-        public void PartialMatchShort()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new TextExpression("x"),
-                new TextExpression("y")
-            );
+    [Fact]
+    public void PartialMatchShort()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new TextExpression("x"),
+            new TextExpression("y")
+        );
 
         // When
         var result = expression.Transform("x");
@@ -68,14 +66,14 @@ namespace Kleene.Tests
         Assert.Null(result);
     }
 
-        [Fact]
-        public void PartialMatchLong()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new TextExpression("x"),
-                new TextExpression("y")
-            );
+    [Fact]
+    public void PartialMatchLong()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new TextExpression("x"),
+            new TextExpression("y")
+        );
 
         // When
         var result = expression.Transform("xyz");
@@ -84,14 +82,14 @@ namespace Kleene.Tests
         Assert.Null(result);
     }
 
-        [Fact]
-        public void Backtrack()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new OptExpression(new TextExpression("x")),
-                new TextExpression("x")
-            );
+    [Fact]
+    public void Backtrack()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new OptExpression(new TextExpression("x")),
+            new TextExpression("x")
+        );
 
         // When
         var result = expression.Transform("x");

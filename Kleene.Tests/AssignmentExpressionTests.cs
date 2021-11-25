@@ -1,17 +1,15 @@
 namespace Kleene.Tests;
 
-namespace Kleene.Tests
+public class AssignmentExpressionTests
 {
-    public class AssignmentExpressionTests
+    [Fact]
+    public void Text()
     {
-        [Fact]
-        public void Text()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new AssignmentExpression("foo", "x"),
-                new BackreferenceExpression("foo")
-            );
+        // Given
+        var expression = new ConcatExpression(
+            new AssignmentExpression("foo", "x"),
+            new BackreferenceExpression("foo")
+        );
 
         // When
         var result = expression.Transform("x");
@@ -20,15 +18,15 @@ namespace Kleene.Tests
         Assert.Equal("x", result);
     }
 
-        [Fact]
-        public void Capture()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new CaptureExpression("foo", new TextExpression("x")),
-                new AssignmentExpression("bar", new BackreferenceExpression("foo")),
-                new BackreferenceExpression("bar")
-            );
+    [Fact]
+    public void Capture()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new CaptureExpression("foo", new TextExpression("x")),
+            new AssignmentExpression("bar", new BackreferenceExpression("foo")),
+            new BackreferenceExpression("bar")
+        );
 
         // When
         var result = expression.Transform("xx");
@@ -37,15 +35,15 @@ namespace Kleene.Tests
         Assert.Equal("xx", result);
     }
 
-        [Fact]
-        public void Shadow()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new CaptureExpression("foo", new TextExpression("x")),
-                new AssignmentExpression("foo", "y"),
-                new BackreferenceExpression("foo")
-            );
+    [Fact]
+    public void Shadow()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new CaptureExpression("foo", new TextExpression("x")),
+            new AssignmentExpression("foo", "y"),
+            new BackreferenceExpression("foo")
+        );
 
         // When
         var result = expression.Transform("xy");
@@ -54,14 +52,14 @@ namespace Kleene.Tests
         Assert.Equal("xy", result);
     }
 
-        [Fact]
-        public void Nested()
-        {
-            // Given
-            var expression = new ConcatExpression(
-                new AssignmentExpression("foo.bar", "x"),
-                new BackreferenceExpression("foo.bar")
-            );
+    [Fact]
+    public void Nested()
+    {
+        // Given
+        var expression = new ConcatExpression(
+            new AssignmentExpression("foo.bar", "x"),
+            new BackreferenceExpression("foo.bar")
+        );
 
         // When
         var result = expression.Transform("x");
