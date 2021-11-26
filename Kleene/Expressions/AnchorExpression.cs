@@ -5,7 +5,7 @@ public class AnchorExpression : Expression
     internal class Model : IModel<AnchorExpression>
     {
         public AnchorType? Type { get; set; }
-        public IModel<CharacterClass>? CharacterClass { get; set; }
+        public CharacterClass.Model? CharacterClass { get; set; }
         public bool? Negated { get; set; }
 
         public AnchorExpression Convert()

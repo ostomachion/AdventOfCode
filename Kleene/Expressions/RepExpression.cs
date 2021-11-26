@@ -6,7 +6,7 @@ public class RepExpression : Expression
     {
         public IModel<Expression>? Expression { get; set; }
         public IModel<Expression>? Separator { get; set; }
-        public IModel<RepCount>? Count { get; set; }
+        public RepCount.Model? Count { get; set; }
         public MatchOrder? Order { get; set; }
 
         public RepExpression Convert()

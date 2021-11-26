@@ -5,7 +5,7 @@ public class TypeAssignmentExpression : Expression
     internal class Model : IModel<TypeAssignmentExpression>
     {
         public string? TypeName { get; set; }
-        public List<IModel<TypeAssignmentProperty>>? Properties { get; set; }
+        public List<TypeAssignmentProperty.Model>? Properties { get; set; }
 
         public TypeAssignmentExpression Convert()
         {

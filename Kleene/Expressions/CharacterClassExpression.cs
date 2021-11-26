@@ -4,7 +4,7 @@ public class CharacterClassExpression : Expression
 {
     internal class Model : IModel<CharacterClassExpression>
     {
-        public IModel<CharacterClass>? CharacterClass { get; set; }
+        public CharacterClass.Model? CharacterClass { get; set; }
 
         public CharacterClassExpression Convert()
         {

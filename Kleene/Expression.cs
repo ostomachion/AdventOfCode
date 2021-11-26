@@ -94,10 +94,10 @@ public abstract class Expression
                 Type<RepExpression.Model>(),
                 Alt(
                     Text("*"),
-                    Cap("Min", Trans(Text("+"), Text("1"))),
-                    Concat(Text("^"), Cap("Min", Plus(D)), Text("+")),
-                    Concat(Text("^"), Cap("Min", Plus(D)), Text("-"), Cap("Max", Plus(D))),
-                    Concat(Text("^"), Cap("Max", Cap("Min", Plus(D))))
+                    Cap("Count.Min", Trans(Text("+"), Text("1"))),
+                    Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("+")),
+                    Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("-"), Cap("Count.Max", Plus(D))),
+                    Concat(Text("^"), Cap("Count.Max", Cap("Count.Min", Plus(D))))
                 ), R,
                 Opt(Cap("Eval", Trans(Text("?"), Text("Lazy")))), R,
                 Opt(WS, Text("%"), WS, Call("capture", "Separator")), R,
@@ -172,7 +172,7 @@ public abstract class Expression
         ),
 
         Fun("using",
-            Text(":::"), Call("dotnet-namespace-name", "Name"), Type<UsingExpression.Model>(), R
+            Text(":::"), Call("dotnet-namespace-name", "NamespaceName"), Type<UsingExpression.Model>(), R
         ),
 
         Fun("type-set",

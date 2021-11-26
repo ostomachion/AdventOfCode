@@ -42,10 +42,10 @@ namespace Kleene.Tests
         ::RepExpression.Model
         (
             - '*'
-            - ('+'/1):Min
-            - '^' \d+:Min '+'
-            - '^' \d+:Min '-' \d+:Max
-            - '^'( \d+:Min):Max
+            - ('+'/1):Count.Min
+            - '^' \d+:Count.Min '+'
+            - '^' \d+:Count.Min '-' \d+:Count.Max
+            - '^'( \d+:Count.Min):Count.Max
 
             - ('?'/1) ::OptExpression.Model
         ) ;
@@ -121,7 +121,7 @@ namespace Kleene.Tests
     ::RenameExpression.Model
 }
 
-<using> { ':::' <dotnet-namespace-name>:Name ::UsingExpression.Model ; }
+<using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpression.Model ; }
 
 <type-set> {
     '::' <dotnet-type-name>:Name ;
