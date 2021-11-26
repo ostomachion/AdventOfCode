@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Kleene;
 
 public class CaptureTreeNode
@@ -43,61 +45,235 @@ public class CaptureTreeNode
         var node = children.Pop();
         node.Parent = null;
     }
-
-    public T Parse<T>()
+    public IEnumerable<CaptureTreeNode> GetPropertyNodes()
     {
-        var typeNode = GetTypeAssignmentNode();
-        var type = typeNode is null ? typeof(T) : ResolveTypeName(typeNode.Name);
+        foreach (var child in Children)
+        {
+            if (child.IsPropertyBoundary)
+                yield return child;
+            else
+            {
+                foreach (var node in child.GetPropertyNodes())
+                {
+                    yield return node;
+                }
+            }
+        }
+    }
 
-        object value;
-        if (type.IsEnum)
+    public void Parse<T>(ref T? value)
+    {
+        object? obj = value;
+        Parse(typeof(T), ref obj);
+        value = (T?)obj;
+    }
+
+    public void Parse(Type type, ref object? value)
+    {
+        // Reflection code is never pretty.
+
+        if (!IsPropertyBoundary)
+            throw new InvalidOperationException();
+
+        if (Value is null)
+            throw new InvalidOperationException();
+
+        var text = Value.Output;
+
+        var ienumerable = type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+        var itemType = ienumerable?.GetGenericArguments()[0]!;
+        var listType = typeof(List<>).MakeGenericType(itemType);
+        MethodInfo? addMethod = null;
+        if (ienumerable is not null)
         {
-            // TODO:Enum.TryParse<C>(ReadOnlySpan<char>, out C) || (C)Int32.Parse(ReadOnlySpan<char>)
-            throw new NotImplementedException();
+            if (type.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! }) is MethodInfo add)
+            {
+                addMethod = add;
+            }
+            else if (type.IsAssignableFrom(listType))
+            {
+                addMethod = listType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! });
+            }
+            // TODO: Assignable from array type = itemType.MakeArrayType()
         }
-        else if (type.GetInterfaces().Contains(typeof(IEnumerable<char>)))
+
+        var typeNode = GetTypeAssignmentNode();
+        type = typeNode is null ? type : Type.GetType(typeNode["FullName"]!.Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"]!.Value!.Output}' could not be found.");
+
+        if (type.IsAssignableFrom(typeof(string)))
         {
-            // TODO: parse as string
-            throw new NotImplementedException();
+            value = text;
         }
-        else if (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+        else if (type.GetMethod("op_Implicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                new[] { typeof(string) }) is MethodInfo implicitCast && implicitCast.ReturnType == type)
         {
-            // TODO: parse each value as type, then construct collection (???)
-            throw new NotImplementedException();
+            try
+            {
+                value = implicitCast.Invoke(null, new object[] { text })!;
+            }
+            catch
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+        }
+        else if (type.GetMethod("op_Explicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                new[] { typeof(string) }) is MethodInfo explicitCast && explicitCast.ReturnType == type)
+        {
+            try
+            {
+                value = explicitCast.Invoke(null, new object[] { text })!;
+            }
+            catch
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+        }
+        else if (type.IsEnum)
+        {
+            if (Enum.TryParse(type, text, out var enumValue))
+            {
+                value = enumValue!;
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(byte))
+            {
+                if (byte.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(sbyte))
+            {
+                if (sbyte.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(short))
+            {
+                if (short.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(ushort))
+            {
+                if (ushort.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(int))
+            {
+                if (int.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(uint))
+            {
+                if (uint.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(long))
+            {
+                if (long.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else if (Enum.GetUnderlyingType(type) == typeof(ulong))
+            {
+                if (ulong.TryParse(text, out var v))
+                    value = Enum.ToObject(type, v);
+                else
+                    throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+        else if (type.GetMethod("TryParse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                new[] { typeof(string), type.MakeByRefType() }) is MethodInfo tryParse && tryParse.ReturnType == typeof(bool))
+        {
+            var parameters = new object?[] { text, null };
+            if ((bool)tryParse.Invoke(null, parameters)!)
+            {
+                value = parameters[1]!;
+            }
+            else
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+        }
+        else if (type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                new[] { typeof(string) }) is MethodInfo parse && parse.ReturnType == type)
+        {
+            try
+            {
+                value = parse.Invoke(null, new object[] { text })!;
+            }
+            catch
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
+        }
+        else if (type.GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
+                Array.Empty<Type>()) is ConstructorInfo constructor)
+        {
+            try
+            {
+                value = constructor.Invoke(Array.Empty<object>());
+            }
+            catch
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+            }
         }
         else
         {
-            // 5. Otherwise, parse as C
-            //      - bool Enum.TryParse<C>(ReadOnlySpan<char>, out C)
-            //      - bool TryParse(ReadOnlySpan<char>, out C)
-            //      - bool TryParse(string, out C)
-            //      - C Parse(ReadOnlySpan<char>)
-            //      - C Parse(string)
-            //      - bool C.TryParse<T>(ReadOnlySpan<char>, out C)
-            //      - bool C.TryParse<T>(string, out C)
-            //      - bool C.TryParse(Type, ReadOnlySpan<char>, out C)
-            //      - bool C.TryParse(Type, string, out C)
-            //      - bool C.TryParse(ReadOnlySpan<char>, out C)
-            //      - bool C.TryParse(string, out C)
-            //      - C C.Parse<C>(ReadOnlySpan<char>)
-            //      - C C.Parse<C>(string)
-            //      - C C.Parse(Type, ReadOnlySpan<char>)
-            //      - C C.Parse(Type, string)
-            //      - C C.Parse(ReadOnlySpan<char>)
-            //      - C C.Parse(string)
-            //      - implicit C (ReadOnlySpan<char>)
-            //      - explicit C (ReadOnlySpan<char>)
-            //      - implicit C (string)
-            //      - explicit C (string)
-            //      - new C()
-            throw new NotImplementedException();
+            throw new Exception($"Unable to create an instance of {type.FullName}.");
         }
 
-        // 6. Parse and set explicit properties
+        // These two loops will do some extra work if there are shadowed captures for scalar properties.
+        if (typeNode is not null)
+        {
+            foreach (var propertyNode in typeNode["Properties"]!.Children)
+            {
+                SetPropertyValue(propertyNode, type, ref value);
+            }
+        }
 
-        // 7. Parse and set captured properties
+        foreach (var propertyNode in GetPropertyNodes())
+        {
+            SetPropertyValue(propertyNode, type, ref value);
+        }
 
-        return (T)value;
+        static void SetPropertyValue(CaptureTreeNode propertyNode, Type type, ref object value, MethodInfo? addMethod = null)
+        {
+            var property = type.GetProperty(propertyNode.Name);
+            if (property is null)
+                throw new Exception($"Type {type.FullName} does not contain a public property '{propertyNode.Name}'.");
+            var propertyValue = property.GetValue(value);
+            propertyNode.Parse(property.PropertyType, ref propertyValue);
+            try
+            {
+                if (addMethod is null)
+                {
+                    property.SetValue(value, propertyValue);
+                }
+                else
+                {
+                    addMethod.Invoke(value, new[] { propertyValue });
+                }
+            }
+            catch
+            {
+                throw new Exception($"Could not set property '{propertyNode.Name}' on type {type.FullName}.");
+            }
+        }
     }
 
     public CaptureTreeNode? GetTypeAssignmentNode()
@@ -111,11 +287,9 @@ public class CaptureTreeNode
                 return value;
         }
 
-        return null;
-    }
+        if (this.IsFunctionBoundary || this.IsPropertyBoundary || this.Parent is null)
+            return null;
 
-    private Type ResolveTypeName(string name)
-    {
-        throw new NotImplementedException();
+        return Parent.GetTypeAssignmentNode();
     }
 }
