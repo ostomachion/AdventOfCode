@@ -362,6 +362,14 @@ public abstract class Expression
 
     public string? Transform(string input) => RunFull(input, out _);
 
+    public T? Parse<T>(string input)
+    {
+        if (RunFull(input, out var captureTree) is null)
+            throw new Exception("Could not parse value.");
+
+        return captureTree!.Root.Parse<T>();
+    }
+
     public abstract IEnumerable<ExpressionResult> RunInternal(ExpressionContext context);
 
     public IEnumerable<ExpressionResult> Run(ExpressionContext context)
@@ -376,8 +384,5 @@ public abstract class Expression
         }
     }
 
-    public static Expression Parse(string pattern)
-    {
-        throw new NotImplementedException();
-    }
+    public static Expression Parse(string pattern) => Meta.Parse<Expression>(pattern) ?? throw new Exception("Could not parse pattern.");
 }

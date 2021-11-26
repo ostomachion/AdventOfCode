@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Puzzles\AdventOfCode.Puzzles.csproj" />
     <ProjectReference Include="..\AdventOfCode.Helpers\AdventOfCode.Helpers.csproj" />
+    <ProjectReference Include="..\Kleene\Kleene.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

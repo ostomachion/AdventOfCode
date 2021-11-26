@@ -11,6 +11,7 @@ namespace Kleene.Tests
         {
             var meta = Expression.Meta.RunFull(Meta.Expression, out var captureTree);
             Assert.NotNull(meta);
+            var metaMeta = captureTree!.Root.Parse<Expression>();
         }
     }
 }

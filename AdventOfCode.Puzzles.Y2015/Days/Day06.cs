@@ -1,3 +1,5 @@
+using Kleene;
+
 namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day06 : Day

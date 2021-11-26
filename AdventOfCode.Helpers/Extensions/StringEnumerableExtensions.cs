@@ -29,6 +29,4 @@ public static class StringEnumerableExtensions
     public static IEnumerable<int?> TryParseInt(this IEnumerable<string> text) => text.Select(x => int.TryParse(x, out int result) ? result : (int?)null);
     public static IEnumerable<int> ParseInt(this IEnumerable<string> text, NumberStyles style) => text.Select(x => int.Parse(x, style));
     public static IEnumerable<int?> TryParseInt(this IEnumerable<string> text, NumberStyles style) => text.Select(x => int.TryParse(x, style, null, out int result) ? result : (int?)null);
-
-    public static IEnumerable<T?> Parse<T>(this IEnumerable<string> text, params string[] rules) => throw new NotImplementedException();
 }

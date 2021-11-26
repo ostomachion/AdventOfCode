@@ -61,18 +61,19 @@ public class CaptureTreeNode
         }
     }
 
-    public void Parse<T>(ref T? value)
+    public T? Parse<T>()
     {
+        T? value = default;
         object? obj = value;
         Parse(typeof(T), ref obj);
-        value = (T?)obj;
+        return (T?)obj;
     }
 
     public void Parse(Type type, ref object? value)
     {
         // Reflection code is never pretty.
 
-        if (!IsPropertyBoundary)
+        if (Parent is not null && !IsPropertyBoundary)
             throw new InvalidOperationException();
 
         if (Value is null)
