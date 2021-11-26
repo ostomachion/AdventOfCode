@@ -2,18 +2,32 @@ namespace Kleene;
 
 public class FunctionExpression : Expression
 {
-    public string Name { get; }
-    public Expression Value { get; }
+    internal class Model : IModel<FunctionExpression>
+    {
+        public string? Name { get; set; }
+        public IModel<Expression>? Expression { get; set; }
 
-    public FunctionExpression(string name, Expression value)
+        public FunctionExpression Convert()
+        {
+            if (Name is null || Expression is null)
+                throw new InvalidOperationException();
+
+            return new(Name, Expression.Convert());
+        }
+    }
+
+    public string Name { get; }
+    public Expression Expression { get; }
+
+    public FunctionExpression(string name, Expression expression)
     {
         Name = name;
-        Value = value;
+        Expression = expression;
     }
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
-        context.DefineFunction(Name, Value);
+        context.DefineFunction(Name, Expression);
         yield return new();
         context.UndefineFunction(Name);
     }

@@ -2,14 +2,30 @@ namespace Kleene;
 
 public class AnchorExpression : Expression
 {
+    internal class Model : IModel<AnchorExpression>
+    {
+        public AnchorType? Type { get; set; }
+        public IModel<CharacterClass>? CharacterClass { get; set; }
+        public bool? Negated { get; set; }
+
+        public AnchorExpression Convert()
+        {
+            if (Type is null || CharacterClass is null || Negated is null)
+                throw new InvalidOperationException();
+
+            return new(Type.Value, CharacterClass.Convert(), Negated.Value);
+        }
+    }
+
     public AnchorType Type { get; }
     public CharacterClass CharacterClass { get; }
     public bool Negated { get; }
 
-    public AnchorExpression(AnchorType type, CharacterClass characterClass)
+    public AnchorExpression(AnchorType type, CharacterClass characterClass, bool negated)
     {
         Type = type;
         CharacterClass = characterClass;
+        Negated = negated;
     }
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)

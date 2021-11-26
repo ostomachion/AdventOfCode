@@ -2,6 +2,20 @@ namespace Kleene;
 
 public class ScopeExpression : Expression
 {
+    internal class Model : IModel<ScopeExpression>
+    {
+        public string? Name { get; set; }
+        public IModel<Expression>? Expression { get; set; }
+
+        public ScopeExpression Convert()
+        {
+            if (Name is null || Expression is null)
+                throw new InvalidOperationException();
+
+            return new(Name, Expression.Convert());
+        }
+    }
+
     public CaptureName Name { get; }
     public Expression Expression { get; }
 
@@ -14,7 +28,7 @@ public class ScopeExpression : Expression
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
         var originalScope = context.CaptureTree.Current;
-        var newScope = context.CaptureTree.Current[Name];
+        var newScope = context.CaptureTree[Name].FirstOrDefault();
         if (newScope is null)
         {
             yield break;

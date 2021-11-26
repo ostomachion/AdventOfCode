@@ -15,7 +15,7 @@ public class CaptureExpressionTests
         // Then
         Assert.Equal("x", result?.Input);
         Assert.Equal("x", result?.Output);
-        Assert.Collection(context.CaptureTree.Current.Children,
+        Assert.Collection(context.CaptureTree.Root.Children,
             item =>
             {
                 Assert.Equal("foo", item.Name);
@@ -43,7 +43,7 @@ public class CaptureExpressionTests
         // Then
         Assert.Equal("xy", result?.Input);
         Assert.Equal("xy", result?.Output);
-        Assert.Collection(context.CaptureTree.Current.Children,
+        Assert.Collection(context.CaptureTree.Root.Children,
             item =>
             {
                 Assert.Equal("foo", item.Name);
@@ -76,7 +76,7 @@ public class CaptureExpressionTests
         // Then
         Assert.Equal("x", result?.Input);
         Assert.Equal("x", result?.Output);
-        Assert.Collection(context.CaptureTree.Current.Children,
+        Assert.Collection(context.CaptureTree.Root.Children,
             item =>
             {
                 Assert.Equal("foo", item.Name);
@@ -110,7 +110,7 @@ public class CaptureExpressionTests
         // Then
         Assert.Equal("x", result?.Input);
         Assert.Equal("x", result?.Output);
-        Assert.Collection(context.CaptureTree.Current.Children,
+        Assert.Collection(context.CaptureTree.Root.Children,
             item =>
             {
                 Assert.Equal("foo", item.Name);

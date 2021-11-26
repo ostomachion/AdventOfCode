@@ -2,6 +2,20 @@ namespace Kleene;
 
 public class RepCount
 {
+    internal class Model : IModel<RepCount>
+    {
+        public int? Min { get; set; }
+        public int? Max { get; set; }
+
+        public RepCount Convert()
+        {
+            if (Min is null || Max is null)
+                throw new InvalidOperationException();
+
+            return new(Min.Value, Max.Value);
+        }
+    }
+
     public const int Unbounded = -1;
 
     public int Min { get; }

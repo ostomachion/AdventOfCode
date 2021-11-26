@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kleene;
 
 public class CaptureName
@@ -18,7 +20,11 @@ public class CaptureName
         Parts = parts;
     }
 
-    public static implicit operator CaptureName(string value) => new(value);
+    internal static CaptureName Create() => new("capture-" + Guid.NewGuid().ToString());
+
+    [return: NotNullIfNotNull("value")]
+
+    public static implicit operator CaptureName?(string? value) => value is null ? null : new(value);
 
     public override string ToString() => string.Join('.', Parts);
 }

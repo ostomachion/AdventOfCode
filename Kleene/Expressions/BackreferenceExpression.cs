@@ -2,6 +2,19 @@ namespace Kleene;
 
 public class BackreferenceExpression : TextValueExpression
 {
+    internal class Model : IModel<BackreferenceExpression>
+    {
+        public string? Name { get; set; }
+
+        public BackreferenceExpression Convert()
+        {
+            if (Name is null)
+                throw new InvalidOperationException();
+
+            return new(Name);
+        }
+    }
+
     public CaptureName Name { get; }
 
     public BackreferenceExpression(CaptureName name)
@@ -25,5 +38,5 @@ public class BackreferenceExpression : TextValueExpression
         }
     }
 
-    public override ExpressionResult? GetValue(ExpressionContext context) => context.CaptureTree[Name]?.Value;
+    public override ExpressionResult? GetValue(ExpressionContext context) => context.CaptureTree[Name].FirstOrDefault()?.Value;
 }

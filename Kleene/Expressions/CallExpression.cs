@@ -2,6 +2,20 @@ namespace Kleene;
 
 public class CallExpression : Expression
 {
+    internal class Model : IModel<CallExpression>
+    {
+        public string? Name { get; set; }
+        public string? CaptureName { get; set; }
+
+        public CallExpression Convert()
+        {
+            if (Name is null)
+                throw new InvalidOperationException();
+
+            return new(Name, CaptureName);
+        }
+    }
+
     public string Name { get; }
     public CaptureName? CaptureName { get; }
 
@@ -20,7 +34,7 @@ public class CallExpression : Expression
 
         var captureName = CaptureName ?? new("!F");
         context.CaptureTree.Open(captureName);
-        context.CaptureTree.Current.IsFunctionBoundary = true;
+        context.CaptureTree.Current!.IsFunctionBoundary = true;
         context.CallStack.Push(new(Name));
         foreach (var result in expression.Run(context))
         {

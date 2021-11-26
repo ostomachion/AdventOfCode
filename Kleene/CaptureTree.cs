@@ -2,31 +2,39 @@ namespace Kleene;
 
 public class CaptureTree
 {
-    public CaptureTreeNode Root { get; }
-    public CaptureTreeNode Current { get; set; }
+    public const string RootCaptureName = "root";
 
-    public CaptureTreeNode? this[CaptureName? name]
+    public CaptureTreeNode Root { get; }
+    public CaptureTreeNode? Current { get; set; }
+
+    public IEnumerable<CaptureTreeNode> this[CaptureName? name]
     {
         get
         {
             if (name is null)
             {
-                return Current;
+                return Current is null ? Enumerable.Empty<CaptureTreeNode>() : new[] { Current };
             }
 
-            var head = Current.Children.FirstOrDefault(x => x.Name == name.Head);
-            if (head is not null)
+            IEnumerable<CaptureTreeNode> head;
+            if (Current is null)
             {
-                return head[name.Tail];
+                head = name.Head == RootCaptureName ? new [] { Root } : Enumerable.Empty<CaptureTreeNode>();
+            }
+            else
+            {
+                head = Current?.Children.Where(x => x.Name == name.Head) ?? Enumerable.Empty<CaptureTreeNode>();
             }
 
-            return (Current.IsFunctionBoundary || Current.Parent is null) ? null : Current.Parent[name];
+            var value = head.SelectMany(x => x[name.Tail]);
+
+            return (Current is null || Current.IsFunctionBoundary || Current.Parent is null) ? value : value.Concat(Current.Parent[name]);
         }
     }
 
     public CaptureTree()
     {
-        Root = new(this, "root");
+        Root = new(this, RootCaptureName);
         Current = Root;
     }
 
@@ -44,6 +52,9 @@ public class CaptureTree
 
     public void Open(CaptureName name)
     {
+        if (Current is null)
+            throw new InvalidOperationException("Capture tree is fully closed.");
+
         foreach (var part in name.Parts)
         {
             var node = new CaptureTreeNode(this, part);
@@ -54,6 +65,9 @@ public class CaptureTree
 
     public void Unopen(CaptureName name)
     {
+        if (Current is null)
+            throw new InvalidOperationException("Capture tree is fully closed.");
+
         foreach (var part in name.Parts.Reverse())
         {
             if (Current.Name != part)
@@ -68,21 +82,27 @@ public class CaptureTree
 
     public void Close(CaptureName name, ExpressionResult value)
     {
+        if (Current is null)
+            throw new InvalidOperationException("Capture tree is fully closed.");
+
         foreach (var part in name.Parts.Reverse())
         {
-            if (Current.Name != part)
+            if (Current?.Name != part)
             {
                 throw new InvalidOperationException();
             }
 
             Current.IsOpen = false;
             Current.Value = value;
-            Current = Current.Parent ?? throw new InvalidOperationException();
+            Current = Current.Parent;
         }
     }
 
     public void Unclose(CaptureName name)
     {
+        if (Current is null)
+            throw new InvalidOperationException("Capture tree is fully closed.");
+
         foreach (var part in name.Parts.Reverse())
         {   
             this.Current = this.Current.Children.First();

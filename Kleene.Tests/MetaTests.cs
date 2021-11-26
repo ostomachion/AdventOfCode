@@ -9,9 +9,9 @@ namespace Kleene.Tests
         [Fact]
         public void SelfRun()
         {
-            var meta = Expression.Meta.RunFull(Meta.Expression, out var captureTree);
+            var meta = Expression.Parse(Meta.Expression);
             Assert.NotNull(meta);
-            var metaMeta = captureTree!.Root.Parse<Expression>();
+            ;
         }
     }
 }

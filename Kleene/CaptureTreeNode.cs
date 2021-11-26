@@ -5,7 +5,7 @@ namespace Kleene;
 public class CaptureTreeNode
 {
     public CaptureTree Tree { get; }
-    public string Name { get; }
+    public string Name { get; set;  }
     public CaptureTreeNode? Parent { get; set; }
     private readonly Stack<CaptureTreeNode> children = new();
     public ExpressionResult? Value { get; set; }
@@ -14,17 +14,17 @@ public class CaptureTreeNode
     public bool IsFunctionBoundary { get; set; }
     public bool IsPropertyBoundary => Name != "" && Char.IsUpper(Name[0]);
 
-    public CaptureTreeNode? this[CaptureName? name]
+    public IEnumerable<CaptureTreeNode> this[CaptureName? name]
     {
         get
         {
             if (name is null)
             {
-                return this;
+                return new[] { this };
             }
 
-            var head = children.FirstOrDefault(x => x.Name == name.Head);
-            return head?[name.Tail];
+            var head = children.Where(x => x.Name == name.Head);
+            return head.SelectMany(x => x[name.Tail]);
         }
     }
 
@@ -47,11 +47,13 @@ public class CaptureTreeNode
     }
     public IEnumerable<CaptureTreeNode> GetPropertyNodes()
     {
-        foreach (var child in Children)
+        foreach (var child in Children.Reverse())
         {
             if (child.IsPropertyBoundary)
+            {
                 yield return child;
-            else
+            }
+            else if (child.Name != "!T")
             {
                 foreach (var node in child.GetPropertyNodes())
                 {
@@ -77,29 +79,12 @@ public class CaptureTreeNode
             throw new InvalidOperationException();
 
         if (Value is null)
-            throw new InvalidOperationException();
+             throw new InvalidOperationException();
 
         var text = Value.Output;
 
-        var ienumerable = type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-        var itemType = ienumerable?.GetGenericArguments()[0]!;
-        var listType = typeof(List<>).MakeGenericType(itemType);
-        MethodInfo? addMethod = null;
-        if (ienumerable is not null)
-        {
-            if (type.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! }) is MethodInfo add)
-            {
-                addMethod = add;
-            }
-            else if (type.IsAssignableFrom(listType))
-            {
-                addMethod = listType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! });
-            }
-            // TODO: Assignable from array type = itemType.MakeArrayType()
-        }
-
         var typeNode = GetTypeAssignmentNode();
-        type = typeNode is null ? type : Type.GetType(typeNode["FullName"]!.Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"]!.Value!.Output}' could not be found.");
+        type = typeNode is null ? type : Type.GetType(typeNode["FullName"].First().Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"].First().Value!.Output}' could not be found.");
 
         if (type.IsAssignableFrom(typeof(string)))
         {
@@ -209,7 +194,7 @@ public class CaptureTreeNode
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.");
             }
         }
-        else if (type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+        else if (type != typeof(Expression) /* TODO: Remove this */ && type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
                 new[] { typeof(string) }) is MethodInfo parse && parse.ReturnType == type)
         {
             try
@@ -221,7 +206,7 @@ public class CaptureTreeNode
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.");
             }
         }
-        else if (type.GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
+        else if (type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
                 Array.Empty<Type>()) is ConstructorInfo constructor)
         {
             try
@@ -241,7 +226,7 @@ public class CaptureTreeNode
         // These two loops will do some extra work if there are shadowed captures for scalar properties.
         if (typeNode is not null)
         {
-            foreach (var propertyNode in typeNode["Properties"]!.Children)
+            foreach (var propertyNode in typeNode["Properties"].First().Children)
             {
                 SetPropertyValue(propertyNode, type, ref value);
             }
@@ -252,12 +237,50 @@ public class CaptureTreeNode
             SetPropertyValue(propertyNode, type, ref value);
         }
 
-        static void SetPropertyValue(CaptureTreeNode propertyNode, Type type, ref object value, MethodInfo? addMethod = null)
+        static void SetPropertyValue(CaptureTreeNode propertyNode, Type type, ref object value)
         {
             var property = type.GetProperty(propertyNode.Name);
             if (property is null)
                 throw new Exception($"Type {type.FullName} does not contain a public property '{propertyNode.Name}'.");
+
             var propertyValue = property.GetValue(value);
+
+            var ienumerable = property.PropertyType.GetInterfaces().Concat(new [] { property.PropertyType }).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            MethodInfo? addMethod = null;
+            if (ienumerable is not null)
+            {
+                var itemType = ienumerable?.GetGenericArguments()[0]!;
+                var listType = typeof(List<>).MakeGenericType(itemType);
+
+                if (property.PropertyType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! }) is MethodInfo add
+                    && property.PropertyType.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, Array.Empty<Type>()) is ConstructorInfo ctor)
+                {
+                    if (property.GetValue(value) is null)
+                        property.SetValue(value, ctor.Invoke(Array.Empty<object>()));
+                    addMethod = add;
+
+                }
+                else if (property.PropertyType.IsAssignableFrom(listType))
+                {
+                    var propertyType = propertyValue?.GetType()!;
+                    addMethod = listType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! })!;
+                    if (propertyValue is null)
+                    {
+                        property.SetValue(value, listType.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>()));
+                    }
+                    else if (!propertyType.IsGenericType || propertyType.GetGenericTypeDefinition() != typeof(List<>))
+                    {
+                        var list = listType.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
+                        foreach (object item in (IEnumerable)propertyValue)
+                        {
+                            addMethod.Invoke(list, new[] { item });
+                        }
+                        property.SetValue(value, list);
+                    }
+                }
+                // TODO: Assignable from array type = itemType.MakeArrayType()
+            }
+
             propertyNode.Parse(property.PropertyType, ref propertyValue);
             try
             {
@@ -267,7 +290,7 @@ public class CaptureTreeNode
                 }
                 else
                 {
-                    addMethod.Invoke(value, new[] { propertyValue });
+                    addMethod.Invoke(property.GetValue(value), new[] { propertyValue });
                 }
             }
             catch
@@ -277,20 +300,20 @@ public class CaptureTreeNode
         }
     }
 
-    public CaptureTreeNode? GetTypeAssignmentNode()
+    public CaptureTreeNode? GetTypeAssignmentNode(bool lookUp = true)
     {
         if (Name == "!T")
             return this;
 
-        foreach (var node in Children.Where(x => !x.IsFunctionBoundary && !x.IsPropertyBoundary))
+        foreach (var node in Children.Where(x => !x.IsPropertyBoundary))
         {
-            if (node.GetTypeAssignmentNode() is CaptureTreeNode value)
+            if (node.GetTypeAssignmentNode(lookUp: false) is CaptureTreeNode value)
                 return value;
         }
 
-        if (this.IsFunctionBoundary || this.IsPropertyBoundary || this.Parent is null)
+        if (this.IsPropertyBoundary || this.Parent is null)
             return null;
 
-        return Parent.GetTypeAssignmentNode();
+        return lookUp ? Parent.GetTypeAssignmentNode() : null;
     }
 }

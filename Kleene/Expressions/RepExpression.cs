@@ -2,6 +2,22 @@ namespace Kleene;
 
 public class RepExpression : Expression
 {
+    internal class Model : IModel<RepExpression>
+    {
+        public IModel<Expression>? Expression { get; set; }
+        public IModel<Expression>? Separator { get; set; }
+        public IModel<RepCount>? Count { get; set; }
+        public MatchOrder? Order { get; set; }
+
+        public RepExpression Convert()
+        {
+            if (Expression is null || Count is null || Order is null)
+                throw new InvalidOperationException();
+
+            return new(Expression.Convert(), Separator?.Convert(), Count.Convert(), Order.Value);
+        }
+    }
+
     public Expression Expression { get; }
     public Expression? Separator { get; }
     public RepCount Count { get; }
