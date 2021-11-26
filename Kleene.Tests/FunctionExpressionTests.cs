@@ -15,7 +15,7 @@ public class FunctionExpressionTests
         // Then
         Assert.Equal("", result?.Input);
         Assert.Equal("", result?.Output);
-        Assert.Collection(context.FunctionList.OrderBy(x => x.Key),
+        Assert.Collection(context.CallStack.Peek().Functions.OrderBy(x => x.Key),
             item =>
             {
                 Assert.Equal("foo", item.Key);

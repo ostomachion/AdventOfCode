@@ -13,8 +13,8 @@ public class FunctionExpression : Expression
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
-        context.FunctionList.Define(Name, Value);
+        context.DefineFunction(Name, Value);
         yield return new();
-        context.FunctionList.Undefine(Name);
+        context.UndefineFunction(Name);
     }
 }

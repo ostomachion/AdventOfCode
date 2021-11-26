@@ -345,23 +345,10 @@ public abstract class Expression
         Call("root")
     );
 
-    public string? Transform(string input)
-    {
-        var context = new ExpressionContext(input);
-        foreach (var result in Run(context))
-        {
-            if (context.Local.IsAtEnd)
-                return result.Output;
-        }
-        return null;
-    }
-
     public string? RunFull(string input, out CaptureTree? captureTree)
     {
-        input = input.ReplaceLineEndings("\n");
         var context = new ExpressionContext(input);
-        context.CallStack.Push(new StackFrame("root", this));
-        if (Run(context).FirstOrDefault(_ => context.Local.Index == input.Length) is ExpressionResult result)
+        if (Run(context).FirstOrDefault(_ => context.Local.IsAtEnd) is ExpressionResult result)
         {
             captureTree = context.CaptureTree;
             return result.Output;
@@ -372,6 +359,8 @@ public abstract class Expression
             return null;
         }
     }
+
+    public string? Transform(string input) => RunFull(input, out _);
 
     public abstract IEnumerable<ExpressionResult> RunInternal(ExpressionContext context);
 

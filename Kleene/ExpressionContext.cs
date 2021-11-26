@@ -4,7 +4,6 @@ public class ExpressionContext
 {
     public ExpressionLocalContext Local { get; set; }
     public CaptureTree CaptureTree { get; } = new();
-    public FunctionList FunctionList { get; } = new();
     public Stack<StackFrame> CallStack { get; } = new();
     public bool Ratchet
     {
@@ -15,7 +14,9 @@ public class ExpressionContext
 
     public ExpressionContext(string input)
     {
+        input = input.ReplaceLineEndings("\n");
         Local = new(input);
+        CallStack.Push(new StackFrame("[root]"));
     }
 
     public void Consume(int length) => Local.Consume(length);
@@ -25,6 +26,10 @@ public class ExpressionContext
     public void Produce(string value) => Local.Produce(value);
 
     public void Unproduce() => Local.Unproduce();
+
+    public void DefineFunction(string name, Expression expression) => CallStack.Peek().Functions.Define(name, expression);
+    public void UndefineFunction(string name) => CallStack.Peek().Functions.Undefine(name);
+    public Expression? GetFunction(string name) => CallStack.Select(x => x.Functions[name]).OfType<Expression>().FirstOrDefault();
 
     public Type ResolveTypeName(string name)
     {

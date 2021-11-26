@@ -13,7 +13,7 @@ public class CallExpression : Expression
 
     public override IEnumerable<ExpressionResult> RunInternal(ExpressionContext context)
     {
-        if (context.FunctionList[Name] is not Expression expression)
+        if (context.GetFunction(Name) is not Expression expression)
         {
             yield break;
         }
@@ -21,7 +21,7 @@ public class CallExpression : Expression
         var captureName = CaptureName ?? new("!F");
         context.CaptureTree.Open(captureName);
         context.CaptureTree.Current.IsFunctionBoundary = true;
-        context.CallStack.Push(new(Name, expression));
+        context.CallStack.Push(new(Name));
         foreach (var result in expression.Run(context))
         {
             var frame = context.CallStack.Pop();
