@@ -341,7 +341,7 @@ public abstract class Expression
             Sep(
                 Plus(Call("dotnet-name")),
                 Text(".")
-            ), R
+            )
         ),
 
         Fun("dotnet-type-name",

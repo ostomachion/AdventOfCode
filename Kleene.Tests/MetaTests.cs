@@ -9,10 +9,11 @@ namespace Kleene.Tests
         [Fact]
         public void SelfRun()
         {
+            var test = Type.GetType("Kleene.TextExpression+Model");
             var meta = Expression.Parse(Meta.Expression);
             Assert.NotNull(meta);
 
-            var bootstrap = meta.RunFull(Meta.Expression, out var captureTree);
+            var bootstrap = meta.RunFull(Meta.Expression2, out var captureTree);
             Assert.NotNull(captureTree);
         }
     }

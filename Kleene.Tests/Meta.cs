@@ -2,6 +2,7 @@ namespace Kleene.Tests
 {
     public static class Meta
     {
+        public static readonly string Expression2 = @"a";
         public static readonly string Expression = @":::Kleene
 
 <root> { <ws> <expression>:value <ws> ; }
@@ -18,7 +19,7 @@ namespace Kleene.Tests
     (<ws> '/' <ws> <alt>:Output @/value/Input ::TransformExpression.Model)? ;
 }
 
-<alt> {t
+<alt> {
     <concat>:value+ % (<ws> '|' <ws> ::AltExpression.Model:alt) ;
     ((?@alt) @/value/Expressions)?
 }
@@ -282,11 +283,11 @@ namespace Kleene.Tests
 
 <capture-name> { '@' <name> ; }
 
-<dotted-name> {<name>+ % '.' ; }
+<dotted-name> { <name>+ % '.' ; }
 
 <dotted-capture-name> { '@' <dotted-name> ; }
 
-<dotnet-namespace-name> { <dotnet-name>+ % '.' ; }
+<dotnet-namespace-name> { <dotnet-name>+ % '.' }
 
 <dotnet-type-name> {
     (<dotnet-namespace-name> '.')?

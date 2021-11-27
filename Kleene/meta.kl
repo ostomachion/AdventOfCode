@@ -278,11 +278,11 @@
 
 <capture-name> { '@' <name> ; }
 
-<dotted-name> {<name>+ % '.' ; }
+<dotted-name> { <name>+ % '.' ; }
 
 <dotted-capture-name> { '@' <dotted-name> ; }
 
-<dotnet-namespace-name> { <dotnet-name>+ % '.' ; }
+<dotnet-namespace-name> { <dotnet-name>+ % '.' }
 
 <dotnet-type-name> {
     (<dotnet-namespace-name> '.')?
