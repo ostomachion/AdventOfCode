@@ -9,10 +9,10 @@ public class TypeAssignmentExpression : Expression
 
         public TypeAssignmentExpression Convert()
         {
-            if (TypeName is null || Properties is null)
+            if (TypeName is null)
                 throw new InvalidOperationException();
 
-            return new(TypeName, Properties.Select(x => x.Convert()).ToArray());
+            return new(TypeName, Properties?.Select(x => x.Convert()).ToArray() ?? Array.Empty<TypeAssignmentProperty>());
         }
     }
 

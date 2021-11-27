@@ -90,6 +90,10 @@ public class CaptureTreeNode
         {
             value = text;
         }
+        else if (type.IsAssignableFrom(typeof(bool)))
+        {
+            value = true;
+        }
         else if (type.GetMethod("op_Implicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
                 new[] { typeof(string) }) is MethodInfo implicitCast && implicitCast.ReturnType == type)
         {
@@ -97,9 +101,9 @@ public class CaptureTreeNode
             {
                 value = implicitCast.Invoke(null, new object[] { text })!;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
             }
         }
         else if (type.GetMethod("op_Explicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
@@ -201,9 +205,9 @@ public class CaptureTreeNode
             {
                 value = parse.Invoke(null, new object[] { text })!;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
             }
         }
         else if (type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
@@ -213,9 +217,9 @@ public class CaptureTreeNode
             {
                 value = constructor.Invoke(Array.Empty<object>());
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
             }
         }
         else
@@ -246,6 +250,7 @@ public class CaptureTreeNode
             var propertyValue = property.GetValue(value);
 
             var ienumerable = property.PropertyType.GetInterfaces().Concat(new [] { property.PropertyType }).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            var nullable = property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
             MethodInfo? addMethod = null;
             if (ienumerable is not null)
             {
@@ -281,7 +286,8 @@ public class CaptureTreeNode
                 // TODO: Assignable from array type = itemType.MakeArrayType()
             }
 
-            propertyNode.Parse(property.PropertyType, ref propertyValue);
+            var parseType = nullable ? property.PropertyType.GetGenericArguments()[0] : property.PropertyType;
+            propertyNode.Parse(parseType, ref propertyValue);
             try
             {
                 if (addMethod is null)
@@ -293,9 +299,9 @@ public class CaptureTreeNode
                     addMethod.Invoke(property.GetValue(value), new[] { propertyValue });
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception($"Could not set property '{propertyNode.Name}' on type {type.FullName}.");
+                throw new Exception($"Could not set property '{propertyNode.Name}' on type {type.FullName}.", ex);
             }
         }
     }

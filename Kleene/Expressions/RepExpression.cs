@@ -11,10 +11,11 @@ public class RepExpression : Expression
 
         public RepExpression Convert()
         {
-            if (Expression is null || Count is null || Order is null)
+            if (Expression is null)
                 throw new InvalidOperationException();
 
-            return new(Expression.Convert(), Separator?.Convert(), Count.Convert(), Order.Value);
+            return Order is not null ? new(Expression.Convert(), Separator?.Convert(), Count?.Convert() ?? new(), Order.Value)
+                : new(Expression.Convert(), Separator?.Convert(), Count?.Convert() ?? new());
         }
     }
 

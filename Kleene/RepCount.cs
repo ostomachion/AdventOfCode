@@ -9,10 +9,10 @@ public class RepCount
 
         public RepCount Convert()
         {
-            if (Min is null || Max is null)
-                throw new InvalidOperationException();
-
-            return new(Min.Value, Max.Value);
+            return Min is not null && Max is not null ? new(Min.Value, Max.Value)
+                : Min is not null ? new(min: Min.Value)
+                : Max is not null ? new(max: Max.Value)
+                : new();
         }
     }
 
@@ -22,7 +22,7 @@ public class RepCount
     public int Max { get; }
     public bool IsUnbounded => Max == Unbounded;
 
-    public RepCount(int min, int max)
+    public RepCount(int min = 0, int max = Unbounded)
     {
         if (min < 0)
         {

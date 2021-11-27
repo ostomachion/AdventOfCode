@@ -166,7 +166,7 @@ public abstract class Expression
         ),
 
         Fun("rename",
-            Text("@/"), Call("dotted-name", "name"),
+            Text("@/"), Call("dotted-name", "Name"),
             Text("/"), Call("name", "NewName"), R,
             Type<RenameExpression.Model>()
         ),
@@ -176,12 +176,13 @@ public abstract class Expression
         ),
 
         Fun("type-set",
-            Text("::"), Call("dotnet-type-name", "Name"), R,
+            Text("::"), Call("dotnet-type-name", "TypeName"), R,
             Opt(
                 WS, Text("{"), WS,
                 Sep(Star(Cap("Properties", Call("dotnet-name", "Name"), WS, Text("="), WS, Call("static", "Value"))), Concat(Text(","), WS)),
                 WS, Text("}")
-            ), R
+            ), R,
+            Type<TypeAssignmentExpression.Model>()
         ),
 
         Fun("function",
@@ -203,6 +204,11 @@ public abstract class Expression
         )),
 
         Fun("positive-predefined-char-class",
+            Cap("CharacterClass", Cap("Characters", Call("positive-predefined-char-class-chars")), R),
+            Type<CharacterClassExpression.Model>()
+        ),
+
+        Fun("positive-predefined-char-class-chars",
             Alt(
                 Trans(Text("\\\\"), Text("\\")),
                 Trans(Text("\\n"), Text("\n")),
@@ -214,12 +220,11 @@ public abstract class Expression
                 Trans(Text("\\l"), Text("abcdefghijklmnopqrstuvwxyz")),
                 Trans(Text("\\a"), Text("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")),
                 Trans(Text("\\w"), Text("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
-            ), R,
-            Type<CharacterClassExpression.Model>()
+            ), R
         ),
 
         Fun("negative-predefined-char-class",
-            Alt(
+            Cap("CharacterClass", Cap("Characters", Alt(
                 Trans(Text("."), Text("")),
                 Trans(Text("\\N"), Text("\n")),
                 Trans(Text("\\T"), Text("\t")),
@@ -230,19 +235,19 @@ public abstract class Expression
                 Trans(Text("\\L"), Text("abcdefghijklmnopqrstuvwxyz")),
                 Trans(Text("\\A"), Text("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")),
                 Trans(Text("\\W"), Text("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
-            ), R,
-            Cap("Negated"),
+            )), R,
+            Cap("Negated")),
             Type<CharacterClassExpression.Model>()
         ),
 
         Fun("literal-char-class",
             Text("["),
-            Opt(Cap("Negated", Text("^"))),
-            Plus(Alt(
+            Opt(Cap("negated", Text("^"))),
+            Cap("CharacterClass.Characters", Plus(Alt(
                 Call("char-escape"),
-                Call("positive-predefined-char-class"),
+                Call("positive-predefined-char-class-chars"),
                 Plus(CCN("[]\\"))
-            )),
+            ))),
             Text("]"), R,
             Type<CharacterClassExpression.Model>()
         ),
@@ -255,8 +260,8 @@ public abstract class Expression
             Cap("start", CC("<>")),
             Opt(Cap("Negated", Text("!"))),
             Alt(
-                Call("char-class", "CharClass"),
-                Sub("\\w", Call("char-class", "CharClass")) // Default char-class to \w
+                Call("char-class", "CharacterClass"),
+                Sub("\\w", Call("char-class", "CharacterClass")) // Default char-class to \w
             ),
             Cap("end", CC("<>")),
             Alt(
@@ -270,10 +275,10 @@ public abstract class Expression
 
         Fun("literal-anchor",
             Alt(
-                Concat(Text("^^"), Assign("Type", "Start"), Sub("\\N", Call("char-class", "CharClass"))),
-                Concat(Text("$$"), Assign("Type", "End"), Sub("\\N", Call("char-class", "CharClass"))),
-                Concat(Text("^"), Assign("Type", "Start"), Sub(".", Call("char-class", "CharClass"))),
-                Concat(Text("$$"), Assign("Type", "End"), Sub(".", Call("char-class", "CharClass")))
+                Concat(Text("^^"), Assign("Type", "Start"), Sub("\\N", Call("char-class", "CharacterClass"))),
+                Concat(Text("$$"), Assign("Type", "End"), Sub("\\N", Call("char-class", "CharacterClass"))),
+                Concat(Text("^"), Assign("Type", "Start"), Sub(".", Call("char-class", "CharacterClass"))),
+                Concat(Text("$$"), Assign("Type", "End"), Sub(".", Call("char-class", "CharacterClass")))
             ), R,
             Type<AnchorExpression.Model>()
         ),

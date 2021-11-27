@@ -9,10 +9,11 @@ public class SubExpression : Expression
 
         public SubExpression Convert()
         {
-            if (Input is null || Expression is null)
+            if (Input is null)
                 throw new InvalidOperationException();
 
-            return new(Input.Convert(), Expression.Convert());
+            return Expression is not null ? new(Input.Convert(), Expression.Convert())
+                : new(Input.Convert());
         }
     }
 

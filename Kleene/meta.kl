@@ -123,7 +123,7 @@
     '::' <dotnet-type-name>:Name ;
     (
         <ws> '{' <ws>
-        ((<dotnet-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
+        ((<dotnet-name>:TypeName <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
     ::TypeSetExpression.Model
@@ -149,45 +149,53 @@
 
 <positive-predefined-char-class> {
     (
-        - '\\' / '\'
-        - '\t' / '[t]'
-        - '\h' / ' [t]'
-        - '\s' / ' [t][n]'
-        - '\d' / '0123456789'
-        - '\u' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        - '\l' / 'abcdefghijklmnopqrstuvwxyz'
-        - '\a' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-        - '\w' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    ) ;
+        <positive-predefined-char-class-chars>:Characters ;
+    ):CharacterClass
     ::CharClassExpression.Model
+}
+
+<positive-predefined-char-class-chars> {
+    - '\\' / '\'
+    - '\t' / '[t]'
+    - '\h' / ' [t]'
+    - '\s' / ' [t][n]'
+    - '\d' / '0123456789'
+    - '\u' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    - '\l' / 'abcdefghijklmnopqrstuvwxyz'
+    - '\a' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    - '\w' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 }
 
 <negative-predefined-char-class> {
     (
-        - '.'  / ''
-        - '\N' / '[n]'
-        - '\T' / '[t]'
-        - '\H' / ' [t]'
-        - '\S' / ' [t][n]'
-        - '\D' / '0123456789'
-        - '\U' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        - '\L' / 'abcdefghijklmnopqrstuvwxyz'
-        - '\A' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-        - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    ) ;
-    ?:Negated
+        (
+            - '.'  / ''
+            - '\N' / '[n]'
+            - '\T' / '[t]'
+            - '\H' / ' [t]'
+            - '\S' / ' [t][n]'
+            - '\D' / '0123456789'
+            - '\U' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            - '\L' / 'abcdefghijklmnopqrstuvwxyz'
+            - '\A' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+            - '\W' / 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        ):Characters ;
+        ?:Negated
+    ):CharacterClass
     ::CharClassExpression.Model
 }
 
 <literal-char-class> {
-    '[<]'
-    ('^':Negated)?
     (
-        - <char-escape>
-        - <positive-predefined-char-class>
-        - [^[<][>]\\]+
-    )+
-    '[>]' ;
+        '[<]'
+        ('^':Negated)?
+        ((
+            - <char-escape>
+            - <positive-predefined-char-class-chars>
+            - [^[<][>]\\]+
+        )+):Characters
+        '[>]' ;
+    ):CharacterClass
     ::CharClassExpression.Model
 }
 

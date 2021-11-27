@@ -6,14 +6,14 @@ public class AnchorExpression : Expression
     {
         public AnchorType? Type { get; set; }
         public CharacterClass.Model? CharacterClass { get; set; }
-        public bool? Negated { get; set; }
+        public bool Negated { get; set; }
 
         public AnchorExpression Convert()
         {
-            if (Type is null || CharacterClass is null || Negated is null)
+            if (Type is null || CharacterClass is null)
                 throw new InvalidOperationException();
 
-            return new(Type.Value, CharacterClass.Convert(), Negated.Value);
+            return new(Type.Value, CharacterClass.Convert(), Negated);
         }
     }
 
