@@ -134,7 +134,7 @@ public abstract class Expression
         )),
 
         Fun("assignment",
-            Text("(:"), Call("dotted-name", "Name"), WS, Text("="), WS, Call("static", "Value"), Text(")"), R,
+            Text("(:"), WS, Call("dotted-name", "Name"), WS, Text("="), WS, Call("static", "Value"), WS, Text(")"), R,
             Type<AssignmentExpressionModel>()
         ),
 
@@ -162,7 +162,10 @@ public abstract class Expression
         ),
 
         Fun("group",
-            Text("("), WS, Call("expression", "value"), WS, Text(")"), R
+            Text("("), WS,
+            Call("expression", "Expressions"),
+            WS, Text(")"), R,
+            Type<ConcatExpressionModel>() // TODO: Optimize this.
         ),
 
         Fun("backreference",

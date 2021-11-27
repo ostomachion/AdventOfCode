@@ -2,7 +2,6 @@ namespace Kleene.Tests
 {
     public static class Meta
     {
-        public static readonly string Expression2 = @"[^a]";
         public static readonly string Expression = @":::Kleene.Models
 
 <root> { <ws> <expression>:value <ws> ; }
@@ -80,9 +79,8 @@ namespace Kleene.Tests
     - <text>
 }
 
-<assignent> {
-    '(:' <dotted-name>:Name <ws> '=' <ws> <static>:Value ')' ;
-        ::AssignmentExpressionModel
+<assignment> {
+    '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')'
 }
 
 <subexpression> {
@@ -109,7 +107,8 @@ namespace Kleene.Tests
 }
 
 <group> {
-    '(' <ws> <expression>:value <ws> ')' ;
+    '(' <ws> <expression>:Expressions <ws> ')' ;
+    ::ConcatExpressionModel #TODO: Optimize this.
 }
 
 <backreference> {

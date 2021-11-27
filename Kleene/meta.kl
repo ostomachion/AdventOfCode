@@ -75,9 +75,9 @@
     - <text>
 }
 
-<assignent> {
-    '(:' <dotted-name>:Name <ws> '=' <ws> <static>:Value ')' ;
-        ::AssignmentExpressionModel
+<assignment> {
+    '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')' ;
+    ::AssignmentExpressionModel
 }
 
 <subexpression> {
@@ -104,7 +104,8 @@
 }
 
 <group> {
-    '(' <ws> <expression>:value <ws> ')' ;
+    '(' <ws> <expression>:Expressions <ws> ')' ;
+    ::ConcatExpressionModel #TODO: Optimize this.
 }
 
 <backreference> {
