@@ -126,7 +126,7 @@
         ((<dotnet-name>:TypeName <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
-    ::TypeSetExpressionModel
+    ::TypeAssignmentExpressionModel
 }
 
 <function> {
@@ -188,7 +188,7 @@
 <literal-char-class> {
     (
         '[<]'
-        ('^':Negated)?
+        ('^':Negated)? ;
         ((
             - <char-escape>
             - <positive-predefined-char-class-chars>

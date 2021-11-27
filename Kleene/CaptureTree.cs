@@ -103,7 +103,7 @@ public class CaptureTree
         if (Current is null)
             throw new InvalidOperationException("Capture tree is fully closed.");
 
-        foreach (var part in name.Parts.Reverse())
+        foreach (var part in name.Parts)
         {   
             this.Current = this.Current.Children.First();
             if (this.Current.Name != part)

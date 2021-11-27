@@ -2,7 +2,7 @@ namespace Kleene.Tests
 {
     public static class Meta
     {
-        public static readonly string Expression2 = @"a";
+        public static readonly string Expression2 = @"[^a]";
         public static readonly string Expression = @":::Kleene.Models
 
 <root> { <ws> <expression>:value <ws> ; }
@@ -131,7 +131,7 @@ namespace Kleene.Tests
         ((<dotnet-name>:TypeName <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
-    ::TypeSetExpressionModel
+    ::TypeAssignmentExpressionModel
 }
 
 <function> {
@@ -193,7 +193,7 @@ namespace Kleene.Tests
 <literal-char-class> {
     (
         '[<]'
-        ('^':Negated)?
+        ('^':Negated)? ;
         ((
             - <char-escape>
             - <positive-predefined-char-class-chars>

@@ -245,14 +245,16 @@ public abstract class Expression
         ),
 
         Fun("literal-char-class",
-            Text("["),
-            Opt(Cap("negated", Text("^"))),
-            Cap("CharacterClass.Characters", Plus(Alt(
-                Call("char-escape"),
-                Call("positive-predefined-char-class-chars"),
-                Plus(CCN("[]\\"))
-            ))),
-            Text("]"), R,
+            Cap("CharacterClass",
+                Text("["),
+                Opt(Cap("Negated", Text("^"))), R,
+                Cap("Characters", Plus(Alt(
+                    Call("char-escape"),
+                    Call("positive-predefined-char-class-chars"),
+                    Plus(CCN("[]\\"))
+                ))),
+                Text("]"), R
+            ),
             Type<CharacterClassExpressionModel>()
         ),
 

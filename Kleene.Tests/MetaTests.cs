@@ -11,7 +11,7 @@ namespace Kleene.Tests
         {
             var meta = Expression.Parse(Meta.Expression);
             Assert.NotNull(meta);
-            _ = meta.RunFull(Meta.Expression2, out var captureTree);
+            _ = meta.RunFull(Meta.Expression, out var captureTree);
             Assert.NotNull(captureTree);
 
             //for (var i = 0; i < 10; i++)

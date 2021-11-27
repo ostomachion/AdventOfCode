@@ -74,7 +74,7 @@ public class CaptureTreeNode
     public void Parse(Type type, ref object? value)
     {
         // Reflection code is never pretty.
-
+        
         if (Parent is not null && !IsPropertyBoundary)
             throw new InvalidOperationException();
 
