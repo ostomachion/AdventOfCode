@@ -2,15 +2,13 @@
 
 public class AnchorExpressionModel : IModel<AnchorExpression>
 {
-    public AnchorType? Type { get; set; }
-    public CharacterClassModel? CharacterClass { get; set; }
-    public bool Negated { get; set; }
+    public AnchorModel? Anchor { get; set; }
 
     public AnchorExpression Convert()
     {
-        if (Type is null || CharacterClass is null)
+        if (Anchor is null)
             throw new InvalidOperationException();
 
-        return new(Type.Value, CharacterClass.Convert(), Negated);
+        return new(Anchor.Convert());
     }
 }

@@ -1,3 +1,6 @@
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace Kleene;
 
 public class TextExpression : TextValueExpression
@@ -23,4 +26,26 @@ public class TextExpression : TextValueExpression
     }
 
     public override ExpressionResult? GetValue(ExpressionContext context) => new(Value);
+
+    public override string ToString()
+    {
+        if (new Regex(@"^[A-Za-z0-9]+$").IsMatch(Value))
+            return Value;
+
+        var builder = new StringBuilder();
+        foreach (var c in Value)
+        {
+            builder.Append(c switch
+            {
+                '\'' => "[']",
+                '[' => "[<]",
+                ']' => "[>]",
+                '\n' => "[n]",
+                '\t' => "[t]",
+                _ => c.ToString()
+            });
+        }
+
+        return $"'{builder}'";
+    }
 }

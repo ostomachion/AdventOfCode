@@ -6,4 +6,6 @@ public class FailExpression : Expression
     {
         yield break;
     }
+
+    public override string ToString() => "!";
 }

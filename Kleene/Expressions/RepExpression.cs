@@ -73,4 +73,24 @@ public class RepExpression : Expression
             }
         }
     }
+
+    public override string ToString()
+    {
+        string quantifier;
+        if (Count.Min == 0 && Count.Max == RepCount.Unbounded)
+            quantifier = "*";
+        else if (Count.Min == 1 && Count.Max == RepCount.Unbounded)
+            quantifier = "+";
+        else if (Count.Max == RepCount.Unbounded)
+            quantifier = $"^{Count.Min}+";
+        else if (Count.Min == Count.Max)
+            quantifier = $"^{Count.Min}";
+        else
+            quantifier = $"{Count.Min}-{Count.Max}";
+
+        var value = Expression.ToString()!;
+        if (value.Contains('\n') || value.Length + 2 + quantifier.Length > ToStringLength)
+            value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+        return $"({value}){quantifier}";
+    }
 }

@@ -29,4 +29,21 @@ public class ScopeExpression : Expression
         }
         context.CaptureTree.Current = originalScope;
     }
+
+    public override string ToString()
+    {
+        var name = Name.ToString();
+
+        if (Expression is null)
+        {
+            return $"(={Name})";
+        }
+        else
+        {
+            string value = Expression.ToString()!.Replace("\n", "\n  ");
+            if (value.Contains('\n') || value.Length + name.Length + 4 > ToStringLength)
+                value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+            return $"(={name} {value})";
+        }
+    }
 }

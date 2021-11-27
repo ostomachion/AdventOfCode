@@ -23,4 +23,13 @@ public class AssignmentExpression : Expression
         yield return new();
         context.CaptureTree.Unset(Name);
     }
+
+    public override string ToString()
+    {
+        string name = Name.ToString();
+        string value = Value.ToString()!.Replace("\n", "\n  ");
+        if (value.Contains('\n') || value.Length + name.Length + 6 > ToStringLength)
+            value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+        return $"(:{name} = {value})";
+    }
 }

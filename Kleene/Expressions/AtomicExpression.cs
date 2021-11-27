@@ -17,4 +17,11 @@ public class AtomicExpression : Expression
             yield break;
         }
     }
+    public override string ToString()
+    {
+        string value = Expression.ToString()!.Replace("\n", "\n  ");
+        if (value.Contains('\n') || value.Length + 3 > ToStringLength)
+            value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+        return $"(>{value})";
+    }
 }

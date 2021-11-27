@@ -43,4 +43,21 @@ public class SubExpression : Expression
         }
         context.Local = originalContext;
     }
+
+    public override string ToString()
+    {
+        var input = Input.ToString()!;
+
+        if (Expression is null)
+        {
+            return $"(?{input})";
+        }
+        else
+        {
+            string value = Expression.ToString()!.Replace("\n", "\n  ");
+            if (value.Contains('\n') || value.Length + input.Length + 4 > ToStringLength)
+                value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+            return $"(?{input} {value})";
+        }
+    }
 }

@@ -15,4 +15,9 @@ public class UsingExpression : Expression
         yield return new();
         context.CallStack.Peek().Usings.Remove(NamespaceName);
     }
+
+    public override string ToString()
+    {
+        return $":::{NamespaceName}";
+    }
 }

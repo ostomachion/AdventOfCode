@@ -29,4 +29,6 @@ public class RenameExpression : Expression
             capture.Name = localName;
         }
     }
+
+    public override string ToString() => $"@/{Name}/{NewName}";
 }

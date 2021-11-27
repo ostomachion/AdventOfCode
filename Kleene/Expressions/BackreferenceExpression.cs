@@ -26,4 +26,6 @@ public class BackreferenceExpression : TextValueExpression
     }
 
     public override ExpressionResult? GetValue(ExpressionContext context) => context.CaptureTree[Name].FirstOrDefault()?.Value;
+
+    public override string ToString() => $"@{Name}";
 }

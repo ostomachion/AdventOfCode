@@ -10,6 +10,7 @@ namespace Kleene.Tests
         [Fact]
         public void SelfRun()
         {
+            var metaString = Expression.Meta.ToString();
             var meta = Expression.Meta;
             for (var i = 0; i < 10; i++)
             {

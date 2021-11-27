@@ -35,4 +35,12 @@ public class CallExpression : Expression
         context.CallStack.Pop();
         context.CaptureTree.Unopen(captureName);
     }
+
+    public override string ToString()
+    {
+        var value = $"<{Name}>";
+        if (CaptureName is not null)
+            value += $":{CaptureName}";
+        return value;
+    }
 }

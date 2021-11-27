@@ -6,4 +6,6 @@ public class PassExpression : Expression
     {
         yield return new();
     }
+
+    public override string ToString() => "?";
 }

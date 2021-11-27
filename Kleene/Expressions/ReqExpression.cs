@@ -19,4 +19,12 @@ public class ReqExpression : Expression
             }
         }
     }
+
+    public override string ToString()
+    {
+        var value = Expression.ToString()!;
+        if (value.Contains('\n') || value.Length + 3 > ToStringLength)
+            value = "\n  " + value.Replace("\n", "\n  ") + "\n";
+        return $"({value})!";
+    }
 }

@@ -17,4 +17,20 @@ public class FunctionExpression : Expression
         yield return new();
         context.UndefineFunction(Name);
     }
+
+    public override string ToString()
+    {
+        var value = $"<{Name}> {{";
+        var text = Expression.ToString()!;
+        if (text.Contains('\n') || text.Length + value.Length + 3 > ToStringLength)
+        {
+            value += "\n  " + text.Replace("\n", "\n  ") + "\n}";
+        }
+        else
+        {
+            value += $" {text} }}";
+        }
+
+        return value;
+    }
 }

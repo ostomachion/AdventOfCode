@@ -1,3 +1,3 @@
 namespace Kleene;
 
-public enum AnchorType { Left, Right, Outer, Inner }
+public enum AnchorType { Start, End, Outer, Inner }

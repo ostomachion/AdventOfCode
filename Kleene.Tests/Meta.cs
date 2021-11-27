@@ -80,7 +80,8 @@ namespace Kleene.Tests
 }
 
 <assignment> {
-    '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')'
+    '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')' ;
+    ::AssignmentExpressionModel
 }
 
 <subexpression> {
@@ -160,6 +161,7 @@ namespace Kleene.Tests
 
 <positive-predefined-char-class-chars> {
     - '\\' / '\'
+    - '\n' / '[n]'
     - '\t' / '[t]'
     - '\h' / ' [t]'
     - '\s' / ' [t][n]'
@@ -206,29 +208,31 @@ namespace Kleene.Tests
 <anchor> { <predefined-anchor> | <literal-anchor> }
 
 <predefined-anchor> {
-    [<>]:start
-    ('!':Negated)?
-    (
-        - <char-class>:CharacterClass
-        - (?'\w' <char-class>:CharacterClass) # Default char-class to \w
-    )
-    [<>]:end
-    (
-        - (?@start '<') (?@end '<') (:Type = Start)
-        - (?@start '>') (?@end '>') (:Type = End)
-        - (?@start '<') (?@end '>') (:Type = Outer)
-        - (?@start '>') (?@end '<') (:Type = Inner)
-    ) ;
-    ::AnchorExpressionModel
-}
-
-<literal-anchor> {
     (
         - '^^' (:Type = Start) (?'\N' <char-class>:CharacterClass)
         - '$$' (:Type = End) (?'\N' <char-class>:CharacterClass)
         - '^' (:Type = Start) (?'.' <char-class>:CharacterClass)
         - '$' (:Type = End) (?'.' <char-class>:CharacterClass)
-    ) ;
+    ):Anchor ;
+    ::AnchorExpressionModel
+}
+
+<literal-anchor> {
+    (
+        [<>]:start
+        ('!':Negated)?
+        (
+            - <char-class>:CharacterClass
+            - (?'\w' <char-class>:CharacterClass) # Default char-class to \w
+        )
+        [<>]:end
+        (
+            - (?@start '<') (?@end '<') (:Type = Start)
+            - (?@start '>') (?@end '>') (:Type = End)
+            - (?@start '<') (?@end '>') (:Type = Outer)
+            - (?@start '>') (?@end '<') (:Type = Inner)
+        ) ;
+    ):Anchor
     ::AnchorExpressionModel
 }
 

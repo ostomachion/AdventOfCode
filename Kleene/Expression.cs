@@ -4,6 +4,8 @@ namespace Kleene;
 
 public abstract class Expression
 {
+    public const int ToStringLength = 120;
+
     private static Expression Concat(params Expression[] children)
     {
         return children.Length switch
@@ -266,29 +268,31 @@ public abstract class Expression
         )),
 
         Fun("predefined-anchor",
-            Cap("start", CC("<>")),
-            Opt(Cap("Negated", Text("!"))),
-            Alt(
-                Call("char-class", "CharacterClass"),
-                Sub("\\w", Call("char-class", "CharacterClass")) // Default char-class to \w
-            ),
-            Cap("end", CC("<>")),
-            Alt(
-                Concat(Sub(Ref("start"), Text("<")), Sub(Ref("end"), Text("<")), Assign("Type", "Start")),
-                Concat(Sub(Ref("start"), Text(">")), Sub(Ref("end"), Text(">")), Assign("Type", "End")),
-                Concat(Sub(Ref("start"), Text("<")), Sub(Ref("end"), Text(">")), Assign("Type", "Outer")),
-                Concat(Sub(Ref("start"), Text(">")), Sub(Ref("end"), Text("<")), Assign("Type", "Inner"))
-            ), R,
-            Type<AnchorExpressionModel>()
-        ),
-
-        Fun("literal-anchor",
-            Alt(
+            Cap("Anchor", Alt(
                 Concat(Text("^^"), Assign("Type", "Start"), Sub("\\N", Call("char-class", "CharacterClass"))),
                 Concat(Text("$$"), Assign("Type", "End"), Sub("\\N", Call("char-class", "CharacterClass"))),
                 Concat(Text("^"), Assign("Type", "Start"), Sub(".", Call("char-class", "CharacterClass"))),
                 Concat(Text("$$"), Assign("Type", "End"), Sub(".", Call("char-class", "CharacterClass")))
-            ), R,
+            )), R,
+            Type<AnchorExpressionModel>()
+        ),
+
+        Fun("literal-anchor",
+            Cap("Anchor", 
+                Cap("start", CC("<>")),
+                Opt(Cap("Negated", Text("!"))),
+                Alt(
+                    Call("char-class", "CharacterClass"),
+                    Sub("\\w", Call("char-class", "CharacterClass")) // Default char-class to \w
+                ),
+                Cap("end", CC("<>")),
+                Alt(
+                    Concat(Sub(Ref("start"), Text("<")), Sub(Ref("end"), Text("<")), Assign("Type", "Start")),
+                    Concat(Sub(Ref("start"), Text(">")), Sub(Ref("end"), Text(">")), Assign("Type", "End")),
+                    Concat(Sub(Ref("start"), Text("<")), Sub(Ref("end"), Text(">")), Assign("Type", "Outer")),
+                    Concat(Sub(Ref("start"), Text(">")), Sub(Ref("end"), Text("<")), Assign("Type", "Inner"))
+                ), R
+            ),
             Type<AnchorExpressionModel>()
         ),
 

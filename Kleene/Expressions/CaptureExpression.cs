@@ -22,4 +22,21 @@ public class CaptureExpression : Expression
         }
         context.CaptureTree.Unopen(Name);
     }
+
+    public override string ToString()
+    {
+        var text = Expression.ToString()!;
+        if (Expression is ConcatExpression or AltExpression or TransformExpression)
+        {
+            if (text.Contains('\n'))
+            {
+                text = "(\n  " + text.Replace("\n", "\n  ") + "\n)";
+            }
+            else
+            {
+                text = $"({text})";
+            }
+        }
+        return $"{text}:{Name}";
+    }
 }

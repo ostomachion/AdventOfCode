@@ -41,4 +41,81 @@ public class ConcatExpression : Expression
             }
         }
     }
+
+    public override string ToString()
+    {
+        var value = "";
+        var lineLength = 0;
+        var startOfLine = true;
+        foreach (var p in Expressions.Select((x, i) => (x, i)))
+        {
+            var expression = p.x;
+            var text = expression.ToString()!;
+
+            if (expression is ConcatExpression or AltExpression or TransformExpression)
+            {
+                if (text.Contains('\n'))
+                {
+                    text = "(\n  " + text.Replace("\n", "\n  ") + "\n)";
+                }
+                else
+                {
+                    text = $"({text})";
+                }
+            }
+            else if (expression is FunctionExpression or UsingExpression)
+            {
+                if (value != "" && !value.EndsWith("\n"))
+                    text = "\n" + text;
+                text += "\n";
+            }
+
+            if (text.Contains('\n'))
+            {
+                var lastLine = text.Split('\n')[^1];
+                if (p.i != Expressions.Count() - 1 && Expressions.ElementAt(p.i + 1) is RatchetExpression && lastLine.Length + 2 < ToStringLength)
+                {
+                    if (!startOfLine)
+                        value += "\n";
+                    value += text;
+                    lineLength = lastLine.Length;
+                    startOfLine = lastLine == "";
+                }
+                else
+                {
+                    if (value != "" && !value.EndsWith("\n"))
+                        text = "\n" + text;
+                    text += "\n";
+                    value += text;
+                    lineLength = 0;
+                    startOfLine = true;
+                }
+            }
+            else if (lineLength + text.Length + (startOfLine ? 0 : 1) <= ToStringLength)
+            {
+                if (!startOfLine)
+                    value += " ";
+                value += text;
+                lineLength += text.Length;
+                startOfLine = false;
+
+                if (expression is RatchetExpression && p.i != Expressions.Count() - 1)
+                {
+                    value += "\n";
+                    lineLength = 0;
+                    startOfLine = true;
+                }
+            }
+            else
+            {
+                if (!startOfLine)
+                    value += "\n";
+                value += text;
+                lineLength = text.Length;
+                startOfLine = false;
+            }
+        }
+
+        return value;
+    }
 }

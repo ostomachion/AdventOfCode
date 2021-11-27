@@ -43,4 +43,16 @@ public class TypeAssignmentExpression : Expression
         context.CaptureTree.Unset("FullName");
         context.CaptureTree.Unopen("!T");
     }
+
+    public override string ToString()
+    {
+        var value = "::" + TypeName;
+        if (Properties.Any())
+        {
+            value += " {\n";
+            value += String.Join(", ", Properties.Select(x => $"  {x.Name} = {x.Value}\n"));
+            value += "}";
+        }
+        return value;
+    }
 }

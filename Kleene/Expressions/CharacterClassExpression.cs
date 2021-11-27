@@ -31,4 +31,6 @@ public class CharacterClassExpression : Expression
             context.Unconsume(1);
         }
     }
+
+    public override string ToString() => CharacterClass.ToString();
 }

@@ -7,4 +7,6 @@ public class RatchetExpression : Expression
         yield return new();
         context.Ratchet = true;
     }
+
+    public override string ToString() => ";";
 }
