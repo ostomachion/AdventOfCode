@@ -113,7 +113,8 @@ namespace Kleene.Tests
 }
 
 <backreference> {
-    <dotted-capture-name>:Name ::BackreferenceExpressionModel ;
+    <dotted-capture-name>:name ::BackreferenceExpressionModel ;
+    (:Name = @name.value)
 }
 
 <rename> {
@@ -125,10 +126,10 @@ namespace Kleene.Tests
 <using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpressionModel ; }
 
 <type-set> {
-    '::' <dotnet-type-name>:Name ;
+    '::' <dotnet-type-name>:TypeName ;
     (
         <ws> '{' <ws>
-        ((<dotnet-name>:TypeName <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
+        ((<dotnet-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
     ::TypeAssignmentExpressionModel
@@ -284,11 +285,11 @@ namespace Kleene.Tests
 
 <name> { (\a \w*)+ % [-_] ; }
 
-<capture-name> { '@' <name> ; }
+<capture-name> { '@' <name>:value ; }
 
 <dotted-name> { <name>+ % '.' ; }
 
-<dotted-capture-name> { '@' <dotted-name> ; }
+<dotted-capture-name> { '@' <dotted-name>:value ; }
 
 <dotnet-namespace-name> { <dotnet-name>+ % '.' }
 

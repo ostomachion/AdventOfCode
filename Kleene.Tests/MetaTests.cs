@@ -10,7 +10,6 @@ namespace Kleene.Tests
         [Fact]
         public void SelfRun()
         {
-            var metaString = Expression.Meta.ToString();
             var meta = Expression.Meta;
             for (var i = 0; i < 10; i++)
             {
@@ -19,6 +18,7 @@ namespace Kleene.Tests
                 meta = captureTree!.Root.Parse<IModel<Expression>>()!.Convert();
                 Assert.NotNull(meta);
             }
+            // Neat :)
         }
     }
 }

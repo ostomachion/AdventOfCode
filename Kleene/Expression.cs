@@ -171,7 +171,8 @@ public abstract class Expression
         ),
 
         Fun("backreference",
-            Call("dotted-capture-name", "Name"), Type<BackreferenceExpressionModel>(), R
+            Call("dotted-capture-name", "name"), Type<BackreferenceExpressionModel>(), R,
+            Assign("Name", Ref("name.value"))
         ),
 
         Fun("rename",
@@ -344,11 +345,11 @@ public abstract class Expression
 
         Fun("name", Sep(Plus(A, Star(W)), CC("-_")), R),
 
-        Fun("capture-name", Text("@"), Call("name")),
+        Fun("capture-name", Text("@"), Call("name", "value"), R),
 
         Fun("dotted-name", Sep(Plus(Call("name")), Text(".")), R),
 
-        Fun("dotted-capture-name", Text("@"), Call("dotted-name")),
+        Fun("dotted-capture-name", Text("@"), Call("dotted-name", "value"), R),
 
         Fun("dotnet-namespace-name",
             Sep(
