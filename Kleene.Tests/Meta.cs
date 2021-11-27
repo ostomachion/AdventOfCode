@@ -29,7 +29,7 @@ namespace Kleene.Tests
 
 <concat> {
     <capture>:value+ % (<ws> ::ConcatExpressionModel:concat) ;
-    ((?@concat) @/value/Expressions)
+    ((?@concat) @/value/Expressions)?
 }
 
 <capture> {
@@ -156,7 +156,7 @@ namespace Kleene.Tests
     (
         <positive-predefined-char-class-chars>:Characters ;
     ):CharacterClass
-    ::CharClassExpressionModel
+    ::CharacterClassExpressionModel
 }
 
 <positive-predefined-char-class-chars> {
@@ -187,7 +187,7 @@ namespace Kleene.Tests
         ):Characters ;
         ?:Negated
     ):CharacterClass
-    ::CharClassExpressionModel
+    ::CharacterClassExpressionModel
 }
 
 <literal-char-class> {
@@ -201,7 +201,7 @@ namespace Kleene.Tests
         )+):Characters
         '[>]' ;
     ):CharacterClass
-    ::CharClassExpressionModel
+    ::CharacterClassExpressionModel
 }
 
 <anchor> { <predefined-anchor> | <literal-anchor> }
@@ -210,8 +210,8 @@ namespace Kleene.Tests
     [<>]:start
     ('!':Negated)?
     (
-        - <char-class>:CharClass
-        - (?'\w' <char-class>:CharClass) # Default char-class to \w
+        - <char-class>:CharacterClass
+        - (?'\w' <char-class>:CharacterClass) # Default char-class to \w
     )
     [<>]:end
     (
@@ -225,10 +225,10 @@ namespace Kleene.Tests
 
 <literal-anchor> {
     (
-        - '^^' (:Type = Start) (?'\N' <char-class>:CharClass)
-        - '$$' (:Type = End) (?'\N' <char-class>:CharClass)
-        - '^' (:Type = Start) (?'.' <char-class>:CharClass)
-        - '$' (:Type = End) (?'.' <char-class>:CharClass)
+        - '^^' (:Type = Start) (?'\N' <char-class>:CharacterClass)
+        - '$$' (:Type = End) (?'\N' <char-class>:CharacterClass)
+        - '^' (:Type = Start) (?'.' <char-class>:CharacterClass)
+        - '$' (:Type = End) (?'.' <char-class>:CharacterClass)
     ) ;
     ::AnchorExpressionModel
 }
