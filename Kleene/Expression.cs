@@ -99,7 +99,9 @@ public abstract class Expression
                     Cap("Count.Min", Trans(Text("+"), Text("1"))),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("+")),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("-"), Cap("Count.Max", Plus(D))),
-                    Concat(Text("^"), Cap("Count.Max", Cap("Count.Min", Plus(D))))
+                    Concat(Text("^"), Cap("Count.Max", Cap("Count.Min", Plus(D)))),
+
+                    Concat(Text("?"), Type<OptExpressionModel>())
                 ), R,
                 Opt(Cap("Eval", Trans(Text("?"), Text("Lazy")))), R,
                 Opt(WS, Text("%"), WS, Call("capture", "Separator")), R,

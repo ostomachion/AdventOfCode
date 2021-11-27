@@ -7,10 +7,10 @@ public class OptExpressionModel : IModel<OptExpression>
 
     public OptExpression Convert()
     {
-        if (Expression is null || Order is null)
+        if (Expression is null)
             throw new InvalidOperationException();
 
-        return new(Expression.Convert(), Order.Value);
+        return Order is not null ? new(Expression.Convert(), Order.Value)
+            : new(Expression.Convert());
     }
 }
-

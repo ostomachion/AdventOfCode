@@ -48,7 +48,7 @@ namespace Kleene.Tests
             - '^' \d+:Count.Min '-' \d+:Count.Max
             - '^'( \d+:Count.Min):Count.Max
 
-            - ('?'/1) ::OptExpressionModel
+            - '?' ::OptExpressionModel
         ) ;
         (('?'/Lazy):Eval)? ;
         ( <ws> '%' <ws> <capture>:Separator )?
