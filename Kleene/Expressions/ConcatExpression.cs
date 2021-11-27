@@ -52,7 +52,7 @@ public class ConcatExpression : Expression
             var expression = p.x;
             var text = expression.ToString()!;
 
-            if (expression is ConcatExpression or AltExpression or TransformExpression)
+            if (expression is ConcatExpression c && c.Expressions.Count() != 1 || expression is AltExpression or TransformExpression)
             {
                 if (text.Contains('\n'))
                 {

@@ -88,9 +88,19 @@ public class RepExpression : Expression
         else
             quantifier = $"{Count.Min}-{Count.Max}";
 
-        var value = Expression.ToString()!;
-        if (value.Contains('\n') || value.Length + 2 + quantifier.Length > ToStringLength)
-            value = "\n  " + value.Replace("\n", "\n  ") + "\n";
-        return $"({value}){quantifier}";
+        var text = Expression.ToString()!;
+        if (Expression is ConcatExpression c && c.Expressions.Count() != 1 || Expression is AltExpression or TransformExpression)
+        {
+            if (text.Contains('\n') || text.Length + quantifier.Length + 2 > ToStringLength)
+            {
+                text = "(\n  " + text.Replace("\n", "\n  ") + "\n)";
+            }
+            else
+            {
+                text = $"({text})";
+            }
+        }
+
+        return $"{text}{quantifier}";
     }
 }

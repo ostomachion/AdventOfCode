@@ -26,7 +26,7 @@ public class CaptureExpression : Expression
     public override string ToString()
     {
         var text = Expression.ToString()!;
-        if (Expression is ConcatExpression or AltExpression or TransformExpression)
+        if (Expression is ConcatExpression c && c.Expressions.Count() != 1 || Expression is AltExpression or TransformExpression)
         {
             if (text.Contains('\n'))
             {
