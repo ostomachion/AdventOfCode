@@ -2,20 +2,6 @@
 
 public class TransformExpression : Expression
 {
-    internal class Model : IModel<TransformExpression>
-    {
-        public IModel<Expression>? Input { get; set; }
-        public IModel<Expression>? Output { get; set; }
-
-        public TransformExpression Convert()
-        {
-            if (Input is null || Output is null)
-                throw new InvalidOperationException();
-
-            return new(Input.Convert(), Output.Convert());
-        }
-    }
-
     public Expression Input { get; }
     public Expression Output { get; }
 

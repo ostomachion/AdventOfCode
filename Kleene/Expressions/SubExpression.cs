@@ -2,21 +2,6 @@ namespace Kleene;
 
 public class SubExpression : Expression
 {
-    internal class Model : IModel<SubExpression>
-    {
-        public IModel<TextValueExpression>? Input { get; set; }
-        public IModel<Expression>? Expression { get; set; }
-
-        public SubExpression Convert()
-        {
-            if (Input is null)
-                throw new InvalidOperationException();
-
-            return Expression is not null ? new(Input.Convert(), Expression.Convert())
-                : new(Input.Convert());
-        }
-    }
-
     public TextValueExpression Input { get; }
     public Expression? Expression { get; }
 

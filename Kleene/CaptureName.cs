@@ -20,7 +20,6 @@ public class CaptureName
         Parts = parts;
     }
 
-    internal static CaptureName Create() => new("capture-" + Guid.NewGuid().ToString());
 
     [return: NotNullIfNotNull("value")]
 

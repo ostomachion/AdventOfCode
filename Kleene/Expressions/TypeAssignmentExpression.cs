@@ -2,20 +2,6 @@ namespace Kleene;
 
 public class TypeAssignmentExpression : Expression
 {
-    internal class Model : IModel<TypeAssignmentExpression>
-    {
-        public string? TypeName { get; set; }
-        public List<TypeAssignmentProperty.Model>? Properties { get; set; }
-
-        public TypeAssignmentExpression Convert()
-        {
-            if (TypeName is null)
-                throw new InvalidOperationException();
-
-            return new(TypeName, Properties?.Select(x => x.Convert()).ToArray() ?? Array.Empty<TypeAssignmentProperty>());
-        }
-    }
-
     public string TypeName { get; }
     public IEnumerable<TypeAssignmentProperty> Properties { get; }
 

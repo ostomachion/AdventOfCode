@@ -2,19 +2,6 @@ namespace Kleene;
 
 public class CharacterClassExpression : Expression
 {
-    internal class Model : IModel<CharacterClassExpression>
-    {
-        public CharacterClass.Model? CharacterClass { get; set; }
-
-        public CharacterClassExpression Convert()
-        {
-            if (CharacterClass is null)
-                throw new InvalidOperationException();
-
-            return new(CharacterClass.Convert());
-        }
-    }
-
     public CharacterClass CharacterClass { get; }
 
     public CharacterClassExpression(CharacterClass characterClass)

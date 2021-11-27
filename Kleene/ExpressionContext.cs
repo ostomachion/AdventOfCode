@@ -36,7 +36,7 @@ public class ExpressionContext
         if (ParseTypeKeyword(name) is Type value)
             return value;
 
-        var types = Usings.Select(x => Type.GetType(x + "." + name)).OfType<Type>().ToList();
+        var types = Usings.SelectMany(x => AppDomain.CurrentDomain.GetAssemblies().Select(y => y.GetType(x + "." + name))).OfType<Type>().ToList();
         if (Type.GetType(name) is Type type)
             types.Add(type);
 

@@ -2,9 +2,9 @@
 
 [assembly: InternalsVisibleTo("Kleene.Tests")]
 
-namespace Kleene;
+namespace Kleene.Models;
 
-internal interface IModel<out T>
+public interface IModel<out T>
 {
     T Convert();
 }

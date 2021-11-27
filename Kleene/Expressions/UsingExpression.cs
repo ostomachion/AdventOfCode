@@ -2,19 +2,6 @@ namespace Kleene;
 
 public class UsingExpression : Expression
 {
-    internal class Model : IModel<UsingExpression>
-    {
-        public string? NamespaceName { get; set; }
-
-        public UsingExpression Convert()
-        {
-            if (NamespaceName is null)
-                throw new InvalidOperationException();
-
-            return new(NamespaceName);
-        }
-    }
-
     public string NamespaceName { get; }
 
     public UsingExpression(string namespaceName)

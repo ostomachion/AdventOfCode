@@ -2,19 +2,6 @@ namespace Kleene;
 
 public class ConcatExpression : Expression
 {
-    internal class Model : IModel<ConcatExpression>
-    {
-        public List<IModel<Expression>>? Expressions { get; set; }
-
-        public ConcatExpression Convert()
-        {
-            if (Expressions is null)
-                throw new InvalidOperationException();
-
-            return new(Expressions.Select(x => x.Convert()).ToArray());
-        }
-    }
-
     public IEnumerable<Expression> Expressions { get; }
 
     public ConcatExpression(params Expression[] expressions)

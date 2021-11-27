@@ -1,3 +1,5 @@
+using Kleene.Models;
+
 namespace Kleene;
 
 public abstract class Expression
@@ -53,7 +55,7 @@ public abstract class Expression
     private static TypeAssignmentExpression Type<T>(params TypeAssignmentProperty[] props) => new(typeof(T).FullName!, props);
 
     public static readonly Expression Meta = Concat(
-        Use("Kleene"),
+        Use("Kleene.Models"),
 
         Fun("root", WS, Call("expression", "value"), WS, R),
 
@@ -61,37 +63,37 @@ public abstract class Expression
 
         Fun("bullet-alt",
             Sep(Plus(Text("-"), WS, Call("trans", "Expressions")), WS), R,
-            Type<AltExpression.Model>()
+            Type<AltExpressionModel>()
         ),
 
         Fun("trans",
             Call("alt", "value"), R,
-            Opt(WS, Text("/"), WS, Call("alt", "Output"), Rename("value", "Input"), Type<TransformExpression.Model>()), R
+            Opt(WS, Text("/"), WS, Call("alt", "Output"), Rename("value", "Input"), Type<TransformExpressionModel>()), R
         ),
 
         Fun("alt",
-            Sep(Plus(Call("concat", "value")), Concat(WS, Text("|"), WS, Cap("alt", Type<AltExpression.Model>()))), R,
+            Sep(Plus(Call("concat", "value")), Concat(WS, Text("|"), WS, Cap("alt", Type<AltExpressionModel>()))), R,
             Opt(Sub(Ref("alt")), Rename("value", "Expressions"))
         ),
 
         // TODO: Use <postfix> for items once left-recursion is implemented.
 
         Fun("concat",
-            Sep(Plus(Call("capture", "value")), Concat(WS, Cap("concat", Type<ConcatExpression.Model>()))), R,
+            Sep(Plus(Call("capture", "value")), Concat(WS, Cap("concat", Type<ConcatExpressionModel>()))), R,
             Opt(Sub(Ref("concat")), Rename("value", "Expressions"))
         ),
 
         Fun("capture", Alt(
             Concat(
                 Call("quant", "value"), R,
-                Opt(Text(":"), Call("dotted-name", "Name"), Rename("value", "Expression"), Type<CaptureExpression.Model>()), R
+                Opt(Text(":"), Call("dotted-name", "Name"), Rename("value", "Expression"), Type<CaptureExpressionModel>()), R
             )
         )),
 
         Fun("quant",
             Call("req", "value"), R,
             Opt(
-                Type<RepExpression.Model>(),
+                Type<RepExpressionModel>(),
                 Alt(
                     Text("*"),
                     Cap("Count.Min", Trans(Text("+"), Text("1"))),
@@ -107,7 +109,7 @@ public abstract class Expression
 
         Fun("req",
             Call("item", "value"), R,
-            Opt(Text("!"), Rename("value", "Expression"), Type<ReqExpression.Model>()), R
+            Opt(Text("!"), Rename("value", "Expression"), Type<ReqExpressionModel>()), R
         ),
 
         Fun("item", Alt(
@@ -131,7 +133,7 @@ public abstract class Expression
 
         Fun("assignment",
             Text("(:"), Call("dotted-name", "Name"), WS, Text("="), WS, Call("static", "Value"), Text(")"), R,
-            Type<AssignmentExpression.Model>()
+            Type<AssignmentExpressionModel>()
         ),
 
         Fun("subexpression",
@@ -139,7 +141,7 @@ public abstract class Expression
             WS, Call("static", "Input"), WS, R,
             Opt(Call("expression", "Expression"), WS),
             Text(")"), R,
-            Type<SubExpression.Model>()
+            Type<SubExpressionModel>()
         ),
 
         Fun("scope",
@@ -147,14 +149,14 @@ public abstract class Expression
             WS, Call("dotted-name", "Name"), WS, R,
             Opt(Call("expression", "Expression"), WS),
             Text(")"), R,
-            Type<ScopeExpression.Model>()
+            Type<ScopeExpressionModel>()
         ),
 
         Fun("atomic",
             Text("(>"),
             WS, Call("expression", "Expression"), WS,
             Text(")"), R,
-            Type<AtomicExpression.Model>()
+            Type<AtomicExpressionModel>()
         ),
 
         Fun("group",
@@ -162,17 +164,17 @@ public abstract class Expression
         ),
 
         Fun("backreference",
-            Call("dotted-capture-name", "Name"), Type<BackreferenceExpression.Model>(), R
+            Call("dotted-capture-name", "Name"), Type<BackreferenceExpressionModel>(), R
         ),
 
         Fun("rename",
             Text("@/"), Call("dotted-name", "Name"),
             Text("/"), Call("name", "NewName"), R,
-            Type<RenameExpression.Model>()
+            Type<RenameExpressionModel>()
         ),
 
         Fun("using",
-            Text(":::"), Call("dotnet-namespace-name", "NamespaceName"), Type<UsingExpression.Model>(), R
+            Text(":::"), Call("dotnet-namespace-name", "NamespaceName"), Type<UsingExpressionModel>(), R
         ),
 
         Fun("type-set",
@@ -182,18 +184,18 @@ public abstract class Expression
                 Sep(Star(Cap("Properties", Call("dotnet-name", "Name"), WS, Text("="), WS, Call("static", "Value"))), Concat(Text(","), WS)),
                 WS, Text("}")
             ), R,
-            Type<TypeAssignmentExpression.Model>()
+            Type<TypeAssignmentExpressionModel>()
         ),
 
         Fun("function",
             Text("<"), Call("name", "Name"), Text(">"), WS, Text("{"), WS, Call("expression", "Expression"), WS, Text("}"), R,
-            Type<FunctionExpression.Model>()
+            Type<FunctionExpressionModel>()
         ),
 
         Fun("call",
             Text("<"), Call("name", "Name"), Text(">"), R,
             Opt(Text(":"), Call("dotted-name", "CaptureName")), R,
-            Type<CallExpression.Model>()
+            Type<CallExpressionModel>()
         ),
 
         Fun("char-class", Alt(Call("predefined-char-class"), Call("literal-char-class"))),
@@ -205,7 +207,7 @@ public abstract class Expression
 
         Fun("positive-predefined-char-class",
             Cap("CharacterClass", Cap("Characters", Call("positive-predefined-char-class-chars")), R),
-            Type<CharacterClassExpression.Model>()
+            Type<CharacterClassExpressionModel>()
         ),
 
         Fun("positive-predefined-char-class-chars",
@@ -237,7 +239,7 @@ public abstract class Expression
                 Trans(Text("\\W"), Text("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
             )), R,
             Cap("Negated")),
-            Type<CharacterClassExpression.Model>()
+            Type<CharacterClassExpressionModel>()
         ),
 
         Fun("literal-char-class",
@@ -249,7 +251,7 @@ public abstract class Expression
                 Plus(CCN("[]\\"))
             ))),
             Text("]"), R,
-            Type<CharacterClassExpression.Model>()
+            Type<CharacterClassExpressionModel>()
         ),
 
         Fun("anchor", Alt(
@@ -270,7 +272,7 @@ public abstract class Expression
                 Concat(Sub(Ref("start"), Text("<")), Sub(Ref("end"), Text(">")), Assign("Type", "Outer")),
                 Concat(Sub(Ref("start"), Text(">")), Sub(Ref("end"), Text("<")), Assign("Type", "Inner"))
             ), R,
-            Type<AnchorExpression.Model>()
+            Type<AnchorExpressionModel>()
         ),
 
         Fun("literal-anchor",
@@ -280,30 +282,30 @@ public abstract class Expression
                 Concat(Text("^"), Assign("Type", "Start"), Sub(".", Call("char-class", "CharacterClass"))),
                 Concat(Text("$$"), Assign("Type", "End"), Sub(".", Call("char-class", "CharacterClass")))
             ), R,
-            Type<AnchorExpression.Model>()
+            Type<AnchorExpressionModel>()
         ),
 
-        Fun("ratchet", Text(";"), Type<RatchetExpression.Model>()),
+        Fun("ratchet", Text(";"), Type<RatchetExpressionModel>()),
 
         Fun("special", Alt(
             Call("pass"),
             Call("fail")
         )),
 
-        Fun("pass", Text("?"), Type<PassExpression.Model>()),
+        Fun("pass", Text("?"), Type<PassExpressionModel>()),
 
-        Fun("fail", Text("!"), Type<FailExpression.Model>()),
+        Fun("fail", Text("!"), Type<FailExpressionModel>()),
 
         Fun("text", Alt(Call("string"), Call("literal"))),
 
         Fun("string",
             Trans(Text("'"), Concat()), Star(Alt(Plus(CCN("'[]")), Call("char-escape"))), Trans(Text("'"), Concat()), R,
-            Type<TextExpression.Model>()
+            Type<TextExpressionModel>()
         ),
 
         Fun("literal",
             Plus(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")),
-            Type<TextExpression.Model>()
+            Type<TextExpressionModel>()
         ),
 
         Fun("char-escape",

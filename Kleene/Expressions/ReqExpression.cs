@@ -2,19 +2,6 @@ namespace Kleene;
 
 public class ReqExpression : Expression
 {
-    internal class Model : IModel<ReqExpression>
-    {
-        public IModel<Expression>? Expression { get; set; }
-
-        public ReqExpression Convert()
-        {
-            if (Expression is null)
-                throw new InvalidOperationException();
-
-            return new(Expression.Convert());
-        }
-    }
-
     public Expression Expression { get; }
 
     public ReqExpression(Expression expression)

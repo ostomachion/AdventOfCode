@@ -2,20 +2,6 @@ namespace Kleene;
 
 public class OptExpression : Expression
 {
-    internal class Model : IModel<OptExpression>
-    {
-        public IModel<Expression>? Expression { get; set; }
-        public MatchOrder? Order { get; set; }
-
-        public OptExpression Convert()
-        {
-            if (Expression is null || Order is null)
-                throw new InvalidOperationException();
-
-            return new(Expression.Convert(), Order.Value);
-        }
-    }
-
     public Expression Expression { get; }
     public MatchOrder Order { get; }
 

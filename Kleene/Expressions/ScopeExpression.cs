@@ -2,20 +2,6 @@ namespace Kleene;
 
 public class ScopeExpression : Expression
 {
-    internal class Model : IModel<ScopeExpression>
-    {
-        public string? Name { get; set; }
-        public IModel<Expression>? Expression { get; set; }
-
-        public ScopeExpression Convert()
-        {
-            if (Name is null || Expression is null)
-                throw new InvalidOperationException();
-
-            return new(Name, Expression.Convert());
-        }
-    }
-
     public CaptureName Name { get; }
     public Expression Expression { get; }
 

@@ -2,20 +2,6 @@ namespace Kleene;
 
 public class FunctionExpression : Expression
 {
-    internal class Model : IModel<FunctionExpression>
-    {
-        public string? Name { get; set; }
-        public IModel<Expression>? Expression { get; set; }
-
-        public FunctionExpression Convert()
-        {
-            if (Name is null || Expression is null)
-                throw new InvalidOperationException();
-
-            return new(Name, Expression.Convert());
-        }
-    }
-
     public string Name { get; }
     public Expression Expression { get; }
 

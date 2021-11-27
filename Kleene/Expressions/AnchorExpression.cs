@@ -2,21 +2,6 @@ namespace Kleene;
 
 public class AnchorExpression : Expression
 {
-    internal class Model : IModel<AnchorExpression>
-    {
-        public AnchorType? Type { get; set; }
-        public CharacterClass.Model? CharacterClass { get; set; }
-        public bool Negated { get; set; }
-
-        public AnchorExpression Convert()
-        {
-            if (Type is null || CharacterClass is null)
-                throw new InvalidOperationException();
-
-            return new(Type.Value, CharacterClass.Convert(), Negated);
-        }
-    }
-
     public AnchorType Type { get; }
     public CharacterClass CharacterClass { get; }
     public bool Negated { get; }

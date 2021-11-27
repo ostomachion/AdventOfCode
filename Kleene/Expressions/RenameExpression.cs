@@ -2,20 +2,6 @@ namespace Kleene;
 
 public class RenameExpression : Expression
 {
-    internal class Model : IModel<RenameExpression>
-    {
-        public string? Name { get; set; }
-        public string? NewName { get; set; }
-
-        public RenameExpression Convert()
-        {
-            if (Name is null || NewName is null)
-                throw new InvalidOperationException();
-
-            return new(Name, NewName);
-        }
-    }
-
     public CaptureName Name { get; }
     public CaptureName NewName { get; }
 
