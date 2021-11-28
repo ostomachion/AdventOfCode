@@ -15,7 +15,8 @@ namespace Kleene
 
         public static IEnumerable<T?> Parse<T>(this IEnumerable<string> input, string pattern)
         {
-            return input.Select(x => Expression.Parse(pattern).Parse<T>(x));
+            var expression = Expression.Parse(pattern);
+            return input.Select(expression.Parse<T>);
         }
     }
 }
