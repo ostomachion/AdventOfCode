@@ -41,7 +41,7 @@ namespace Kleene.Tests
     (
         ::RepExpression
         (
-            - '*'
+            - '*':Count
             - ('+'/1):Count.Min
             - '^' \d+:Count.Min '+'
             - '^' \d+:Count.Min '-' \d+:Count.Max

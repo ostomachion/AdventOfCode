@@ -48,4 +48,6 @@ public class TextExpression : TextValueExpression
 
         return $"'{builder}'";
     }
+
+    public static implicit operator TextExpression(string value) => new(value);
 }

@@ -94,7 +94,7 @@ public abstract class Expression
             Opt(
                 Type<RepExpression>(),
                 Alt(
-                    Text("*"),
+                    Cap("Count", Text("*")),
                     Cap("Count.Min", Trans(Text("+"), Text("1"))),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("+")),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("-"), Cap("Count.Max", Plus(D))),

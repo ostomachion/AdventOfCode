@@ -277,26 +277,45 @@ public class CaptureTreeNode
         else
         {
             value = null!;
-            var ctors = type.GetConstructors().Select(x => (Ctor: x, Params: x.GetParameters())).OrderBy(x => x.Params.Length);
-
+            var ctors = type.GetConstructors().Select(x => (Ctor: x, Params: x.GetParameters())).OrderByDescending(x => x.Params.Length);
             foreach (var (ctor, parameters) in ctors)
             {
-                List<KeyValuePair<string, object>> args = new();
+                if (type == typeof(CharacterClass)) ;
+                List<KeyValuePair<(string? PropName, string ParamName), object>> args = new();
                 foreach (var p in parameters)
                 {
                     var prop = properties.Keys.FirstOrDefault(x =>
-                        !args.Any(y => y.Key == x) &&
+                        !args.Any(y => y.Key.PropName == x) &&
                         x.Equals(p.Name, StringComparison.OrdinalIgnoreCase) &&
-                        p.ParameterType.IsAssignableFrom(properties[x].GetType()));
-                    if (prop is null)
+                        (
+                            p.ParameterType.IsAssignableFrom(properties[x].GetType()) ||
+                            p.ParameterType.IsArray && properties[x].GetType().IsGenericType &&
+                            properties[x].GetType().GetGenericTypeDefinition() == typeof(List<>) &&
+                            p.ParameterType.GetElementType()!.IsAssignableFrom(properties[x].GetType().GetGenericArguments()[0])
+                        ));
+
+                    var isParams = p.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any();
+                    var isBool = p.ParameterType == typeof(bool) && type.GetProperties().Any(x => x.Name.Equals(p.Name, StringComparison.OrdinalIgnoreCase));
+                    var isNullable = new NullabilityInfoContext().Create(p).WriteState == NullabilityState.Nullable;
+                    if (!p.HasDefaultValue && !(isParams || isBool || isNullable) && prop is null)
                         break;
-                    args.Add(new(prop, properties[prop]));
+
+                    args.Add(new((prop, p.Name), prop is null ?
+                        (
+                            isParams ? Array.CreateInstance(p.ParameterType.GetElementType()!, 0) :
+                            isBool ? false :
+                            isNullable ? null :
+                            p.DefaultValue
+                        ) :
+                        p.ParameterType.IsArray ? properties[prop].ToArray() :
+                        properties[prop]));
+                        
                 }
                 if (args.Count == parameters.Length)
                 {
                     value = ctor.Invoke(args.Select(x => x.Value).ToArray());
-                    foreach (var p in args)
-                        properties.Remove(p.Key);
+                    foreach (var p in args.Where(x => x.Key.PropName is not null))
+                        properties.Remove(p.Key.PropName!);
                     break;
                 }
             }
