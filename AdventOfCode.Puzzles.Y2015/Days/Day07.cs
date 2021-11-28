@@ -4,8 +4,6 @@ namespace AdventOfCode.Puzzles.Y2015.Days;
 
 public class Day07 : Day
 {
-    public static string Dest { get; set; } = "a";
-
     public override Output Part1()
     {
         var test = Input;
@@ -17,8 +15,9 @@ public class Day07 : Day
             )
             ' -> ' \w+:Dest
         ").ToList();
+        Line.Reset();
         Line.Lines = input;
-        return input.First(x => x.Dest == Dest)!.Compute();
+        return input.First(x => x.Dest == "a")!.Compute();
     }
 
     public override Output Part2()
@@ -31,14 +30,15 @@ public class Day07 : Day
             )
             ' -> ' \w+:Dest
         ").ToList();
+        Line.Reset();
         Line.Lines = input;
-        var a = input.First(x => x.Dest == Dest)!.Compute();
+        var a = input.First(x => x.Dest == "a")!.Compute();
 
         Line.Reset();
         Line.Lines.RemoveAll(x => x.Dest == "b");
         Line.Lines.Add(new Ref(a.ToString(), "b"));
 
-        return input.First(x => x.Dest == Dest)!.Compute();
+        return input.First(x => x.Dest == "a")!.Compute();
     }
 }
 
