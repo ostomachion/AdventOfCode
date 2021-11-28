@@ -42,7 +42,6 @@ public abstract class Expression
     private static RepExpression Plus(params Expression[] children) => new(Concat(children), null, new RepCount(1, RepCount.Unbounded));
     private static OptExpression Opt(params Expression[] children) => new(Concat(children));
     private static RepExpression Sep(RepExpression expression, Expression sep) => new(expression.Expression, sep, expression.Count, expression.Order);
-    private static ScopeExpression Scope(string name, params Expression[] children) => new(name, Concat(children));
     private static CaptureExpression Cap(string name, params Expression[] children) => new(name, Concat(children));
     private static TransformExpression Trans(Expression input, Expression output) => new(input, output);
     private static SubExpression Sub(TextValueExpression input, params Expression[] children) => new(input, Concat(children));
