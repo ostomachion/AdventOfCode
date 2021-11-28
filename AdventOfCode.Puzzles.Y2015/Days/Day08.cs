@@ -9,8 +9,8 @@ public class Day08 : Day
         var parsed = Input.Lines().Select(x => (Old: x, New: x.Parse<string>(@"
             ('""'/?)
             (
-            - '\' [\\""] / '.' 
-            - '\' \d^2 / '.'
+            - '\' [""\\]  / '.'
+            - '\x' .^2 / '.'
             - .
             )*
             ('""'/?)
@@ -20,6 +20,14 @@ public class Day08 : Day
 
     public override Output Part2()
     {
-        throw new NotImplementedException();
+        var parsed = Input.Lines().Select(x => (Old: x, New: x.Parse<string>(@"
+            (?/'""')
+            (
+            - [""\\] / '\?'
+            - .
+            )*
+            (?/'""')
+        "))).ToList();
+        return parsed.Sum(x => x.New.Length) - parsed.Sum(x => x.Old.Length);
     }
 }
