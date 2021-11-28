@@ -9,7 +9,7 @@ public class Day06 : Day
     {
         var input = Input.Lines().Parse<MatchValue>(@"
             <coord> { \d+:X ',' \d+:Y }
-            (('turn on'/1) | ('toggle'/0) | ('turn off'/-1)):Toggle
+            ((turn on/1) | (toggle/0) | (turn off/-1)):Toggle
             ' ' <coord>:Start ' through ' <coord>:End
         ");
 
@@ -42,7 +42,7 @@ public class Day06 : Day
     {
         var input = Input.Lines().Parse<MatchValue>(@"
             <coord> { \d+:X ',' \d+:Y }
-            (('turn on'/1) | ('toggle'/0) | ('turn off'/-1)):Toggle
+            ((turn on/1) | (toggle/0) | (turn off/-1)):Toggle
             ' ' <coord>:Start ' through ' <coord>:End
         ");
 

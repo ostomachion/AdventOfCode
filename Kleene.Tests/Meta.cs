@@ -256,7 +256,7 @@ namespace Kleene.Tests
 }
 
 <literal> {
-    ([\w_]+ | '-' \d+ ('.' \d+)?)
+    ([\w_]+ | '-' \d+ ('.' \d+)?)+ % (<ws>!/' ')
     ::TextExpression
 }
 

@@ -314,10 +314,10 @@ public abstract class Expression
         ),
 
         Fun("literal",
-            Alt(
+            Sep(Plus(Alt(
                 Plus(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")),
                 Concat(Text("-"), Plus(CC("0123456789")), Opt(Text("."), Plus(CC("0123456789"))))
-            ),
+            )), Trans(Req(WS), Text(" "))),
             Type<TextExpression>()
         ),
 
