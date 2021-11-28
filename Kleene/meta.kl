@@ -1,4 +1,4 @@
-:::Kleene.Models
+:::Models
 
 <root> { <ws> <expression>:value <ws> ; }
 
@@ -6,16 +6,16 @@
 
 <bullet-alt> {
     ('-' <ws> <trans>:Expressions)+ % <ws>;
-    ::AltExpressionModel
+    ::AltExpression
 }
 
 <trans> {
     <alt>:value ;
-    (<ws> '/' <ws> <alt>:Output @/value/Input ::TransformExpressionModel)? ;
+    (<ws> '/' <ws> <alt>:Output @/value/Input ::TransformExpression)? ;
 }
 
 <alt> {
-    <concat>:value+ % (<ws> '|' <ws> ::AltExpressionModel:alt) ;
+    <concat>:value+ % (<ws> '|' <ws> ::AltExpression:alt) ;
     ((?@alt) @/value/Expressions)?
 }
 
@@ -23,19 +23,19 @@
 # For now, you have to put parentheses around captures to add a quantifier.
 
 <concat> {
-    <capture>:value+ % (<ws> ::ConcatExpressionModel:concat) ;
+    <capture>:value+ % (<ws> ::ConcatExpression:concat) ;
     ((?@concat) @/value/Expressions)?
 }
 
 <capture> {
     <quant>:value ;
-    (':' <dotted-name>:Name @/value/Expression ::CaptureExpressionModel)? ;
+    (':' <dotted-name>:Name @/value/Expression ::CaptureExpression)? ;
 }
 
 <quant> {
     <req>:value ;
     (
-        ::RepExpressionModel
+        ::RepExpression
         (
             - '*'
             - ('+'/1):Count.Min
@@ -43,7 +43,7 @@
             - '^' \d+:Count.Min '-' \d+:Count.Max
             - '^'( \d+:Count.Min):Count.Max
 
-            - '?' ::OptExpressionModel
+            - '?' ::OptExpression
         ) ;
         (('?'/Lazy):Eval)? ;
         ( <ws> '%' <ws> <capture>:Separator )?
@@ -53,7 +53,7 @@
 
 <req> {
     <item>:value ;
-    ('!' @/value/Expression ::ReqExpressionModel)? ;
+    ('!' @/value/Expression ::ReqExpression)? ;
 }
 
 <item> {
@@ -77,7 +77,7 @@
 
 <assignment> {
     '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')' ;
-    ::AssignmentExpressionModel
+    ::AssignmentExpression
 }
 
 <subexpression> {
@@ -85,7 +85,7 @@
     <ws> <static>:Input <ws> ;
     (<expression>:Expression <ws>)?
     ')' ;
-    ::SubExpressionModel
+    ::SubExpression
 }
 
 <scope> {
@@ -93,33 +93,33 @@
     <ws> <dotted-name>:Name <ws> ;
     (<expression>:Expression <ws>)?
     ')' ;
-    ::ScopeExpressionModel
+    ::ScopeExpression
 }
 
 <atomic> {
     '(>'
     <ws> <expression>:Expression <ws>
     ')' ;
-    ::AtomicExpressionModel
+    ::AtomicExpression
 }
 
 <group> {
     '(' <ws> <expression>:Expressions <ws> ')' ;
-    ::ConcatExpressionModel #TODO: Optimize this.
+    ::ConcatExpression #TODO: Optimize this.
 }
 
 <backreference> {
-    <dotted-capture-name>:name ::BackreferenceExpressionModel ;
+    <dotted-capture-name>:name ::BackreferenceExpression ;
     (:Name = @name.value)
 }
 
 <rename> {
     '@/' <dotted-name>:Name
     '/' <name>:NewName ;
-    ::RenameExpressionModel
+    ::RenameExpression
 }
 
-<using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpressionModel ; }
+<using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpression ; }
 
 <type-set> {
     '::' <dotnet-type-name>:TypeName ;
@@ -128,18 +128,18 @@
         ((<dotnet-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
-    ::TypeAssignmentExpressionModel
+    ::TypeAssignmentExpression
 }
 
 <function> {
     '<' <name>:Name '>' <ws> '{' <ws> <expression>:Expression <ws> '}' ;
-    ::FunctionExpressionModel
+    ::FunctionExpression
 }
 
 <call> {
     '<' <name>:Name '>' ;
      (':' <dotted-name>:CaptureName)? ;
-    ::CallExpressionModel
+    ::CallExpression
 }
 
 <char-class> { <predefined-char-class> | <literal-char-class> }
@@ -153,7 +153,7 @@
     (
         <positive-predefined-char-class-chars>:Characters ;
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <positive-predefined-char-class-chars> {
@@ -185,7 +185,7 @@
         ):Characters ;
         ?:Negated
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <literal-char-class> {
@@ -199,7 +199,7 @@
         )+):Characters
         '[>]' ;
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <anchor> { <predefined-anchor> | <literal-anchor> }
@@ -211,7 +211,7 @@
         - '^' (:Type = Start) (?'.' <char-class>:CharacterClass)
         - '$' (:Type = End) (?'.' <char-class>:CharacterClass)
     ):Anchor ;
-    ::AnchorExpressionModel
+    ::AnchorExpression
 }
 
 <literal-anchor> {
@@ -230,30 +230,30 @@
             - (?@start '>') (?@end '<') (:Type = Inner)
         ) ;
     ):Anchor
-    ::AnchorExpressionModel
+    ::AnchorExpression
 }
 
-<ratchet> { ';' ::RatchetExpressionModel }
+<ratchet> { ';' ::RatchetExpression }
 
 <special> {
     - <pass>
     - <fail>
 }
 
-<pass> { '?' ::PassExpressionModel }
+<pass> { '?' ::PassExpression }
 
-<fail> { '!' ::FailExpressionModel }
+<fail> { '!' ::FailExpression }
 
 <text> { <string> | <literal> }
 
 <string> {
     ('[']'/?) ([^'[<][>]]+ | <char-escape>)* ('[']'/?) ;
-    ::TextExpressionModel
+    ::TextExpression
 }
 
 <literal> {
     [\w_]+
-    ::TextExpressionModel
+    ::TextExpression
 }
 
 <char-escape> {

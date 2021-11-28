@@ -2,7 +2,7 @@ namespace Kleene.Tests
 {
     public static class Meta
     {
-        public static readonly string Expression = @":::Kleene.Models
+        public static readonly string Expression = @":::Kleene
 
 <root> { <ws> <expression>:value <ws> ; }
 
@@ -10,16 +10,16 @@ namespace Kleene.Tests
 
 <bullet-alt> {
     ('-' <ws> <trans>:Expressions)+ % <ws>;
-    ::AltExpressionModel
+    ::AltExpression
 }
 
 <trans> {
     <alt>:value ;
-    (<ws> '/' <ws> <alt>:Output @/value/Input ::TransformExpressionModel)? ;
+    (<ws> '/' <ws> <alt>:Output @/value/Input ::TransformExpression)? ;
 }
 
 <alt> {
-    <concat>:value+ % (<ws> '|' <ws> ::AltExpressionModel:alt) ;
+    <concat>:value+ % (<ws> '|' <ws> ::AltExpression:alt) ;
     ((?@alt) @/value/Expressions)?
 }
 
@@ -27,19 +27,19 @@ namespace Kleene.Tests
 # For now, you have to put parentheses around captures to add a quantifier.
 
 <concat> {
-    <capture>:value+ % (<ws> ::ConcatExpressionModel:concat) ;
+    <capture>:value+ % (<ws> ::ConcatExpression:concat) ;
     ((?@concat) @/value/Expressions)?
 }
 
 <capture> {
     <quant>:value ;
-    (':' <dotted-name>:Name @/value/Expression ::CaptureExpressionModel)? ;
+    (':' <dotted-name>:Name @/value/Expression ::CaptureExpression)? ;
 }
 
 <quant> {
     <req>:value ;
     (
-        ::RepExpressionModel
+        ::RepExpression
         (
             - '*'
             - ('+'/1):Count.Min
@@ -47,7 +47,7 @@ namespace Kleene.Tests
             - '^' \d+:Count.Min '-' \d+:Count.Max
             - '^'( \d+:Count.Min):Count.Max
 
-            - '?' ::OptExpressionModel
+            - '?' ::OptExpression
         ) ;
         (('?'/Lazy):Eval)? ;
         ( <ws> '%' <ws> <capture>:Separator )?
@@ -57,7 +57,7 @@ namespace Kleene.Tests
 
 <req> {
     <item>:value ;
-    ('!' @/value/Expression ::ReqExpressionModel)? ;
+    ('!' @/value/Expression ::ReqExpression)? ;
 }
 
 <item> {
@@ -81,7 +81,7 @@ namespace Kleene.Tests
 
 <assignment> {
     '(:' <ws> <dotted-name>:Name <ws> '=' <ws> <static>:Value <ws> ')' ;
-    ::AssignmentExpressionModel
+    ::AssignmentExpression
 }
 
 <subexpression> {
@@ -89,7 +89,7 @@ namespace Kleene.Tests
     <ws> <static>:Input <ws> ;
     (<expression>:Expression <ws>)?
     ')' ;
-    ::SubExpressionModel
+    ::SubExpression
 }
 
 <scope> {
@@ -97,33 +97,33 @@ namespace Kleene.Tests
     <ws> <dotted-name>:Name <ws> ;
     (<expression>:Expression <ws>)?
     ')' ;
-    ::ScopeExpressionModel
+    ::ScopeExpression
 }
 
 <atomic> {
     '(>'
     <ws> <expression>:Expression <ws>
     ')' ;
-    ::AtomicExpressionModel
+    ::AtomicExpression
 }
 
 <group> {
     '(' <ws> <expression>:Expressions <ws> ')' ;
-    ::ConcatExpressionModel #TODO: Optimize this.
+    ::ConcatExpression #TODO: Optimize this.
 }
 
 <backreference> {
-    <dotted-capture-name>:name ::BackreferenceExpressionModel ;
+    <dotted-capture-name>:name ::BackreferenceExpression ;
     (:Name = @name.value)
 }
 
 <rename> {
     '@/' <dotted-name>:Name
     '/' <name>:NewName ;
-    ::RenameExpressionModel
+    ::RenameExpression
 }
 
-<using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpressionModel ; }
+<using> { ':::' <dotnet-namespace-name>:NamespaceName ::UsingExpression ; }
 
 <type-set> {
     '::' <dotnet-type-name>:TypeName ;
@@ -132,18 +132,18 @@ namespace Kleene.Tests
         ((<dotnet-name>:Name <ws> '=' <ws> <static>:Value):Properties)* % (',' <ws>)
         <ws> '}'
     )? ;
-    ::TypeAssignmentExpressionModel
+    ::TypeAssignmentExpression
 }
 
 <function> {
     '<' <name>:Name '>' <ws> '{' <ws> <expression>:Expression <ws> '}' ;
-    ::FunctionExpressionModel
+    ::FunctionExpression
 }
 
 <call> {
     '<' <name>:Name '>' ;
      (':' <dotted-name>:CaptureName)? ;
-    ::CallExpressionModel
+    ::CallExpression
 }
 
 <char-class> { <predefined-char-class> | <literal-char-class> }
@@ -157,7 +157,7 @@ namespace Kleene.Tests
     (
         <positive-predefined-char-class-chars>:Characters ;
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <positive-predefined-char-class-chars> {
@@ -189,7 +189,7 @@ namespace Kleene.Tests
         ):Characters ;
         ?:Negated
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <literal-char-class> {
@@ -203,7 +203,7 @@ namespace Kleene.Tests
         )+):Characters
         '[>]' ;
     ):CharacterClass
-    ::CharacterClassExpressionModel
+    ::CharacterClassExpression
 }
 
 <anchor> { <predefined-anchor> | <literal-anchor> }
@@ -215,7 +215,7 @@ namespace Kleene.Tests
         - '^' (:Type = Start) (?'.' <char-class>:CharacterClass)
         - '$' (:Type = End) (?'.' <char-class>:CharacterClass)
     ):Anchor ;
-    ::AnchorExpressionModel
+    ::AnchorExpression
 }
 
 <literal-anchor> {
@@ -234,30 +234,30 @@ namespace Kleene.Tests
             - (?@start '>') (?@end '<') (:Type = Inner)
         ) ;
     ):Anchor
-    ::AnchorExpressionModel
+    ::AnchorExpression
 }
 
-<ratchet> { ';' ::RatchetExpressionModel }
+<ratchet> { ';' ::RatchetExpression }
 
 <special> {
     - <pass>
     - <fail>
 }
 
-<pass> { '?' ::PassExpressionModel }
+<pass> { '?' ::PassExpression }
 
-<fail> { '!' ::FailExpressionModel }
+<fail> { '!' ::FailExpression }
 
 <text> { <string> | <literal> }
 
 <string> {
     ('[']'/?) ([^'[<][>]]+ | <char-escape>)* ('[']'/?) ;
-    ::TextExpressionModel
+    ::TextExpression
 }
 
 <literal> {
     [\w_]+
-    ::TextExpressionModel
+    ::TextExpression
 }
 
 <char-escape> {

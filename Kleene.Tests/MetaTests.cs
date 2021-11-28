@@ -1,4 +1,3 @@
-using Kleene.Models;
 using System;
 using System.Linq;
 using Xunit;
@@ -15,7 +14,7 @@ namespace Kleene.Tests
             {
                 _ = meta.RunFull(Meta.Expression, out var captureTree);
                 Assert.NotNull(captureTree);
-                meta = captureTree!.Root.Parse<IModel<Expression>>()!.Convert();
+                meta = captureTree!.Root.Parse<Expression>();
                 Assert.NotNull(meta);
             }
             // Neat :)
