@@ -1,6 +1,4 @@
-using AdventOfCode.Helpers.DataStructures;
-
-namespace AdventOfCode.Puzzles.Y2015.Days;
+namespace AdventOfCode.Puzzles.Y2015.Days.Day08;
 
 public class Day08 : Day
 {

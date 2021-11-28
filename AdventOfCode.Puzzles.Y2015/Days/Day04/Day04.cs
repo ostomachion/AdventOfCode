@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AdventOfCode.Puzzles.Y2015.Days;
+namespace AdventOfCode.Puzzles.Y2015.Days.Day04;
 
 public class Day04 : Day
 {

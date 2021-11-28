@@ -1,4 +1,4 @@
-namespace AdventOfCode.Puzzles.Y2015.Days;
+namespace AdventOfCode.Puzzles.Y2015.Days.Day01;
 
 public class Day01 : Day
 {

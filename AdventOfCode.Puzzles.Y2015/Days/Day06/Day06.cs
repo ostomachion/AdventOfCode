@@ -1,8 +1,7 @@
-namespace AdventOfCode.Puzzles.Y2015.Days;
+namespace AdventOfCode.Puzzles.Y2015.Days.Day06;
 
 public class Day06 : Day
 {
-    public record MatchValue(int Toggle, Coordinate2D Start, Coordinate2D End);
     public override Output Part1()
     {
         var input = Input.Lines().Parse<MatchValue>(@"
