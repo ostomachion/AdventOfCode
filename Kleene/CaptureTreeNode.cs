@@ -210,21 +210,16 @@ public class CaptureTreeNode
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
             }
         }
-        else if (type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
-                Array.Empty<Type>()) is ConstructorInfo constructor)
+        else
         {
             try
             {
-                value = constructor.Invoke(Array.Empty<object>());
+                value = Activator.CreateInstance(type);
             }
             catch (Exception ex)
             {
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
             }
-        }
-        else
-        {
-            throw new Exception($"Unable to create an instance of {type.FullName}.");
         }
 
         // These two loops will do some extra work if there are shadowed captures for scalar properties.
