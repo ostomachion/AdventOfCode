@@ -55,10 +55,5 @@ public static class StringExtensions
 
     public static string[] Lines(this string text) => text.ReplaceLineEndings("\n").Split('\n');
 
-    public static T? Parse<T>(this string text, params string[] rules)
-    {
-        throw new NotImplementedException();
-    }
-
     public static int ParseInt(this string text) => int.Parse(text);
 }
