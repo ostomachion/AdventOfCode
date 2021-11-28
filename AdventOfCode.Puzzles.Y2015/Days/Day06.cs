@@ -10,7 +10,7 @@ public class Day06 : Day
         var input = Input.Lines().Parse<MatchValue>(@"
             <coord> { \d+:X ',' \d+:Y }
             (('turn on'/'1') | ('toggle'/'0') | ('turn off'/'-1')):Toggle
-            <coord>:Start ' through ' <coord>:End
+            ' ' <coord>:Start ' through ' <coord>:End
         ");
 
         var grid = new SparsePlaneGrid2D<bool>(1000, 1000);
@@ -43,7 +43,7 @@ public class Day06 : Day
         var input = Input.Lines().Parse<MatchValue>(@"
             <coord> { \d+:X ',' \d+:Y }
             (('turn on'/'1') | ('toggle'/'0') | ('turn off'/'1')):Toggle
-            <coord>:Start ' through ' <coord>:End
+            ' ' <coord>:Start ' through ' <coord>:End
         ");
 
         var grid = new SparsePlaneGrid2D<Natural>(1000, 1000);
