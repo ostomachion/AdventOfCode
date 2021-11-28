@@ -63,15 +63,9 @@ public class CaptureTreeNode
         }
     }
 
-    public T? Parse<T>()
-    {
-        T? value = default;
-        object? obj = value;
-        Parse(typeof(T), ref obj);
-        return (T?)obj;
-    }
+    public T Parse<T>() => (T)Parse(typeof(T));
 
-    public void Parse(Type type, ref object? value)
+    public object Parse(Type type)
     {
         // Reflection code is never pretty.
         
@@ -86,6 +80,76 @@ public class CaptureTreeNode
         var typeNode = GetTypeAssignmentNode();
         type = typeNode is null ? type : Type.GetType(typeNode["FullName"].First().Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"].First().Value!.Output}' could not be found.");
 
+        // TODO: Get properties to set.
+        Dictionary<string, dynamic> properties = new();
+        if (typeNode is not null)
+        {
+            foreach (var propertyNode in typeNode["Properties"].First().Children)
+            {
+                if (propertyNode.Name == "NamespaceName") ;
+                var propValue = GetPropertyValue(propertyNode, type, out Type? collectionType);
+                if (properties.ContainsKey(propertyNode.Name))
+                {
+                    if (collectionType is null)
+                    {
+                        properties[propertyNode.Name] = propValue;
+                    }
+                    else
+                    {
+                        properties[propertyNode.Name].Add(propValue);
+                    }
+                }
+                else
+                {
+                    if (collectionType is null)
+                    {
+                        properties.Add(propertyNode.Name, propValue);
+                    }
+                    else
+                    {
+                        dynamic list = Activator.CreateInstance(typeof(List<>).MakeGenericType(collectionType))!;
+                        list.Add(propValue);
+                        properties.Add(propertyNode.Name, list);
+                    }
+                }
+            }
+        }
+
+        List<string> set = new();
+        foreach (var propertyNode in GetPropertyNodes())
+        {
+            var propValue = GetPropertyValue(propertyNode, type, out var collectionType);
+            if (properties.ContainsKey(propertyNode.Name))
+            {
+                if (collectionType is null)
+                {
+                    properties[propertyNode.Name] = propValue;
+                }
+                else
+                {
+                    var list = properties[propertyNode.Name];
+                    if (!set.Contains(propertyNode.Name))
+                        list.Clear();
+                    list.GetType().GetMethod("Add")!.Invoke(list, new[] { propValue });
+                }
+            }
+            else
+            {
+                if (collectionType is null)
+                {
+                    properties.Add(propertyNode.Name, propValue);
+                }
+                else
+                {
+                    dynamic list = Activator.CreateInstance(typeof(List<>).MakeGenericType(collectionType))!;
+                    list.GetType().GetMethod("Add")!.Invoke(list, new [] { propValue });
+                    properties.Add(propertyNode.Name, list);
+                }
+            }
+            set.Add(propertyNode.Name);
+        }
+
+        object value;
         if (type.IsAssignableFrom(typeof(string)))
         {
             value = text;
@@ -198,7 +262,7 @@ public class CaptureTreeNode
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.");
             }
         }
-        else if (type != typeof(Expression) /* TODO: Remove this */ && type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+        else if (type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
                 new[] { typeof(string) }) is MethodInfo parse && parse.ReturnType == type)
         {
             try
@@ -212,92 +276,56 @@ public class CaptureTreeNode
         }
         else
         {
-            try
+            value = null!;
+            var ctors = type.GetConstructors().Select(x => (Ctor: x, Params: x.GetParameters())).OrderBy(x => x.Params.Length);
+
+            foreach (var (ctor, parameters) in ctors)
             {
-                value = Activator.CreateInstance(type);
+                List<KeyValuePair<string, object>> args = new();
+                foreach (var p in parameters)
+                {
+                    var prop = properties.Keys.FirstOrDefault(x =>
+                        !args.Any(y => y.Key == x) &&
+                        x.Equals(p.Name, StringComparison.OrdinalIgnoreCase) &&
+                        p.ParameterType.IsAssignableFrom(properties[x].GetType()));
+                    if (prop is null)
+                        break;
+                    args.Add(new(prop, properties[prop]));
+                }
+                if (args.Count == parameters.Length)
+                {
+                    value = ctor.Invoke(args.Select(x => x.Value).ToArray());
+                    foreach (var p in args)
+                        properties.Remove(p.Key);
+                    break;
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
-            }
+
+            if (value is null)
+                throw new Exception($"Could not create a value of type {type.FullName}.");
         }
 
-        // These two loops will do some extra work if there are shadowed captures for scalar properties.
-        if (typeNode is not null)
+        foreach (var prop in properties)
         {
-            foreach (var propertyNode in typeNode["Properties"].First().Children)
-            {
-                SetPropertyValue(propertyNode, type, ref value);
-            }
+            type.GetProperty(prop.Key)!.SetValue(value, prop.Value);
         }
 
-        foreach (var propertyNode in GetPropertyNodes())
-        {
-            SetPropertyValue(propertyNode, type, ref value);
-        }
+        return value;
 
-        static void SetPropertyValue(CaptureTreeNode propertyNode, Type type, ref object value)
+        static object GetPropertyValue(CaptureTreeNode propertyNode, Type type, out Type? collectionType)
         {
             var property = type.GetProperty(propertyNode.Name);
             if (property is null)
                 throw new Exception($"Type {type.FullName} does not contain a public property '{propertyNode.Name}'.");
 
-            var propertyValue = property.GetValue(value);
+            var ienumerable = property.PropertyType.GetInterfaces().Concat(new [] { property.PropertyType })
+                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            collectionType = property.PropertyType.IsAssignableFrom(typeof(string)) ? null : ienumerable?.GetGenericArguments()[0];
 
-            var ienumerable = property.PropertyType.GetInterfaces().Concat(new [] { property.PropertyType }).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             var nullable = property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
-            MethodInfo? addMethod = null;
-            if (ienumerable is not null)
-            {
-                var itemType = ienumerable?.GetGenericArguments()[0]!;
-                var listType = typeof(List<>).MakeGenericType(itemType);
-
-                if (property.PropertyType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! }) is MethodInfo add
-                    && property.PropertyType.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, Array.Empty<Type>()) is ConstructorInfo ctor)
-                {
-                    if (property.GetValue(value) is null)
-                        property.SetValue(value, ctor.Invoke(Array.Empty<object>()));
-                    addMethod = add;
-
-                }
-                else if (property.PropertyType.IsAssignableFrom(listType))
-                {
-                    var propertyType = propertyValue?.GetType()!;
-                    addMethod = listType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, new[] { itemType! })!;
-                    if (propertyValue is null)
-                    {
-                        property.SetValue(value, listType.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>()));
-                    }
-                    else if (!propertyType.IsGenericType || propertyType.GetGenericTypeDefinition() != typeof(List<>))
-                    {
-                        var list = listType.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
-                        foreach (object item in (IEnumerable)propertyValue)
-                        {
-                            addMethod.Invoke(list, new[] { item });
-                        }
-                        property.SetValue(value, list);
-                    }
-                }
-                // TODO: Assignable from array type = itemType.MakeArrayType()
-            }
-
             var parseType = nullable ? property.PropertyType.GetGenericArguments()[0] : property.PropertyType;
-            propertyNode.Parse(parseType, ref propertyValue);
-            try
-            {
-                if (addMethod is null)
-                {
-                    property.SetValue(value, propertyValue);
-                }
-                else
-                {
-                    addMethod.Invoke(property.GetValue(value), new[] { propertyValue });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Could not set property '{propertyNode.Name}' on type {type.FullName}.", ex);
-            }
+
+            return propertyNode.Parse(parseType);
         }
     }
 
