@@ -92,7 +92,6 @@ public class CaptureTreeNode
         {
             foreach (var propertyNode in typeNode["Properties"].First().Children)
             {
-                if (propertyNode.Name == "NamespaceName") ;
                 var propValue = GetPropertyValue(propertyNode, type, out Type? collectionType);
                 if (properties.ContainsKey(propertyNode.Name))
                 {
@@ -325,7 +324,6 @@ public class CaptureTreeNode
             var ctors = type.GetConstructors().Select(x => (Ctor: x, Params: x.GetParameters())).OrderByDescending(x => x.Params.Length);
             foreach (var (ctor, parameters) in ctors)
             {
-                if (type == typeof(CharacterClass)) ;
                 List<KeyValuePair<(string? PropName, string ParamName), object>> args = new();
                 foreach (var p in parameters)
                 {
@@ -394,7 +392,6 @@ public class CaptureTreeNode
 
         static bool TryConvert<T>(Type type, string text, T parsedValue, [NotNullWhen(true)] out object? value)
         {
-            if (type.Name == "Interval") ;
             try
             {
                 if (type.IsAssignableFrom(typeof(T)))

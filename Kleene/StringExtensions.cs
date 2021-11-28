@@ -8,7 +8,7 @@ namespace Kleene
 {
     public static class StringExtensions
     {
-        public static T? Parse<T>(this string input, string pattern)
+        public static T Parse<T>(this string input, string pattern)
         {
             return Expression.Parse(pattern).Parse<T>(input);
         }
