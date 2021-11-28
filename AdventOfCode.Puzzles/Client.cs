@@ -29,7 +29,7 @@ public class Client : IDisposable
 
         var task = response.Result.Content.ReadAsStringAsync();
         task.Wait();
-        return task.Result;
+        return task.Result.ReplaceLineEndings("\n");
     }
 
     public string GetPuzzle(int year, int day)

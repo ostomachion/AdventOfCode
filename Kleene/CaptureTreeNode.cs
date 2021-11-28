@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Kleene;
@@ -5,7 +6,7 @@ namespace Kleene;
 public class CaptureTreeNode
 {
     public CaptureTree Tree { get; }
-    public string Name { get; set;  }
+    public string Name { get; set; }
     public CaptureTreeNode? Parent { get; set; }
     private readonly Stack<CaptureTreeNode> children = new();
     public ExpressionResult? Value { get; set; }
@@ -68,19 +69,24 @@ public class CaptureTreeNode
     public object Parse(Type type)
     {
         // Reflection code is never pretty.
-        
+
         if (Parent is not null && !IsPropertyBoundary)
             throw new InvalidOperationException();
 
         if (Value is null)
-             throw new InvalidOperationException();
+            throw new InvalidOperationException();
 
         var text = Value.Output;
 
         var typeNode = GetTypeAssignmentNode();
-        type = typeNode is null ? type : Type.GetType(typeNode["FullName"].First().Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"].First().Value!.Output}' could not be found.");
-
-        // TODO: Get properties to set.
+        try
+        {
+            type = typeNode is null ? type : Type.GetType(typeNode["FullName"].First().Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"].First().Value!.Output}' could not be found.");
+        }
+        catch
+        {
+            type = typeNode is null ? type : type.Assembly.GetType(typeNode["FullName"].First().Value!.Output) ?? throw new Exception($"The type name '{typeNode["FullName"].First().Value!.Output}' could not be found.");
+        }
         Dictionary<string, dynamic> properties = new();
         if (typeNode is not null)
         {
@@ -142,45 +148,84 @@ public class CaptureTreeNode
                 else
                 {
                     dynamic list = Activator.CreateInstance(typeof(List<>).MakeGenericType(collectionType))!;
-                    list.GetType().GetMethod("Add")!.Invoke(list, new [] { propValue });
+                    list.GetType().GetMethod("Add")!.Invoke(list, new[] { propValue });
                     properties.Add(propertyNode.Name, list);
                 }
             }
             set.Add(propertyNode.Name);
         }
 
+        var empty = !properties.Any();
+
+        // TODO: Use certain methods only if no properties are set. Add additional casts to basic types.
         object value;
-        if (type.IsAssignableFrom(typeof(string)))
+        if (empty && type.IsAssignableFrom(typeof(string)))
         {
             value = text;
         }
-        else if (type.IsAssignableFrom(typeof(bool)))
+        else if (TryConvert(type, text, text, out var stringValue))
         {
-            value = true;
+            value = stringValue;
         }
-        else if (type.GetMethod("op_Implicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
-                new[] { typeof(string) }) is MethodInfo implicitCast && implicitCast.ReturnType == type)
+        else if (TryConvert(type, text, true, out var boolValue))
         {
-            try
-            {
-                value = implicitCast.Invoke(null, new object[] { text })!;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
-            }
+            value = boolValue;
         }
-        else if (type.GetMethod("op_Explicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
-                new[] { typeof(string) }) is MethodInfo explicitCast && explicitCast.ReturnType == type)
+        else if (long.TryParse(text, out var longText) && TryConvert(type, text, longText, out var longValue))
         {
-            try
-            {
-                value = explicitCast.Invoke(null, new object[] { text })!;
-            }
-            catch
-            {
-                throw new Exception($"Could not parse '{text}' as {type.FullName}.");
-            }
+            value = longValue;
+        }
+        else if (ulong.TryParse(text, out var ulongText) && TryConvert(type, text, ulongText, out var ulongValue))
+        {
+            value = ulongValue;
+        }
+        else if (int.TryParse(text, out var intText) && TryConvert(type, text, intText, out var intValue))
+        {
+            value = intValue;
+        }
+        else if (uint.TryParse(text, out var uintText) && TryConvert(type, text, uintText, out var uintValue))
+        {
+            value = uintValue;
+        }
+        else if (short.TryParse(text, out var shortText) && TryConvert(type, text, shortText, out var shortValue))
+        {
+            value = shortValue;
+        }
+        else if (ushort.TryParse(text, out var ushortText) && TryConvert(type, text, ushortText, out var ushortValue))
+        {
+            value = ushortValue;
+        }
+        else if (byte.TryParse(text, out var byteText) && TryConvert(type, text, byteText, out var byteValue))
+        {
+            value = byteValue;
+        }
+        else if (sbyte.TryParse(text, out var sbyteText) && TryConvert(type, text, sbyteText, out var sbyteValue))
+        {
+            value = sbyteValue;
+        }
+        else if (nint.TryParse(text, out var nintText) && TryConvert(type, text, nintText, out var nintValue))
+        {
+            value = nintValue;
+        }
+        else if (nuint.TryParse(text, out var nuintText) && TryConvert(type, text, nuintText, out var nuintValue))
+        {
+            value = nuintValue;
+        }
+        else if (double.TryParse(text, out var doubleText) && TryConvert(type, text, doubleText, out var doubleValue))
+        {
+            value = doubleValue;
+        }
+        else if (float.TryParse(text, out var floatText) && TryConvert(type, text, floatText, out var floatValue))
+        {
+            value = floatValue;
+        }
+        else if (decimal.TryParse(text, out var decimalText) && TryConvert(type, text, decimalText, out var decimalValue))
+        {
+            value = decimalValue;
+        }
+        else if (long.TryParse(text, out var charText) && TryConvert(type, text, charText, out var charValue))
+        {
+            value = charValue;
         }
         else if (type.IsEnum)
         {
@@ -249,7 +294,7 @@ public class CaptureTreeNode
                 throw new NotImplementedException();
             }
         }
-        else if (type.GetMethod("TryParse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+        else if (empty && type.GetMethod("TryParse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
                 new[] { typeof(string), type.MakeByRefType() }) is MethodInfo tryParse && tryParse.ReturnType == typeof(bool))
         {
             var parameters = new object?[] { text, null };
@@ -262,7 +307,7 @@ public class CaptureTreeNode
                 throw new Exception($"Could not parse '{text}' as {type.FullName}.");
             }
         }
-        else if (type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+        else if (empty && type.GetMethod("Parse", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
                 new[] { typeof(string) }) is MethodInfo parse && parse.ReturnType == type)
         {
             try
@@ -309,7 +354,7 @@ public class CaptureTreeNode
                         ) :
                         p.ParameterType.IsArray ? properties[prop].ToArray() :
                         properties[prop]));
-                        
+
                 }
                 if (args.Count == parameters.Length)
                 {
@@ -337,7 +382,7 @@ public class CaptureTreeNode
             if (property is null)
                 throw new Exception($"Type {type.FullName} does not contain a public property '{propertyNode.Name}'.");
 
-            var ienumerable = property.PropertyType.GetInterfaces().Concat(new [] { property.PropertyType })
+            var ienumerable = property.PropertyType.GetInterfaces().Concat(new[] { property.PropertyType })
                 .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             collectionType = property.PropertyType.IsAssignableFrom(typeof(string)) ? null : ienumerable?.GetGenericArguments()[0];
 
@@ -345,6 +390,40 @@ public class CaptureTreeNode
             var parseType = nullable ? property.PropertyType.GetGenericArguments()[0] : property.PropertyType;
 
             return propertyNode.Parse(parseType);
+        }
+
+        static bool TryConvert<T>(Type type, string text, T parsedValue, [NotNullWhen(true)] out object? value)
+        {
+            if (type.Name == "Interval") ;
+            try
+            {
+                if (type.IsAssignableFrom(typeof(T)))
+                {
+                    value = parsedValue!;
+                    return true;
+                }
+                else if (type.GetMethod("op_Implicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                       new[] { typeof(T) }) is MethodInfo implicitCast && implicitCast.ReturnType == type)
+                {
+                    value = implicitCast.Invoke(null, new object[] { parsedValue! })!;
+                    return true;
+                }
+                else if (type.GetMethod("op_Explicit", BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
+                        new[] { typeof(T) }) is MethodInfo explicitCast && explicitCast.ReturnType == type)
+                {
+                    value = (T)explicitCast.Invoke(null, new object[] { parsedValue! })!;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not parse '{text}' as {type.FullName}.", ex);
+            }
         }
     }
 

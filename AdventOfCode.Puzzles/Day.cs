@@ -2,7 +2,12 @@
 
 public abstract class Day
 {
-    public string Input { get; set; } = null!;
+    private string input = null!;
+    public string Input
+    {
+        get => input;
+        set => input = value.ReplaceLineEndings("\n");
+    }
 
     public abstract Output Part1();
     public abstract Output Part2();

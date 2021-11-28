@@ -13,9 +13,11 @@ namespace Kleene
             return Expression.Parse(pattern).Parse<T>(input);
         }
 
-        public static IEnumerable<T?> Parse<T>(this IEnumerable<string> input, string pattern)
+        public static IEnumerable<T> Parse<T>(this IEnumerable<string> input, string pattern)
         {
             var expression = Expression.Parse(pattern);
+            if (typeof(T).Namespace is string ns)
+                expression = new ConcatExpression(new UsingExpression(ns), expression);
             return input.Select(expression.Parse<T>);
         }
     }
