@@ -39,6 +39,7 @@ public abstract class Expression
     private static RepExpression Star(params Expression[] children) => new(Concat(children), null, new RepCount(0, RepCount.Unbounded));
     private static RepExpression Plus(params Expression[] children) => new(Concat(children), null, new RepCount(1, RepCount.Unbounded));
     private static OptExpression Opt(params Expression[] children) => new(Concat(children));
+    private static ReqExpression Req(params Expression[] children) => new(Concat(children));
     private static RepExpression Sep(RepExpression expression, Expression sep) => new(expression.Expression, sep, expression.Count, expression.Order);
     private static CaptureExpression Cap(string name, params Expression[] children) => new(name, Concat(children));
     private static TransformExpression Trans(Expression input, Expression output) => new(input, output);
@@ -61,7 +62,7 @@ public abstract class Expression
         Fun("expression", Alt(Call("bullet-alt", "value"), Call("trans", "value"))),
 
         Fun("bullet-alt",
-            Sep(Plus(Text("-"), WS, Call("trans", "Expressions")), WS), R,
+            Sep(Plus(Text("-"), Req(WS), Call("trans", "Expressions")), WS), R,
             Type<AltExpression>()
         ),
 
@@ -313,7 +314,10 @@ public abstract class Expression
         ),
 
         Fun("literal",
-            Plus(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")),
+            Alt(
+                Plus(CC("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")),
+                Concat(Text("-"), Plus(CC("0123456789")), Opt(Text("."), Plus(CC("0123456789"))))
+            ),
             Type<TextExpression>()
         ),
 

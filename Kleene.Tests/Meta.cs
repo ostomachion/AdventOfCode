@@ -9,7 +9,7 @@ namespace Kleene.Tests
 <expression> { <bullet-alt>:value | <trans>:value }
 
 <bullet-alt> {
-    ('-' <ws> <trans>:Expressions)+ % <ws>;
+    ('-' <ws>! <trans>:Expressions)+ % <ws>;
     ::AltExpression
 }
 
@@ -256,7 +256,7 @@ namespace Kleene.Tests
 }
 
 <literal> {
-    [\w_]+
+    ([\w_]+ | '-' \d+ ('.' \d+)?)
     ::TextExpression
 }
 
