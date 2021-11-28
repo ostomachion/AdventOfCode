@@ -45,7 +45,7 @@ namespace Kleene.Tests
             - ('+'/1):Count.Min
             - '^' \d+:Count.Min '+'
             - '^' \d+:Count.Min '-' \d+:Count.Max
-            - '^'( \d+:Count.Min):Count.Max
+            - '^' \d+:Count.Min (:Count.Max = @Count.Min)
 
             - '?' ::OptExpression
         ) ;

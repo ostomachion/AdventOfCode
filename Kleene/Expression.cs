@@ -99,7 +99,7 @@ public abstract class Expression
                     Cap("Count.Min", Trans(Text("+"), Text("1"))),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("+")),
                     Concat(Text("^"), Cap("Count.Min", Plus(D)), Text("-"), Cap("Count.Max", Plus(D))),
-                    Concat(Text("^"), Cap("Count.Max", Cap("Count.Min", Plus(D)))),
+                    Concat(Text("^"), Cap("Count.Min", Plus(D)), Assign("Count.Max", Ref("Count.Min"))),
 
                     Concat(Text("?"), Type<OptExpression>())
                 ), R,
@@ -277,7 +277,7 @@ public abstract class Expression
         ),
 
         Fun("literal-anchor",
-            Cap("Anchor", 
+            Cap("Anchor",
                 Cap("start", CC("<>")),
                 Opt(Cap("Negated", Text("!"))),
                 Alt(
@@ -329,7 +329,7 @@ public abstract class Expression
                 Trans(Text(">"), Text("]")),
                 Trans(Text("n"), Text("\n")),
                 Trans(Text("t"), Text("\t"))
-                // TODO: Unicode escapes.
+            // TODO: Unicode escapes.
             ),
             Trans(Text("]"), Concat()), R
         ),
@@ -398,8 +398,10 @@ public abstract class Expression
     public T Parse<T>(string input)
     {
         if (RunFull(input, out var captureTree) is null)
+        {
             throw new Exception("Could not parse value.");
-        
+        }
+
         return captureTree!.Root.Parse<T>();
     }
 
@@ -408,12 +410,16 @@ public abstract class Expression
     public IEnumerable<ExpressionResult> Run(ExpressionContext context)
     {
         if (context.Ratchet)
+        {
             yield break;
+        }
 
         foreach (var result in RunInternal(context))
         {
             if (!context.Ratchet)
+            {
                 yield return result;
+            }
         }
     }
 
