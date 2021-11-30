@@ -7,11 +7,21 @@ public class Day10 : Day
     public override Output Part1()
     {
         var text = Input;
-        var expression = Expression.Parse(@"((\d:a (@a)* ;):Items)*");
-        for (var i = 0; i < 40; i++)
+        var expression = Expression.Parse(@"(
+        - 333 / 33
+        - 33 / 23
+        - 3 / 13
+        - 222 / 32
+        - 22 / 22
+        - 2 / 12
+        - 111 / 31
+        - 11 / 21
+        - 1 / 11
+        )*");
+        for (var i = 0; i < 50; i++)
         {
-            var parsed = expression.Parse<N>(text);
-            text = String.Join("", parsed.Items.Select(x => x.Length.ToString() + x[0]));
+            Console.WriteLine(i);
+            text = expression.Parse<string>(text);
         }
         return text.Length;
     }
@@ -19,18 +29,21 @@ public class Day10 : Day
     public override Output Part2()
     {
         var text = Input;
-        var expression = Expression.Parse(@"((\d:a (@a)* ;):Items)*");
+        var expression = Expression.Parse(@"(
+        - 333 / 33
+        - 33 / 23
+        - 3 / 13
+        - 222 / 32
+        - 22 / 22
+        - 2 / 12
+        - 111 / 31
+        - 11 / 21
+        - 1 / 11
+        )*");
         for (var i = 0; i < 50; i++)
         {
             Console.WriteLine(i);
-            var parsed = expression.Parse<N>(text);
-            var sb = new StringBuilder();
-            foreach (var item in parsed.Items)
-            {
-                sb.Append(item.Length);
-                sb.Append(item[0]);
-            }
-            text = sb.ToString();
+            text = expression.Parse<string>(text);
         }
         return text.Length;
     }
