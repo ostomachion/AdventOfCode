@@ -17,4 +17,21 @@ public static class EnumerableExtensions
     public static long Product<T>(this IEnumerable<T> n, Func<T, long> f) => n.Aggregate(1L, (x, y) => x * f(y));
     public static BigInteger BigProduct<T>(this IEnumerable<T> n, Func<T, long> f) => n.Aggregate(BigInteger.One, (x, y) => x * f(y));
     public static BigInteger BigProduct<T>(this IEnumerable<T> n, Func<T, BigInteger> f) => n.Aggregate(BigInteger.One, (x, y) => x * f(y));
+
+    public static IEnumerable<IEnumerable<T>> Permutations<T>(this IEnumerable<T> n)
+    {
+        if (!n.Any())
+        {
+            yield return Enumerable.Empty<T>();
+            yield break;
+        }
+
+        foreach (var (item, i) in n.Select((item, i) => (item, i)))
+        {
+            foreach (var p in n.Take(i).Concat(n.Skip(i + 1)).Permutations())
+            {
+                yield return new[] { item }.Concat(p);
+            }
+        }
+    }
 }
