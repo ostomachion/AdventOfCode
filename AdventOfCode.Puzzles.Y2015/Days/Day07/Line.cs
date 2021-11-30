@@ -2,7 +2,7 @@
 
 public abstract record Line(string Dest)
 {
-    public static List<Line> Lines = null!;
+    public static List<Line> Lines { get; set; } = null!;
     private static readonly Dictionary<string, ushort> memo = new();
     public abstract ushort Compute();
     public static ushort Resolve(string v)
