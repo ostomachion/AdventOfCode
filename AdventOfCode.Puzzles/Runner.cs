@@ -37,7 +37,7 @@ public class Runner
 
     public Output Run(int year, int day, int part, string? input = null)
     {
-        var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
+        var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
         var instance = (Day)type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
         instance.Input = input ?? inputManager.Get(year, day);
         return part == 1 ? instance.Part1() : instance.Part2();
