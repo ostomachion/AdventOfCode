@@ -1,7 +1,7 @@
 using System.Text;
 
 namespace AdventOfCode.Puzzles.Y2015.Days.Day10;
-public record N(List<string> Items);
+
 public class Day10 : Day
 {
     public override Output Part1()
