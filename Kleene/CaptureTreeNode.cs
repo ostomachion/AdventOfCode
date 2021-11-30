@@ -92,7 +92,7 @@ public class CaptureTreeNode
         {
             foreach (var propertyNode in typeNode["Properties"].First().Children)
             {
-                var propValue = GetPropertyValue(propertyNode, type, out Type? collectionType);
+                var propValue = GetPropertyValue(propertyNode, type, out var collectionType);
                 if (properties.ContainsKey(propertyNode.Name))
                 {
                     if (collectionType is null)
@@ -383,9 +383,10 @@ public class CaptureTreeNode
             var ienumerable = property.PropertyType.GetInterfaces().Concat(new[] { property.PropertyType })
                 .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             collectionType = property.PropertyType.IsAssignableFrom(typeof(string)) ? null : ienumerable?.GetGenericArguments()[0];
+            var parseType = collectionType ?? property.PropertyType;
 
-            var nullable = property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
-            var parseType = nullable ? property.PropertyType.GetGenericArguments()[0] : property.PropertyType;
+            var nullable = parseType.IsGenericType && parseType.GetGenericTypeDefinition() == typeof(Nullable<>);
+            parseType = nullable ? parseType.GetGenericArguments()[0] : parseType;
 
             return propertyNode.Parse(parseType);
         }
