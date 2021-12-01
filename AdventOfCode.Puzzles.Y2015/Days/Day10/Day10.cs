@@ -2,7 +2,7 @@ using System.Text;
 
 namespace AdventOfCode.Puzzles.Y2015.Days.Day10;
 
-public class Day11 : Day
+public class Day10 : Day
 {
     public override Output Part1()
     {
