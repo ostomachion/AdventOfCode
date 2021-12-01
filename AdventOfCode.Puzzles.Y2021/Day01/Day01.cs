@@ -13,12 +13,21 @@ public class Day01 : Day
                 val++;
             prev = line;
         }
-        return AnswerNotFound();
+        return val;
     }
 
     public override Output Part2()
     {
-        // TODO:
-        throw new NotImplementedException();
+        var test = Input.Lines().Select(Int32.Parse).ToArray();
+        int val = 0;
+        var prev = 9999999;
+        for (int i = 0; i < test.Length - 2; i++)
+        {
+            int x = test[i] + test[i + 1] + test[i + 2];
+            if (x > prev)
+                val++;
+            prev = x;
+        }
+        return val;
     }
 }

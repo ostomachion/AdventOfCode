@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kleene", "Kleene\Kleene.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Puzzles.Y2016", "AdventOfCode.Puzzles.Y2016\AdventOfCode.Puzzles.Y2016.csproj", "{0D94F814-44AE-437E-98C0-1F3E5853D9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AventOfCode.Puzzles.Y2021", "AventOfCode.Puzzles.Y2021\AventOfCode.Puzzles.Y2021.csproj", "{F23D6D61-5CF6-4300-BB62-F969821AA9E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Puzzles.Y2021", "AdventOfCode.Puzzles.Y2021\AdventOfCode.Puzzles.Y2021.csproj", "{F23D6D61-5CF6-4300-BB62-F969821AA9E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
