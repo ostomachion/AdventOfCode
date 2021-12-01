@@ -49,7 +49,7 @@ namespace Kleene.Tests
 
             - '?' ::OptExpression
         ) ;
-        (('?'/Lazy):Eval)? ;
+        (('?'/Lazy):Order)? ;
         ( <ws> '%' <ws> <capture>:Separator )?
         @/value/Expression;
     )? ;
