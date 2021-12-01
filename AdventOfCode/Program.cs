@@ -2005,14 +2005,15 @@ string Input = @"123
 ";
 
 
-var test = Input.ReplaceLineEndings("\n").Trim().Split("\n").Select(Int32.Parse);
+var test = Input.ReplaceLineEndings("\n").Trim().Split("\n").Select(Int32.Parse).ToArray();
 int val = 0;
-var prev = 9999999;
-foreach (var line in test)
+var prev = 99999999;
+for (int i = 0; i < test.Length - 2; i++)
 {
-    if (line > prev)
+    int x = test[i] + test[i + 1] + test[i + 2];
+    if (x > prev)
         val++;
-    prev = line;
+    prev = x;
 }
 
 ;
