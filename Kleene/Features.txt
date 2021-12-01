@@ -1,0 +1,23 @@
+﻿Fix some parsing bugs combining quantifiers and captures and maybe parens?
+
+Parse straight to IEnumerable<T>. Use some capture name for items? :Items
+
+Specify input/output side of backreference?
+Allow backreferences in transforms
+Nested transforms??>
+
+Call external functions/transforms
+
+Numeric:
+	Capture quantifier counts
+	Numeric operators
+	Use numeric captures as quantifiers
+	Shorthand for repeated quantifier without captures <foo>*` = (<foo>:bar @bar*)?
+
+String:
+	Shift by character class: a~\l => b, a~^3\l => c, a^-1\l => z
+	
+
+Lookahead, positive and negative
+
+Captures from subexpressions?

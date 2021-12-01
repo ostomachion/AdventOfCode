@@ -1,3 +1,5 @@
+using System.Windows;
+
 namespace AdventOfCode.Puzzles;
 
 public class Runner
@@ -53,6 +55,33 @@ public class Runner
     public void Print(int year, int day, int part, string? input = null)
     {
         Console.WriteLine($"Advent of Code {year} day {day} part {part}...");
-        Console.WriteLine(Run(year, day, part, input));
+        var output = Run(year, day, part, input);
+        Console.WriteLine(output);
+
+        bool submit;
+        while (true)
+        {
+            Console.WriteLine();
+            Console.Write("Submit answer? (Yn): ");
+            var key = Console.ReadKey();
+            if (key.Key is ConsoleKey.Y or ConsoleKey.Enter)
+            {
+                submit = true;
+                break;
+            }
+            else if (key.Key is ConsoleKey.N)
+            {
+                submit = false;
+                break;
+            }
+        }
+
+        if (submit)
+        {
+            var message = client.SubmitAnswer(year, day, part, output.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(message);
+        }
     }
 }

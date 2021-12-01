@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Puzzles.Y2015\AdventOfCode.Puzzles.Y2015.csproj" />
+    <ProjectReference Include="..\AdventOfCode.Puzzles.Y2016\AdventOfCode.Puzzles.Y2016.csproj" />
     <ProjectReference Include="..\AdventOfCode.Puzzles\AdventOfCode.Puzzles.csproj" />
   </ItemGroup>
 
