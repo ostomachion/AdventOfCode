@@ -1,3 +1,3 @@
 ﻿using AdventOfCode.Puzzles;
 
-new Runner().Print(2015, 11, 2);
+new Runner().Print(2015, 12, 1);
