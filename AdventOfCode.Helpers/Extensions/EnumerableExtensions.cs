@@ -34,4 +34,20 @@ public static class EnumerableExtensions
             }
         }
     }
+
+    public static IEnumerable<T[]> Windows<T>(this IEnumerable<T> n, int window)
+    {
+        if (n.Count() < window)
+            throw new ArgumentException("Collection is too small for window.", nameof(window));
+        Queue<T> queue = new Queue<T>();
+        foreach (var item in n)
+        {
+            queue.Enqueue(item);
+            if (queue.Count == window)
+            {
+                yield return queue.ToArray();
+                queue.Dequeue();
+            }
+        }
+    }
 }
