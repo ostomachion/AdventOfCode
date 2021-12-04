@@ -54,6 +54,7 @@ public static class StringExtensions
     public static int CountOverlap(this string text, char needle) => text.FindOverlap(needle).Count;
 
     public static string[] Lines(this string text) => text.ReplaceLineEndings("\n").Split('\n');
+    public static string[] Paragraphs(this string text) => text.ReplaceLineEndings("\n").Split("\n\n");
 
     public static int ParseInt(this string text) => int.Parse(text);
 }

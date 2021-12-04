@@ -73,4 +73,30 @@ public static class EnumerableExtensions
         var max = count.Values.Max();
         return count.Keys.Where(x => count[x] == max);
     }
+
+    public static IEnumerable<IEnumerable<T>> Transpose<T>(this IEnumerable<IEnumerable<T>> n)
+    {
+        if (!n.Any() || !n.First().Any())
+            throw new ArgumentException("Sequence contains no elements.", nameof(n));
+
+        var length = n.First().Count();
+        if (n.Any(x => x.Count() != length))
+            throw new ArgumentException("Sequence is not rectangular.", nameof(n));
+
+        List<List<T>> value = new();
+        for (var i = 0; i < length; i++)
+        {
+            value.Add(new());
+        }
+
+        foreach (var row in n)
+        {
+            foreach (var (item, i) in row.Select((item, i) => (item, i)))
+            {
+                value[i].Add(item);
+            }
+        }
+
+        return value;
+    }
 }

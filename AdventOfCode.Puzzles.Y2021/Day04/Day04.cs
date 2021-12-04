@@ -2,13 +2,22 @@
 
 public class Day04 : Day
 {
+    private static bool IsWin(int?[][] board) => board.Any(x => x.All(y => y is null)) || board.Transpose().Any(x => x.All(y => y is null));
+    private static int GetScore(int?[][] board) => board.Sum(x => x.Sum(y => y ?? 0));
+
     public override Output Part1()
     {
-        var value = Input.Split("\n\n");
-        var ns = value[0].Split(",").Select(Int32.Parse);
-        var boards = value.Skip(1).Select(x => x.Lines().Select(x => Regex.Replace(x, @"\s+", " ").Trim()).Split(' ').ToArray()).ToArray();
-        //var boards = boardsP.Select(x => new SparsePlaneGrid2D<int>)
-        foreach (var n in ns)
+        var value = Input.Paragraphs();
+        var numbers = value[0].Split(",").Select(Int32.Parse);
+        var boards = value.Skip(1).Select(x =>
+            x.Lines().Select(y =>
+                Regex.Replace(y, @"\s+", " ").Trim().Split(' ').Select(z =>
+                    (int?)Int32.Parse(z)
+                ).ToArray()
+            ).ToArray()
+        ).ToArray();
+
+        foreach (var n in numbers)
         {
             foreach (var b in boards)
             {
@@ -16,53 +25,14 @@ public class Day04 : Day
                 {
                     for (int x = 0; x < 5; x++)
                     {
-                        if (b[x][y] == n.ToString())
+                        if (b[x][y] == n)
                             b[x][y] = null;
                     }
                 }
 
-                for (int y = 0; y < 5; y++)
+                if (IsWin(b))
                 {
-                    bool win = true;
-                    for (int x = 0; x < 5; x++)
-                    {
-                        if (b[x][y] is not null)
-                            win = false;
-                    }
-                    if (win)
-                    {
-                        var w = 0;
-                        for (int j = 0; j < 5; j++)
-                        {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                w += Int32.Parse(b[i][j] ?? "0");
-                            }
-                        }
-                        return w * n;
-                    }
-                }
-
-                for (int x = 0; x < 5; x++)
-                {
-                    bool win = true;
-                    for (int y = 0; y < 5; y++)
-                    {
-                        if (b[x][y] is not null)
-                            win = false;
-                    }
-                    if (win)
-                    {
-                        var w = 0;
-                        for (int j = 0; j < 5; j++)
-                        {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                w += Int32.Parse(b[i][j] ?? "0");
-                            }
-                        }
-                        return w * n;
-                    }
+                    return GetScore(b) * n;
                 }
             }
         }
@@ -72,17 +42,21 @@ public class Day04 : Day
 
     public override Output Part2()
     {
-        //var value = Input.Parse<Test>(@"(\d+:N)+ % ',' \s+ (((\d+:Items) % ' '+)+:Values % '\n')+:Boards % '\n\n'");
-        var value = Input.Split("\n\n");
-        var ns = value[0].Split(",").Select(Int32.Parse);
-        var boards = value.Skip(1).Select(x => x.Lines().Select(x => Regex.Replace(x, @"\s+", " ").Trim()).Split(' ').ToArray()).ToArray();
-        //var boards = boardsP.Select(x => new SparsePlaneGrid2D<int>)
-        foreach (var n in ns)
-        {
-            for (var bb = 0; bb < boards.Length; bb++)
-            {
+        var value = Input.Paragraphs();
+        var numbers = value[0].Split(",").Select(Int32.Parse);
+        int?[][]?[] boards = value.Skip(1).Select(x =>
+            x.Lines().Select(y =>
+                Regex.Replace(y, @"\s+", " ").Trim().Split(' ').Select(z =>
+                    (int?)Int32.Parse(z)
+                ).ToArray()
+            ).ToArray()
+        ).ToArray();
 
-                var b = boards[bb];
+        foreach (var n in numbers)
+        {
+            for (var i = 0; i < boards.Length; i++)
+            {
+                var b = boards[i];
                 if (b is null)
                     continue;
 
@@ -90,63 +64,16 @@ public class Day04 : Day
                 {
                     for (int x = 0; x < 5; x++)
                     {
-                        if (b[x][y] == n.ToString())
+                        if (b[x][y] == n)
                             b[x][y] = null;
                     }
                 }
 
-                for (int y = 0; y < 5; y++)
+                if (IsWin(b))
                 {
-                    bool win = true;
-                    for (int x = 0; x < 5; x++)
-                    {
-                        if (b[x][y] is not null)
-                            win = false;
-                    }
-                    if (win)
-                    {
-                        boards[bb] = null;
-
-                        if (boards.Count(x => x is not null) == 0)
-                        {
-                            var w = 0;
-                            for (int j = 0; j < 5; j++)
-                            {
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    w += Int32.Parse(b[i][j] ?? "0");
-                                }
-                            }
-                            return w * n;
-                        }
-                    }
-                }
-
-                for (int x = 0; x < 5; x++)
-                {
-                    bool win = true;
-                    for (int y = 0; y < 5; y++)
-                    {
-                        if (b[x][y] is not null)
-                            win = false;
-                    }
-                    if (win)
-                    {
-                        boards[bb] = null;
-
-                        if (boards.Count(x => x is not null) == 0)
-                        {
-                            var w = 0;
-                            for (int j = 0; j < 5; j++)
-                            {
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    w += Int32.Parse(b[i][j] ?? "0");
-                                }
-                            }
-                            return w * n;
-                        }
-                    }
+                    boards[i] = null;
+                    if (boards.All(x => x is null))
+                        return GetScore(b) * n;
                 }
             }
         }
