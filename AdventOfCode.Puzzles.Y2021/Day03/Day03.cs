@@ -4,63 +4,42 @@ public class Day03 : Day
 {
     public override Output Part1()
     {
-        var value = Input.Lines().Parse<string>(@"[01]+").ToArray();
+        var value = Input.Lines();
 
-        var answer = "";
-        var answer2 = "";
-        int count = value.Count();
+        var gamma = "";
+        var epsilon = "";
         for (int i = 0; i < value[0].Length; i++)
         {
-            answer += value.Select(x => x[i]).ToArray().Count(x => x == '0') > count / 2 ? "1" : "0";
-            answer2 += value.Select(x => x[i]).ToArray().Count(x => x == '0') > count / 2 ? "0" : "1";
+            var check = value.Select(x => x[i]).ToArray().Mode().Contains('0');
+            gamma += check ? "1" : "0";
+            epsilon += check ? "0" : "1";
         }
 
-        var x = Convert.ToInt64(answer, 2);
-        var y = Convert.ToInt64(answer2, 2);
-
-        return x * y;
+        return gamma.FromBinary() * epsilon.FromBinary();
     }
 
     public override Output Part2()
     {
-        var value = Input.Lines().Parse<string>(@"[01]+").ToArray();
+        var value = Input.Lines();
 
-        int count = value.Count();
-        int n = value[0].Length;
-        int i;
-        string answer = "";
-        string answer2 = "";
-        for (i = 0; i < n; i++)
+        var i = 0;
+        var o2 = value;
+        while (o2.Length != 1)
         {
-            var c = value.Select(x => x[i]).ToArray().Count(x => x == '0') > count / 2 ? '0' : '1';
-            value = value.Where(x => x[i] == c).ToArray();
-            count = value.Count();
-            answer += c.ToString();
-            if (value.Length == 1)
-            {
-                answer = value[0];
-                break;
-            }
+            var check = o2.Select(x => x[i]).ToArray().Mode().Contains('1');
+            o2 = o2.Where(x => x[i] == (check ? '1' : '0')).ToArray();
+            i++;
         }
 
-        value = Input.Lines().Parse<string>(@"[01]+").ToArray();
-        count = value.Count();
-        int j;
-        for (j = 0; j < n; j++)
+        var co2 = value;
+        i = 0;
+        while (co2.Length != 1)
         {
-            var c = value.Select(x => x[j]).ToArray().Count(x => x == '0') <= count / 2 ? '0' : '1';
-            value = value.Where(x => x[j] == c).ToArray();
-            count = value.Count(); answer2 += c.ToString();
-            if (value.Length == 1)
-            {
-                answer2 = value[0];
-                break;
-            }
+            var check = co2.Select(x => x[i]).ToArray().Mode().Contains('1');
+            co2 = co2.Where(x => x[i] == (check ? '0' : '1')).ToArray();
+            i++;
         }
 
-        var x = Convert.ToInt64(answer, 2);
-        var y = Convert.ToInt64(answer2, 2);
-
-        return x * y;
+        return o2.Single().FromBinary() * co2.Single().FromBinary();
     }
 }

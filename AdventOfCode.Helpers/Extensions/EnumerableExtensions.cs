@@ -1,3 +1,5 @@
+using AdventOfCode.Helpers.DataStructures;
+
 namespace AdventOfCode.Helpers.Extensions;
 
 public static class EnumerableExtensions
@@ -49,5 +51,26 @@ public static class EnumerableExtensions
                 queue.Dequeue();
             }
         }
+    }
+
+    public static int? IndexOf<T>(this IEnumerable<T> n, T value)
+    {
+        foreach (var (item, i) in n.Select((item, i) => (item, i)))
+        {
+            if (item.Equals(value))
+                return i;
+        }
+        return null;
+    }
+
+    public static IEnumerable<T> Mode<T>(this IEnumerable<T> n) where T : notnull
+    {
+        var count = new DefaultDictionary<T, int>();
+        foreach (var item in n)
+        {
+            count[item]++;
+        }
+        var max = count.Values.Max();
+        return count.Keys.Where(x => count[x] == max);
     }
 }
