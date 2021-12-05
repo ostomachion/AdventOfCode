@@ -10,12 +10,7 @@ public class Day04 : Day
         var value = Input.Paragraphs();
         var numbers = value[0].Split(",").Select(Int32.Parse);
         var boards = value.Skip(1).Select(x =>
-            x.Lines().Select(y =>
-                Regex.Replace(y, @"\s+", " ").Trim().Split(' ').Select(z =>
-                    (int?)Int32.Parse(z)
-                ).ToArray()
-            ).ToArray()
-        ).ToArray();
+            x.Lines().Parse<KList<int?>>(@"(\s*\d+:Items)+").Select(x => x.ToArray()).ToArray()).ToArray();
 
         foreach (var n in numbers)
         {
@@ -45,12 +40,7 @@ public class Day04 : Day
         var value = Input.Paragraphs();
         var numbers = value[0].Split(",").Select(Int32.Parse);
         int?[][]?[] boards = value.Skip(1).Select(x =>
-            x.Lines().Select(y =>
-                Regex.Replace(y, @"\s+", " ").Trim().Split(' ').Select(z =>
-                    (int?)Int32.Parse(z)
-                ).ToArray()
-            ).ToArray()
-        ).ToArray();
+            x.Lines().Parse<KList<int?>>(@"(\s*\d+:Items)+").Select(x => x.ToArray()).ToArray()).ToArray();
 
         foreach (var n in numbers)
         {
