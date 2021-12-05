@@ -15,6 +15,8 @@ public record Interval
     public long Start => OptionalStart!.Value;
     public long End => OptionalEnd!.Value;
 
+    public bool IsInfinite => !HasStart || !HasEnd;
+
     public long Length => End - Start;
 
     public Interval(long? start = null, long? end = null, bool looping = false)
