@@ -3,7 +3,7 @@ using AdventOfCode.Helpers.DataStructures;
 
 namespace AdventOfCode.Helpers.Cartesian.Grids;
 
-public record SparseLineGrid2D<T> : Line2D, IEnumerable<KeyValuePair<Coordinate2D, T>>
+public record SparseLineGrid2D<T> : Line2D, IGrid<Coordinate2D, T>
     where T : notnull
 {
     public static new SparseLineGrid2D<T> Infinite => new(Interval.Infinite);

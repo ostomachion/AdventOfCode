@@ -1,6 +1,6 @@
 namespace AdventOfCode.Helpers.Cartesian;
 
-public record Coordinate1D(long X)
+public record Coordinate1D(long X) : ICoordinate
 {
     public static readonly Coordinate1D O = new(0);
     public static readonly Coordinate1D I = new(1);

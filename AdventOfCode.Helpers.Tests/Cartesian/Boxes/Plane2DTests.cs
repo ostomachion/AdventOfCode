@@ -274,4 +274,26 @@ public class Plane2DTests
             }
         );
     }
+
+    [Fact]
+    public void PathfindingTest()
+    {
+        // TODO: Move this.
+        Helpers.Cartesian.Grids.SparsePlaneGrid2D<int> grid = new(10, 10);
+        grid.Metric = (c) =>
+        {
+            return grid.OrthogonalNeighbors(c).Where(x => grid[x] == 1).Select(x => new KeyValuePair<Coordinate2D, long>(x, 1));
+        };
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                grid[i, j] = 1;
+            }
+        }
+        grid[0, 5] = 0;
+        var test = grid.Distance(new(0, 0), new(0, 9));
+        Assert.Equal(11, test);
+    }
 }
