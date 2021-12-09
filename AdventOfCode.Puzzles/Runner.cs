@@ -2,6 +2,7 @@ using System.Windows;
 
 namespace AdventOfCode.Puzzles;
 
+// TODO: Reorganize this.
 public class Runner
 {
     private readonly Client client;
@@ -45,6 +46,7 @@ public class Runner
         if (instance.TestInput is string testInput)
         {
             instance.Input = testInput;
+            Console.WriteLine();
             Console.WriteLine("Running test...");
             var testOutput = part == 1 ? instance.Part1() : instance.Part2();
             if ((part== 1 ? instance.TestOutputPart1 : instance.TestOutputPart2) is Output expectedTestOutput)
