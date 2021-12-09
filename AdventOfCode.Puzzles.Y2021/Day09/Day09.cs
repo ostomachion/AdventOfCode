@@ -16,11 +16,11 @@ public class Day09 : Day
         var input = Input.Lines();
 
         SparsePlaneGrid2D<int> grid = new(input[0].Length, input.Length);
-        for (int i = 0; i < input.Length; i++)
+        for (int y = 0; y < input.Length; y++)
         {
-            for (int j = 0; j < input[i].Length; j++)
+            for (int x = 0; x < input[y].Length; x++)
             {
-                grid[j, i] = Int32.Parse(input[i][j].ToString()) + 1;
+                grid[x, y] = Int32.Parse(input[y][x].ToString()) + 1;
             }
         }
 
@@ -36,11 +36,11 @@ public class Day09 : Day
         var input = Input.Lines();
 
         SparsePlaneGrid2D<int> grid = new(input[0].Length, input.Length);
-        for (int i = 0; i < input.Length; i++)
+        for (int y = 0; y < input.Length; y++)
         {
-            for (int j = 0; j < input[i].Length; j++)
+            for (int x = 0; x < input[y].Length; x++)
             {
-                grid[j, i] = Int32.Parse(input[i][j].ToString()) + 1;
+                grid[x, y] = Int32.Parse(input[y][x].ToString()) + 1;
             }
         }
 
