@@ -28,6 +28,6 @@ public static class Paths
 
     public static string GetResponsePath(int year, int day, int part)
     {
-        return Path.Combine(OutputDir, year.ToString(), day.ToString(), part.ToString(), $"{DateTime.Now:yyyyMMddTHHmmss}.html");
+        return Path.Combine(ResponseDir, year.ToString(), day.ToString(), part.ToString(), $"{DateTime.Now:yyyyMMddTHHmmss}.html");
     }
 }
