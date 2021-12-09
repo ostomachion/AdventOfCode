@@ -15,7 +15,7 @@ public class Day09 : Day
     {
         var input = Input.Lines();
 
-        SparsePlaneGrid2D<int> grid = new(input[0].Length - 1, input.Length - 1);
+        SparsePlaneGrid2D<int> grid = new(input[0].Length, input.Length);
         for (int i = 0; i < input.Length; i++)
         {
             for (int j = 0; j < input[i].Length; j++)
@@ -35,7 +35,7 @@ public class Day09 : Day
     {
         var input = Input.Lines();
 
-        SparsePlaneGrid2D<int> grid = new(input[0].Length - 1, input.Length - 1);
+        SparsePlaneGrid2D<int> grid = new(input[0].Length, input.Length);
         for (int i = 0; i < input.Length; i++)
         {
             for (int j = 0; j < input[i].Length; j++)

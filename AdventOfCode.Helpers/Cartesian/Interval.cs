@@ -36,7 +36,7 @@ public record Interval
         Looping = looping;
     }
 
-    public bool Contains(long n) => (!HasStart || n >= Start) && (!HasEnd || n <= End);
+    public bool Contains(long n) => (!HasStart || n >= Start) && (!HasEnd || n < End);
     public long Loop(long n) => n.Modulus(Length) + Start;
 
     public override string ToString()
