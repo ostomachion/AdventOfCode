@@ -9,6 +9,10 @@ public abstract class Day
         set => input = value.ReplaceLineEndings("\n");
     }
 
+    public virtual string? TestInput { get; }
+    public virtual Output? TestOutputPart1 { get; }
+    public virtual Output? TestOutputPart2 { get; }
+
     public abstract Output Part1();
     public abstract Output Part2();
 

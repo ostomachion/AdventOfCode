@@ -41,6 +41,29 @@ public class Runner
     {
         var type = Type.GetType($"AdventOfCode.Puzzles.Y{year}.Days.Day{day:00}.Day{day:00}, AdventOfCode.Puzzles.Y{year}", true)!;
         var instance = (Day)type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<object>());
+
+        if (instance.TestInput is string testInput)
+        {
+            instance.Input = testInput;
+            Console.WriteLine("Running test...");
+            var testOutput = part == 1 ? instance.Part1() : instance.Part2();
+            if ((part== 1 ? instance.TestOutputPart1 : instance.TestOutputPart2) is Output expectedTestOutput)
+            {
+                var pass = testOutput.ToString() == expectedTestOutput.ToString();
+                Console.Write("Test output: ");
+                Console.ForegroundColor = pass ? ConsoleColor.Green : ConsoleColor.Red;
+                Console.WriteLine(testOutput);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.Write("Test output: ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(testOutput);
+                Console.ResetColor();
+            }
+        }
+
         instance.Input = input ?? inputManager.Get(year, day);
         return part == 1 ? instance.Part1() : instance.Part2();
     }
@@ -56,7 +79,10 @@ public class Runner
     {
         Console.WriteLine($"Advent of Code {year} day {day} part {part}...");
         var output = Run(year, day, part, input);
+        Console.Write("Output: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(output);
+        Console.ResetColor();
 
         bool submit;
         while (true)
