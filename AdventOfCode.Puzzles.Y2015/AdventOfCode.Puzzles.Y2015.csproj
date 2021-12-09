@@ -1,6 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="Day01\TestInput.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Day01\TestInput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Puzzles\AdventOfCode.Puzzles.csproj" />
     <ProjectReference Include="..\AdventOfCode.Helpers\AdventOfCode.Helpers.csproj" />
     <ProjectReference Include="..\Kleene\Kleene.csproj" />
