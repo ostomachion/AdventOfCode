@@ -8,7 +8,7 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
 {
     public static new SparsePlaneGrid2D<T> Infinite => new(Interval.Infinite, Interval.Infinite);
 
-    private readonly DefaultDictionary<Coordinate2D, T> values = new();
+    private readonly DefaultDictionary<Coordinate2D, T> values;
 
     public IEnumerable<Coordinate2D> Keys => values.Keys;
     public IEnumerable<T> Values => values.Values;
@@ -27,10 +27,34 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
         set => this[new Coordinate2D(x, y)] = value;
     }
 
-    public SparsePlaneGrid2D(Interval i, Interval j)
+    public SparsePlaneGrid2D(T? defaultValue = default)
+        : this(Interval.Infinite, Interval.Infinite, defaultValue) { }
+
+    public SparsePlaneGrid2D(Interval i, Interval j, T? defaultValue = default)
         : base(i, j)
     {
         Metric = OrthogonalMetric;
+        values = new(defaultValue);
+    }
+
+    public SparsePlaneGrid2D<TOut> Map<TOut>(Func<T, TOut> f)
+        where TOut : notnull => Map((key, value) => (key, f(value)));
+
+    public SparsePlaneGrid2D<TOut> Map<TOut>(Func<Coordinate2D, TOut> f)
+        where TOut : notnull => Map((key, value) => (key, f(key)));
+
+    public SparsePlaneGrid2D<TOut> Map<TOut>(Func<Coordinate2D, T, (Coordinate2D Key, TOut Value)> f)
+        where TOut : notnull
+    {
+        var value = new SparsePlaneGrid2D<TOut>(I, J);
+
+        foreach (var item in values)
+        {
+            var (k, v) = f(item.Key, item.Value);
+            value[k] = v;
+        }
+
+        return value;
     }
 
     public IEnumerator<KeyValuePair<Coordinate2D, T>> GetEnumerator() => values.GetEnumerator();
@@ -45,6 +69,21 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
             Loop(coordinate - Coordinate2D.I),
             Loop(coordinate + Coordinate2D.J),
             Loop(coordinate - Coordinate2D.J)
+        }.Where(Contains);
+    }
+
+    public IEnumerable<Coordinate2D> Neighbors(Coordinate2D coordinate)
+    {
+        return new[]
+        {
+            Loop(coordinate + Coordinate2D.I),
+            Loop(coordinate - Coordinate2D.I),
+            Loop(coordinate + Coordinate2D.J),
+            Loop(coordinate - Coordinate2D.J),
+            Loop(coordinate + Coordinate2D.I + Coordinate2D.J),
+            Loop(coordinate + Coordinate2D.I - Coordinate2D.J),
+            Loop(coordinate - Coordinate2D.I + Coordinate2D.J),
+            Loop(coordinate - Coordinate2D.I - Coordinate2D.J)
         }.Where(Contains);
     }
 
