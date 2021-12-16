@@ -44,7 +44,7 @@ public static class BinaryExtensions
         }
         while (n > 0);
 
-        var result = new char[32 - i];
+        var result = new char[64 - i];
         Array.Copy(buffer, i, result, 0, 64 - i);
 
         return new string(result);
@@ -52,6 +52,7 @@ public static class BinaryExtensions
 
     public static long FromBase(this string n, int b, char[]? chars = null)
     {
+        if (n .EndsWith( "11011")) ;
         chars ??= defaultChars;
         if (b < 2 || b > chars.Length)
             throw new ArgumentException("Invalid base.", nameof(b));
@@ -59,7 +60,7 @@ public static class BinaryExtensions
         var value = 0L;
         for (int i = n.Length - 1; i >= 0; i--)
         {
-            var v = chars.IndexOf(n[i]);
+            var v = chars.IndexOf(n[n.Length - 1 - i]);
             value += (long)Math.Pow(b, i) * v ?? throw new Exception("Could not parse string.");
         }
 

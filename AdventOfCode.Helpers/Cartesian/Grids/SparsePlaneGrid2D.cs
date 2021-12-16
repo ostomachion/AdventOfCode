@@ -103,6 +103,9 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
         var current = start;
         while (true)
         {
+            var min = this.Min(x => x.Value);
+            var v = this.First(x => !unvisited.Contains(x.Key) && x.Value.Equals(min));
+            unvisited.Remove(v.Key);
             foreach (var (n, d) in Metric(current).Where(x => unvisited.Contains(x.Key)))
             {
                 var nd = distances[current] == long.MaxValue ? long.MaxValue : distances[current] + d;
