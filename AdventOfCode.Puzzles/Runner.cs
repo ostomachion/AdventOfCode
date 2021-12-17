@@ -91,8 +91,6 @@ public class Runner
         {
             Console.WriteLine();
             Console.Write("Submit answer? (Yn): ");
-            submit = true;
-            break;
             var key = Console.ReadKey();
             if (key.Key is ConsoleKey.Y or ConsoleKey.Enter)
             {
