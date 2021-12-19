@@ -4,6 +4,41 @@ public record Orientation3D
 {
     public static readonly Orientation3D Standard = new(Vector3D.LeftToRight, Vector3D.BottomToTop, Vector3D.FarToNear);
 
+    public static IEnumerable<Orientation3D> Orientations = new Orientation3D[]
+    {
+        new(Vector3D.LeftToRight, Vector3D.BottomToTop, Vector3D.FarToNear),
+        new(Vector3D.RightToLeft, Vector3D.TopToBottom, Vector3D.FarToNear),
+        new(Vector3D.RightToLeft, Vector3D.BottomToTop, Vector3D.NearToFar),
+        new(Vector3D.LeftToRight, Vector3D.TopToBottom, Vector3D.NearToFar),
+
+        new(Vector3D.LeftToRight, Vector3D.FarToNear, Vector3D.BottomToTop),
+        new(Vector3D.RightToLeft, Vector3D.NearToFar, Vector3D.BottomToTop),
+        new(Vector3D.RightToLeft, Vector3D.FarToNear, Vector3D.TopToBottom),
+        new(Vector3D.LeftToRight, Vector3D.NearToFar, Vector3D.TopToBottom),
+
+
+        new(Vector3D.BottomToTop, Vector3D.RightToLeft, Vector3D.FarToNear),
+        new(Vector3D.TopToBottom, Vector3D.LeftToRight, Vector3D.FarToNear),
+        new(Vector3D.TopToBottom, Vector3D.RightToLeft, Vector3D.NearToFar),
+        new(Vector3D.BottomToTop, Vector3D.LeftToRight, Vector3D.NearToFar),
+
+        new(Vector3D.BottomToTop, Vector3D.FarToNear, Vector3D.LeftToRight),
+        new(Vector3D.TopToBottom, Vector3D.NearToFar, Vector3D.LeftToRight),
+        new(Vector3D.TopToBottom, Vector3D.FarToNear, Vector3D.RightToLeft),
+        new(Vector3D.BottomToTop, Vector3D.NearToFar, Vector3D.RightToLeft),
+
+
+        new(Vector3D.FarToNear, Vector3D.BottomToTop, Vector3D.RightToLeft),
+        new(Vector3D.NearToFar, Vector3D.TopToBottom, Vector3D.RightToLeft),
+        new(Vector3D.NearToFar, Vector3D.BottomToTop, Vector3D.LeftToRight),
+        new(Vector3D.FarToNear, Vector3D.TopToBottom, Vector3D.LeftToRight),
+
+        new(Vector3D.FarToNear, Vector3D.LeftToRight, Vector3D.BottomToTop),
+        new(Vector3D.NearToFar, Vector3D.RightToLeft, Vector3D.BottomToTop),
+        new(Vector3D.NearToFar, Vector3D.LeftToRight, Vector3D.TopToBottom),
+        new(Vector3D.FarToNear, Vector3D.RightToLeft, Vector3D.TopToBottom),
+    };
+
     private readonly int xx;
     private readonly int xy;
     private readonly int xz;
