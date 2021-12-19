@@ -142,7 +142,7 @@ public class Day19 : Day
 30,-46,-14";
 
     public override Output? TestOutputPart1 => 79;
-    public override Output? TestOutputPart2 => 0000000000;
+    public override Output? TestOutputPart2 => 3621;
 
     public override Output Part1()
     {
@@ -159,68 +159,124 @@ public class Day19 : Day
             scanners.Add(list);
         }
 
-        List<HashSet<(int, Coordinate3D)>> classes = new();
-
-        for (int i = 0; i < scanners.Count; i++)
+        HashSet<Coordinate3D> found = scanners[0].ToHashSet();
+        scanners.RemoveAt(0);
+        while (scanners.Any())
         {
-            for (int j = 0; j < scanners.Count; j++)
+            Console.WriteLine(scanners.Count);
+            var matched = -1;
+            for (int i = 0; i < scanners.Count; i++)
             {
-                if (i == j)
-                    continue;
-
-                bool found = false;
+                Console.Write((scanners.Count - i) + "...");
                 foreach (var ci in scanners[i])
                 {
-                    foreach (var cj in scanners[j])
+                    foreach (var cf in found)
                     {
                         foreach (var o in Orientation3D.Orientations)
                         {
-                            var cjo = Rotate(cj, o);
-                            
-                            var d = cj - ci;
-                            var cjd = scanners[j].ToDictionary(x => Rotate(x, o) - d, x => x);
+                            var d = Rotate(ci, o) - cf;
+                            var cd = scanners[i].Select(x => Rotate(x, o) - d);
 
-                            var intersect = scanners[i].Intersect(cjd.Keys).ToArray();
+                            var intersect = found.Intersect(cd).ToArray();
                             if (intersect.Length >= 12)
                             {
-                                foreach (var c in intersect)
+                                foreach (var c in cd)
                                 {
-                                    var a = (i, c);
-                                    var b = (j, cjd[c]);
-                                    var cl = classes.SingleOrDefault(x => x.Contains(a) || x.Contains(b));
-                                    if (cl is null)
-                                    {
-                                        classes.Add(new HashSet<(int, Coordinate3D)> { a, b });
-                                    }
-                                    else
-                                    {
-                                        cl.Add(a);
-                                        cl.Add(b);
-                                    }
+                                    found.Add(c);
                                 }
-                                found = true;
+                                matched = i;
                                 break;
                             }
                         }
-                        if (found)
+                        if (matched != -1)
                             break;
                     }
-                    if (found)
+                    if (matched != -1)
                         break;
                 }
+                if (matched != -1)
+                    break;
             }
+            Console.WriteLine();
+            if (matched == -1)
+                throw new Exception();
+            scanners.RemoveAt(matched);
         }
 
-        return classes.Count;
+        return found.Count;
     }
 
     public override Output Part2()
     {
-        var input = Input;
+        var input = Input.Paragraphs();
+        List<List<Coordinate3D>> scanners = new();
+        foreach (var p in input)
+        {
+            var list = new List<Coordinate3D>();
+            foreach (var line in p.Lines().Skip(1))
+            {
+                var values = line.Split(',').Select(Int32.Parse).ToArray();
+                list.Add(new Coordinate3D(values[0], values[1], values[2]));
+            }
+            scanners.Add(list);
+        }
 
-        var answer = input;
+        HashSet<Coordinate3D> found = scanners[0].ToHashSet();
+        List<Coordinate3D> scannerCoordinates = new();
+        scannerCoordinates.Add(new(0, 0, 0));
+        scanners.RemoveAt(0);
+        while (scanners.Any())
+        {
+            Console.WriteLine(scanners.Count);
+            var matched = -1;
+            for (int i = 0; i < scanners.Count; i++)
+            {
+                Console.Write((scanners.Count - i) + "...");
+                foreach (var ci in scanners[i])
+                {
+                    foreach (var cf in found)
+                    {
+                        foreach (var o in Orientation3D.Orientations)
+                        {
+                            var d = Rotate(ci, o) - cf;
+                            var cd = scanners[i].Select(x => Rotate(x, o) - d);
 
-        return answer;
+                            var intersect = found.Intersect(cd).ToArray();
+                            if (intersect.Length >= 12)
+                            {
+                                scannerCoordinates.Add(d);
+                                foreach (var c in cd)
+                                {
+                                    found.Add(c);
+                                }
+                                matched = i;
+                                break;
+                            }
+                        }
+                        if (matched != -1)
+                            break;
+                    }
+                    if (matched != -1)
+                        break;
+                }
+                if (matched != -1)
+                    break;
+            }
+            Console.WriteLine();
+            if (matched == -1)
+                throw new Exception();
+            scanners.RemoveAt(matched);
+        }
+
+        var max = 0L;
+        foreach (var l in scannerCoordinates)
+        {
+            foreach (var r in scannerCoordinates)
+            {
+                max = Math.Max(max, Math.Abs(l.X - r.X) + Math.Abs(l.Y - r.Y) + Math.Abs(l.Z - r.Z));
+            }
+        }
+        return max;
     }
 
     private static Coordinate3D Rotate(Coordinate3D c, Orientation3D o)
