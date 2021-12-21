@@ -12,6 +12,7 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
 
     public IEnumerable<Coordinate2D> Keys => values.Keys;
     public IEnumerable<T> Values => values.Values;
+    public T? DefaultValue => values.DefaultValue;
 
     public Func<Coordinate2D, IEnumerable<KeyValuePair<Coordinate2D, long>>> Metric { get; set; }
 
