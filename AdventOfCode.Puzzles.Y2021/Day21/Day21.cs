@@ -79,17 +79,28 @@ public class Day21 : Day
     private static readonly Dictionary<(int, int, long, long), (long, long)> memo = new();
     private static (long, long) Wins(int p1, int p2, long p1Score, long p2Score)
     {
-        if (p1Score >= 21 || p2Score >= 21)
-            return (1, 1);
+        if (p1Score >= 21)
+            return (1, 0);
+        if (p2Score >= 21)
+            return (0, 1);
 
         if (!memo.ContainsKey((p1, p2, p1Score, p2Score)))
         {
             var (p1V, p2V) = (0L, 0L);
-            foreach (var (roll, q) in new[] { (3, 1), (4, 3), (5, 6), (6, 7), (7, 6), (8, 3), (9, 1) })
+            for (int r1 = 1; r1 <= 3; r1++)
             {
-                var (p2Wins, p1Wins) = Wins(p2, (p1 + roll) % 10, p2Score, p1Score + (p1 + roll) % 10);
-                p1V += q * p1Wins;
-                p2V += q * p2Wins;
+                for (int r2 = 1; r2 <= 3; r2++)
+                {
+                    for (int r3 = 1; r3 <= 3; r3++)
+                    {
+                        var newP1 = (p1 + r1 + r2 + r3) % 10;
+                        var newP1Score = p1Score + newP1 + 1;
+
+                        var (p2S, p1S) = Wins(p2, newP1, p2Score, newP1Score);
+                        p1V += p1S;
+                        p2V += p2S;
+                    }
+                }
             }
             memo[(p1, p2, p1Score, p2Score)] = (p1V, p2V);
         }
