@@ -53,5 +53,9 @@ public record Space3D(Interval I, Interval J, Interval K)
     public long SurfaceArea => 2 * (IStart.Area + JStart.Area + KStart.Area);
     public long Volume => I.Length * J.Length * K.Length;
 
+    public Space3D Intersect(Space3D other)
+    {
+        return new Space3D(this.I.Intersect(other.I), this.J.Intersect(other.J), this.K.Intersect(other.K));
+    }
     public override string ToString() => $"{IStart.IStart.IStart}-{IEnd.IEnd.IEnd}";
 }

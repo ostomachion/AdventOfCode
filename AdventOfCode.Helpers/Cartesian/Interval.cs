@@ -39,6 +39,14 @@ public record Interval
     public bool Contains(long n) => (!HasStart || n >= Start) && (!HasEnd || n < End);
     public long Loop(long n) => n.Modulus(Length) + Start;
 
+    public Interval Intersect(Interval other)
+    {
+        if (this.Start >= other.End || this.End <= other.Start)
+            return new Interval(0, 0);
+
+        return new Interval(Math.Max(this.Start, other.Start), Math.Min(this.End, other.End));
+    }
+
     public override string ToString()
     {
         return (HasStart ? "[" + Start : "(-inf") +
