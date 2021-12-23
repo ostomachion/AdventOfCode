@@ -124,4 +124,14 @@ public record SparsePlaneGrid2D<T> : Plane2D, IGrid<Coordinate2D, T>
             current = unvisited.MinBy(x => distances[x])!;
         }
     }
+
+    public SparsePlaneGrid2D<T> Copy()
+    {
+        var value = new SparsePlaneGrid2D<T>(I, J, DefaultValue);
+        foreach (var v in this.values)
+        {
+            value[v.Key] = v.Value;
+        }
+        return value;
+    }
 }

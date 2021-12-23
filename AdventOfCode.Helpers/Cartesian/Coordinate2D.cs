@@ -24,4 +24,6 @@ public record Coordinate2D(long X, long Y) : ICoordinate
 
     public double DistanceTo(Coordinate2D other) => Math.Sqrt((X - other.X) * (X - other.X) + (Y - other.Y) * (Y - other.Y));
     public double ManhattanDistanceTo(Coordinate2D other) => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
+
+    public override string ToString() => $"({X},{Y})";
 }
