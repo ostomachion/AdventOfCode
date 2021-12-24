@@ -49,10 +49,10 @@ public class Day23 : Day
     private static readonly HashSet<string> seen = new();
     private static IEnumerable<long> Steps(SparsePlaneGrid2D<bool> wallGrid, SparsePlaneGrid2D<Amphipod> amphipodGrid, long min)
     {
-        var key = string.Join("", amphipodGrid.OrderBy(x => x.Value.Char).ThenBy(x => x.Key.X).ThenBy(x => x.Key.Y).Select(x => x.Key.ToString()));
-        if (seen.Contains(key))
-            yield break;
-        seen.Add(key);
+        //var key = string.Join("", amphipodGrid.OrderBy(x => x.Value.Char).ThenBy(x => x.Key.X).ThenBy(x => x.Key.Y).Select(x => x.Key.ToString()));
+        //if (seen.Contains(key))
+        //    yield break;
+        //seen.Add(key);
 
         foreach (var (coordinate, amphipod) in amphipodGrid.OrderBy(x => x.Key.Y).ToArray())
         {
@@ -70,11 +70,12 @@ public class Day23 : Day
                 stops = Enumerable.Empty<Coordinate2D>();
             }
 
-            //var paths = stops.Select(x => GetPath(coordinate, x)).Where(x => x.Any() && x.All(x => amphipodGrid[x] is null));
             var paths = new Dictionary<Coordinate2D, Coordinate2D[]>();
             foreach (var stop in stops)
             {
-                if (stop.Y == 2 && (amphipodGrid[stop.X, stop.Y + 1] is not Amphipod a || amphipod.Char != stop.X switch { 3 => 'A', 5 => 'B', 7 => 'C', 9 => 'D', _ => throw new InvalidOperationException() }))
+                if (stop.Y == 2 && (amphipodGrid[stop.X, stop.Y + 1] is not Amphipod a ||
+                    a.Char != amphipod.Char ||
+                    amphipod.Char != stop.X switch { 3 => 'A', 5 => 'B', 7 => 'C', 9 => 'D', _ => throw new InvalidOperationException() }))
                     continue;
 
                 var path = GetPath(coordinate, stop);
